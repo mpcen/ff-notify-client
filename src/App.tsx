@@ -1,7 +1,10 @@
 import * as React from 'react';
-import { createStackNavigator, createAppContainer } from 'react-navigation';
+import { createBottomTabNavigator, createStackNavigator, createAppContainer } from 'react-navigation';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import { TimeLine } from './components/timeline/TimeLine';
+import { TimeLineScreen } from './components/timeline/TimeLineScreen';
+import { AlertSettingsScreen } from './components/alertSettings/AlertSettingsScreen';
+import { PlayerSettingsScreen } from './components/playerSettings/PlayerSettingsScreen';
 
 export class App extends React.Component {
     render() {
@@ -9,10 +12,49 @@ export class App extends React.Component {
     }
 }
 
-const AppNavigator = createStackNavigator({
-    TimeLine: {
-        screen: TimeLine
-    }
+const TimeLineStack = createStackNavigator({
+    TimeLine: TimeLineScreen
 });
+
+const AlertSettingsStack = createStackNavigator({
+    AlertSettings: AlertSettingsScreen
+});
+
+const PlayerSettingsStack = createStackNavigator({
+    PlayerSettings: PlayerSettingsScreen
+});
+
+const AppNavigator = createBottomTabNavigator(
+    {
+        TimeLine: TimeLineStack,
+        PlayerSettings: PlayerSettingsStack,
+        AlertSettings: AlertSettingsStack
+    },
+    {
+        defaultNavigationOptions: ({ navigation }) => ({
+            tabBarIcon: ({ focused, horizontal, tintColor }) => {
+                const { routeName } = navigation.state;
+                let IconComponent = MaterialCommunityIcons;
+                let iconName;
+
+                if (routeName === 'TimeLine') {
+                    iconName = `home-alert`;
+                } else if (routeName === 'PlayerSettings') {
+                    iconName = `account-group`;
+                } else if (routeName === 'AlertSettings') {
+                    iconName = `tune`;
+                }
+
+                // You can return any component that you like here!
+                return <IconComponent name={iconName} size={25} color={tintColor} />;
+            }
+        }),
+        tabBarOptions: {
+            activeTintColor: 'tomato',
+            inactiveTintColor: 'gray',
+            showLabel: false
+        }
+    }
+);
 
 const AppContainer = createAppContainer(AppNavigator);
