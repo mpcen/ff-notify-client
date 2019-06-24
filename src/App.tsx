@@ -2,9 +2,9 @@ import * as React from 'react';
 import { createBottomTabNavigator, createStackNavigator, createAppContainer } from 'react-navigation';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import { TimeLineScreen } from './components/timeline/TimeLineScreen';
-import { AlertSettingsScreen } from './components/alertSettings/AlertSettingsScreen';
-import { PlayerSettingsScreen } from './components/playerSettings/PlayerSettingsScreen';
+import { TimeLineScreen } from './components/TimeLine/TimeLineScreen';
+import { AlertSettingsScreen } from './components/AlertSettings/AlertSettingsScreen';
+import { PlayerSettingsScreen } from './components/PlayerSettings/PlayerSettingsScreen';
 
 export class App extends React.Component {
     render() {

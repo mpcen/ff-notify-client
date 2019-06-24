@@ -1,10 +1,11 @@
 import * as React from 'react';
 import axios, { AxiosResponse } from 'axios';
 import { NavigationScreenOptions, NavigationScreenProps } from 'react-navigation';
-import Constants from 'expo-constants';
-import { StyleSheet, View, FlatList, StatusBar } from 'react-native';
-import { Card, Text, Icon, Avatar, Divider, Header, Badge } from 'react-native-elements';
+import { StyleSheet, View, FlatList } from 'react-native';
+import { Card, Text, Icon, Avatar, Divider, Header } from 'react-native-elements';
 import { format } from 'date-fns';
+
+import { Stories } from './Stories';
 
 interface ITimeLineProps {
     recentPlayerNews: IPlayerNewsItem[];
@@ -64,234 +65,11 @@ export class TimeLineScreen extends React.Component<ITimeLineProps, ITimeLineSta
 
     public render() {
         const { recentPlayerNews } = this.state;
-        const { timeLineContainer } = styles;
+        const { timeLineScreenContainer } = styles;
 
         return (
-            <View style={timeLineContainer}>
-                <View
-                    style={{
-                        flexDirection: 'row',
-                        height: Constants.statusBarHeight * 3,
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                    }}
-                >
-                    <View style={{ padding: 8 }}>
-                        <Avatar
-                            size="medium"
-                            avatarStyle={{
-                                backgroundColor: 'white',
-                                borderColor: 'white'
-                            }}
-                            containerStyle={{
-                                borderColor: '#2089dc',
-                                borderStyle: 'solid',
-                                borderWidth: 1.5
-                            }}
-                            rounded
-                            source={{
-                                uri:
-                                    'https://a.espncdn.com/combiner/i?img=/i/headshots/nfl/players/full/2330.png&h=96&w=96&scale=crop'
-                            }}
-                        />
-
-                        <Badge
-                            containerStyle={{
-                                position: 'absolute',
-                                bottom: 8,
-                                right: 8
-                            }}
-                            badgeStyle={{
-                                backgroundColor: '#ff5a5f',
-                                flex: 1,
-                                justifyContent: 'center',
-                                alignItems: 'center'
-                            }}
-                            value={
-                                <Text
-                                    style={{
-                                        color: 'white',
-                                        fontSize: 8
-                                    }}
-                                >
-                                    6
-                                </Text>
-                            }
-                        />
-                    </View>
-                    <View style={{ padding: 8 }}>
-                        <Avatar
-                            size="medium"
-                            avatarStyle={{
-                                backgroundColor: 'white',
-                                borderColor: 'white'
-                            }}
-                            containerStyle={{
-                                borderColor: '#2089dc',
-                                borderStyle: 'solid',
-                                borderWidth: 1.5
-                            }}
-                            rounded
-                            source={{
-                                uri:
-                                    'https://a.espncdn.com/combiner/i?img=/i/headshots/nfl/players/full/2330.png&h=96&w=96&scale=crop'
-                            }}
-                        />
-
-                        <Badge
-                            containerStyle={{
-                                position: 'absolute',
-                                bottom: 8,
-                                right: 8
-                            }}
-                            badgeStyle={{
-                                backgroundColor: '#ff5a5f',
-                                flex: 1,
-                                justifyContent: 'center',
-                                alignItems: 'center'
-                            }}
-                            value={
-                                <Text
-                                    style={{
-                                        color: 'white',
-                                        fontSize: 8
-                                    }}
-                                >
-                                    6
-                                </Text>
-                            }
-                        />
-                    </View>
-                    <View style={{ padding: 8 }}>
-                        <Avatar
-                            size="medium"
-                            avatarStyle={{
-                                backgroundColor: 'white',
-                                borderColor: 'white'
-                            }}
-                            containerStyle={{
-                                borderColor: '#2089dc',
-                                borderStyle: 'solid',
-                                borderWidth: 1.5
-                            }}
-                            rounded
-                            source={{
-                                uri:
-                                    'https://a.espncdn.com/combiner/i?img=/i/headshots/nfl/players/full/2330.png&h=96&w=96&scale=crop'
-                            }}
-                        />
-
-                        <Badge
-                            containerStyle={{
-                                position: 'absolute',
-                                bottom: 8,
-                                right: 8
-                            }}
-                            badgeStyle={{
-                                backgroundColor: '#ff5a5f',
-                                flex: 1,
-                                justifyContent: 'center',
-                                alignItems: 'center'
-                            }}
-                            value={
-                                <Text
-                                    style={{
-                                        color: 'white',
-                                        fontSize: 8
-                                    }}
-                                >
-                                    6
-                                </Text>
-                            }
-                        />
-                    </View>
-                    <View style={{ padding: 8 }}>
-                        <Avatar
-                            size="medium"
-                            avatarStyle={{
-                                backgroundColor: 'white',
-                                borderColor: 'white'
-                            }}
-                            containerStyle={{
-                                borderColor: '#2089dc',
-                                borderStyle: 'solid',
-                                borderWidth: 1.5
-                            }}
-                            rounded
-                            source={{
-                                uri:
-                                    'https://a.espncdn.com/combiner/i?img=/i/headshots/nfl/players/full/2330.png&h=96&w=96&scale=crop'
-                            }}
-                        />
-
-                        <Badge
-                            containerStyle={{
-                                position: 'absolute',
-                                bottom: 8,
-                                right: 8
-                            }}
-                            badgeStyle={{
-                                backgroundColor: '#ff5a5f',
-                                flex: 1,
-                                justifyContent: 'center',
-                                alignItems: 'center'
-                            }}
-                            value={
-                                <Text
-                                    style={{
-                                        color: 'white',
-                                        fontSize: 8
-                                    }}
-                                >
-                                    6
-                                </Text>
-                            }
-                        />
-                    </View>
-                    <View style={{ padding: 8 }}>
-                        <Avatar
-                            size="medium"
-                            avatarStyle={{
-                                backgroundColor: 'white',
-                                borderColor: 'white'
-                            }}
-                            containerStyle={{
-                                borderColor: '#2089dc',
-                                borderStyle: 'solid',
-                                borderWidth: 1.5
-                            }}
-                            rounded
-                            source={{
-                                uri:
-                                    'https://a.espncdn.com/combiner/i?img=/i/headshots/nfl/players/full/2330.png&h=96&w=96&scale=crop'
-                            }}
-                        />
-
-                        <Badge
-                            containerStyle={{
-                                position: 'absolute',
-                                bottom: 8,
-                                right: 8
-                            }}
-                            badgeStyle={{
-                                backgroundColor: '#ff5a5f',
-                                flex: 1,
-                                justifyContent: 'center',
-                                alignItems: 'center'
-                            }}
-                            value={
-                                <Text
-                                    style={{
-                                        color: 'white',
-                                        fontSize: 8
-                                    }}
-                                >
-                                    6
-                                </Text>
-                            }
-                        />
-                    </View>
-                </View>
+            <View style={timeLineScreenContainer}>
+                <Stories />
 
                 <FlatList
                     data={recentPlayerNews}
@@ -398,7 +176,7 @@ export class TimeLineScreen extends React.Component<ITimeLineProps, ITimeLineSta
 }
 
 const styles = StyleSheet.create({
-    timeLineContainer: {
+    timeLineScreenContainer: {
         flex: 1,
         backgroundColor: '#fff'
     },
