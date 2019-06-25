@@ -6,6 +6,8 @@ import { Header } from 'react-native-elements';
 
 import { Stories } from './Stories/Stories';
 import { PlayerNewsItem, IPlayerNewsItem } from './PlayerNewsItem/PlayerNewsItem';
+import { IPlayer } from '../PlayerSettings/PlayerSettingsScreen';
+//import console = require('console');
 
 interface ITimeLineProps {
     playerNews: IPlayerNewsItem[];
@@ -15,6 +17,7 @@ interface ITimeLineState {
     playerNews: IPlayerNewsItem[];
     loading: boolean;
     error: boolean;
+    filteredPlayers: string[];
 }
 
 export class TimeLineScreen extends React.Component<ITimeLineProps, ITimeLineState> {
@@ -32,6 +35,7 @@ export class TimeLineScreen extends React.Component<ITimeLineProps, ITimeLineSta
 
     public state: ITimeLineState = {
         playerNews: [],
+        filteredPlayers: ['Smith', 'James'],
         loading: true,
         error: false
     };
@@ -64,8 +68,23 @@ export class TimeLineScreen extends React.Component<ITimeLineProps, ITimeLineSta
         try {
             playerNews = await axios.get(uri);
 
-            this.setState({ playerNews: playerNews.data, loading: false, error: false });
+            const filteredNews: IPlayerNewsItem[] = [];
+
+            console.log('before:', this.state.playerNews);
+
+            playerNews.data.forEach(playerNewsItem => {
+                this.state.filteredPlayers.forEach(filteredPlayerName => {
+                    if (playerNewsItem.player.includes(filteredPlayerName)) {
+                        filteredNews.push(playerNewsItem);
+                    }
+                });
+            });
+
+            console.log('filtered:', filteredNews);
+
+            this.setState({ playerNews: filteredNews, loading: false, error: false });
         } catch (e) {
+            console.log('error:', e);
             this.setState({ loading: false, error: true });
         }
     };
