@@ -53,7 +53,8 @@ const AppNavigator = createBottomTabNavigator(
             activeTintColor: 'tomato',
             inactiveTintColor: 'gray',
             showLabel: false
-        }
+        },
+        initialRouteName: 'PlayerSettings'
     }
 );
 
