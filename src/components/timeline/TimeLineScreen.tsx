@@ -7,7 +7,6 @@ import { Header } from 'react-native-elements';
 import { Stories } from './Stories/Stories';
 import { PlayerNewsItem, IPlayerNewsItem } from './PlayerNewsItem/PlayerNewsItem';
 import { IPlayer } from '../PlayerSettings/PlayerSettingsScreen';
-//import console = require('console');
 
 interface ITimeLineProps {
     playerNews: IPlayerNewsItem[];
@@ -55,34 +54,32 @@ export class TimeLineScreen extends React.Component<ITimeLineProps, ITimeLineSta
                 <FlatList
                     data={playerNews}
                     keyExtractor={(item, index) => index.toString()}
-                    renderItem={({ item }: { item: IPlayerNewsItem }) => <PlayerNewsItem item={item} />}
+                    renderItem={({ item }: { item: IPlayerNewsItem }) => {
+                        return <PlayerNewsItem item={item} />;
+                    }}
                 />
             </View>
         );
     }
 
     private _fetchPlayerNews = async () => {
-        let playerNews: AxiosResponse<IPlayerNewsItem[]>;
+        let playerNewsResponse: AxiosResponse<IPlayerNewsItem[]>;
         const uri = 'http://192.168.0.210:3000/recentPlayerNews';
 
         try {
-            playerNews = await axios.get(uri);
+            playerNewsResponse = await axios.get(uri);
 
-            const filteredNews: IPlayerNewsItem[] = [];
+            // const filteredNews: IPlayerNewsItem[] = [];
 
-            console.log('before:', this.state.playerNews);
+            // playerNewsResponse.data.forEach(playerNewsItem => {
+            //     this.state.filteredPlayers.forEach(filteredPlayerName => {
+            //         if (playerNewsItem.player.includes(filteredPlayerName)) {
+            //             filteredNews.push(playerNewsItem);
+            //         }
+            //     });
+            // });
 
-            playerNews.data.forEach(playerNewsItem => {
-                this.state.filteredPlayers.forEach(filteredPlayerName => {
-                    if (playerNewsItem.player.includes(filteredPlayerName)) {
-                        filteredNews.push(playerNewsItem);
-                    }
-                });
-            });
-
-            console.log('filtered:', filteredNews);
-
-            this.setState({ playerNews: filteredNews, loading: false, error: false });
+            this.setState({ playerNews: playerNewsResponse.data, loading: false, error: false });
         } catch (e) {
             console.log('error:', e);
             this.setState({ loading: false, error: true });

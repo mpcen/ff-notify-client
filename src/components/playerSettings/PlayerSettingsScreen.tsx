@@ -3,7 +3,6 @@ import { View, Text, FlatList } from 'react-native';
 import { NavigationScreenOptions, NavigationScreenProps } from 'react-navigation';
 import { Header, Input } from 'react-native-elements';
 import axios, { AxiosResponse } from 'axios';
-//import console = require('console');
 
 enum SearchOptions {
     Popular,
@@ -20,7 +19,7 @@ interface IPlayerSettingsScreenState {
     error: boolean;
 }
 
-interface IPlayer {
+export interface IPlayer {
     name: string;
     college: string;
     suffix?: string;
@@ -69,11 +68,15 @@ export class PlayerSettingsScreen extends React.Component<{}, IPlayerSettingsScr
                 <FlatList
                     data={this.state.filteredPlayers}
                     keyExtractor={(item, index) => index.toString()}
-                    renderItem={({ item }: { item: IPlayer }) => <Text>{item.name}</Text>}
+                    renderItem={({ item }: { item: IPlayer }) => this._renderListItem(item)}
                 />
             </View>
         );
     }
+
+    private _renderListItem = (player: IPlayer) => {
+        return <Text>{player.name}</Text>;
+    };
 
     private _fetchPlayers = async () => {
         const uri = 'http://192.168.0.210:3000/players';
