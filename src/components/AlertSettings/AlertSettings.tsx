@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 import { NavigationScreenOptions, NavigationScreenProps } from 'react-navigation';
 import { Header } from 'react-native-elements';
 
-export class AlertSettingsScreen extends React.Component {
+export class AlertSettings extends React.Component {
     static navigationOptions = ({ navigation }: NavigationScreenProps) => {
         return {
             header: <Header centerComponent={{ text: 'Alert Settings', style: { color: '#fff' } }} />
@@ -13,7 +13,7 @@ export class AlertSettingsScreen extends React.Component {
     render() {
         return (
             <View>
-                <Text>Alert Settings Screen</Text>
+                <Text>Alert Settings</Text>
             </View>
         );
     }

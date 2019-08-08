@@ -28,10 +28,10 @@ export interface IPlayer {
     position: string;
 }
 
-export class PlayerSettingsScreen extends React.Component<{}, IPlayerSettingsScreenState> {
+export class PlayerSearch extends React.Component<{}, IPlayerSettingsScreenState> {
     static navigationOptions = ({ navigation }: NavigationScreenProps) => {
         return {
-            header: <Header centerComponent={{ text: 'Player Settings', style: { color: '#fff' } }} />
+            header: <Header centerComponent={{ text: 'Player Settings - Search', style: { color: '#fff' } }} />
         } as NavigationScreenOptions;
     };
 

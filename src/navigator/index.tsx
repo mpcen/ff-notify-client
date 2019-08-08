@@ -1,28 +1,39 @@
 import React from 'react';
-
-import { createBottomTabNavigator, createStackNavigator, createAppContainer } from 'react-navigation';
+import Constants from 'expo-constants';
+import {
+    createBottomTabNavigator,
+    createStackNavigator,
+    createAppContainer,
+    createMaterialTopTabNavigator
+} from 'react-navigation';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import { TimeLineScreen } from '../components/TimeLine/TimeLineScreen';
-import { AlertSettingsScreen } from '../components/AlertSettings/AlertSettingsScreen';
-import { PlayerSettingsScreen } from '../components/PlayerSettings/PlayerSettingsScreen';
+import { Timeline } from '../components/Timeline/Timeline';
+import { AlertSettings } from '../components/AlertSettings/AlertSettings';
+import { PlayerSearch } from '../components/PlayerSettings/PlayerSearch';
+import { TrackedPlayers } from '../components/PlayerSettings/TrackedPlayers';
 
-const TimeLineStack = createStackNavigator({
-    TimeLine: TimeLineScreen
-});
-
-const AlertSettingsStack = createStackNavigator({
-    AlertSettings: AlertSettingsScreen
-});
-
-const PlayerSettingsStack = createStackNavigator({
-    PlayerSettings: PlayerSettingsScreen
-});
+const TimelineStack = createStackNavigator({ Timeline });
+const AlertSettingsStack = createStackNavigator({ AlertSettings });
+const PlayerSettingsTabs = createMaterialTopTabNavigator(
+    {
+        PlayerSearch,
+        TrackedPlayers
+    },
+    {
+        initialRouteName: 'TrackedPlayers',
+        tabBarOptions: {
+            style: {
+                paddingTop: Constants.statusBarHeight
+            }
+        }
+    }
+);
 
 const AppNavigator = createBottomTabNavigator(
     {
-        TimeLine: TimeLineStack,
-        PlayerSettings: PlayerSettingsStack,
+        Timeline: TimelineStack,
+        PlayerSettings: PlayerSettingsTabs,
         AlertSettings: AlertSettingsStack
     },
     {
@@ -32,7 +43,7 @@ const AppNavigator = createBottomTabNavigator(
                 let IconComponent = MaterialCommunityIcons;
                 let iconName;
 
-                if (routeName === 'TimeLine') {
+                if (routeName === 'Timeline') {
                     iconName = `home-alert`;
                 } else if (routeName === 'PlayerSettings') {
                     iconName = `account-group`;
@@ -49,7 +60,7 @@ const AppNavigator = createBottomTabNavigator(
             inactiveTintColor: 'gray',
             showLabel: false
         },
-        initialRouteName: 'TimeLine'
+        initialRouteName: 'Timeline'
     }
 );
 
