@@ -1,6 +1,6 @@
 import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
-import { FetchPlayersActionTypes } from './types';
-import { fetchPlayersSuccess, fetchPlayersFail } from './actions';
+import { FetchPlayersActionTypes, TrackPlayerActionTypes, IPlayer } from './types';
+import { fetchPlayersSuccess, fetchPlayersFail, trackPlayer, untrackPlayer } from './actions';
 import { callApi } from '../../api';
 
 function* watchFetchPlayers() {
@@ -25,6 +25,6 @@ function* handleFetchPlayers() {
     }
 }
 
-export function* playerSearchSaga() {
+export function* playerSettingsSaga() {
     yield all([fork(watchFetchPlayers)]);
 }

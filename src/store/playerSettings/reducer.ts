@@ -5,16 +5,11 @@ import * as Actions from './actions';
 
 type Action = ActionType<typeof Actions>;
 
-import { FetchPlayersActionTypes, IPlayer } from './types';
-
-interface IPlayerSettingsState {
-    players: IPlayer[];
-    loading: boolean;
-    error: boolean;
-}
+import { FetchPlayersActionTypes, TrackPlayerActionTypes, IPlayer, IPlayerSettingsState } from './types';
 
 const initialState: IPlayerSettingsState = {
     players: [],
+    trackedPlayers: [],
     loading: true,
     error: false
 };
@@ -40,6 +35,16 @@ const reducer: Reducer<IPlayerSettingsState, Action> = (state = initialState, ac
                 error: true,
                 loading: false,
                 errorMessage: action.payload
+            };
+        case TrackPlayerActionTypes.TRACK_PLAYER:
+            return {
+                ...state,
+                trackedPlayers: [...state.trackedPlayers, action.payload]
+            };
+        case TrackPlayerActionTypes.UNTRACK_PLAYER:
+            return {
+                ...state,
+                trackedPlayers: [...state.trackedPlayers, action.payload]
             };
         default:
             return state;

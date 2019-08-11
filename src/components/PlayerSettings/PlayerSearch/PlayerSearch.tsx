@@ -21,6 +21,7 @@ interface IPlayerSearchPropsFromState {
 
 interface IPlayerSearchPropsFromDispatch {
     fetchPlayers: typeof playerSettingsActions.fetchPlayers;
+    trackPlayer: typeof playerSettingsActions.trackPlayer;
 }
 
 interface IPlayerSearchUnconnectedState {
@@ -37,7 +38,7 @@ type PlayerSearchProps = IPlayerSearchProps &
     IPlayerSearchPropsFromDispatch &
     IPlayerSearchUnconnectedState;
 
-export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps> {
+export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, IPlayerSearchUnconnectedState> {
     static navigationOptions = ({ navigation }: NavigationScreenProps) => {
         return {
             header: <Header centerComponent={{ text: 'Player Settings - Search', style: { color: '#fff' } }} />
@@ -74,7 +75,7 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps> 
                 />
 
                 <Overlay isVisible={this.state.isOverlayVisible} onBackdropPress={this._handleBackdropPress}>
-                    <PlayerCard player={this.state.selectedPlayer} handlePlayerFollow={this._handlePlayerFollow} />
+                    <PlayerCard player={this.state.selectedPlayer} handleTrackPlayer={this._handleTrackPlayer} />
                 </Overlay>
 
                 <FlatList
@@ -95,27 +96,31 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps> 
     };
 
     private _handlePlayerSelect = (player: IPlayer) => {
-        this.setState({ searchText: player.name, selectedPlayer: player, isOverlayVisible: true });
+        this.setState({ selectedPlayer: player, isOverlayVisible: true });
     };
 
     private _handleBackdropPress = () => {
         this.setState({ selectedPlayer: null, isOverlayVisible: false });
     };
 
-    private _handlePlayerFollow = () => {};
+    private _handleTrackPlayer = () => {
+        this.props.trackPlayer(this.state.selectedPlayer);
+    };
 }
 
 const mapStateToProps = ({ playerSettings }: AppState): IPlayerSettingsState => {
     return {
         error: playerSettings.error,
         loading: playerSettings.loading,
-        players: playerSettings.players
+        players: playerSettings.players,
+        trackedPlayers: playerSettings.trackedPlayers
     };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        fetchPlayers: () => dispatch(playerSettingsActions.fetchPlayers())
+        fetchPlayers: () => dispatch(playerSettingsActions.fetchPlayers()),
+        trackPlayer: (player: IPlayer) => dispatch(playerSettingsActions.trackPlayer(player))
     };
 };
 

@@ -4,7 +4,7 @@ import { IPlayer } from '../../../store/playerSettings/types';
 
 interface IPlayerCardProps {
     player: IPlayer;
-    handlePlayerFollow(): void;
+    handleTrackPlayer(): void;
 }
 
 export const PlayerCard = (props: IPlayerCardProps) => {
@@ -12,7 +12,7 @@ export const PlayerCard = (props: IPlayerCardProps) => {
         <View>
             <Text>{props.player.name}</Text>
 
-            <TouchableOpacity onPress={props.handlePlayerFollow}>
+            <TouchableOpacity onPress={props.handleTrackPlayer}>
                 <Text>Follow</Text>
             </TouchableOpacity>
         </View>
