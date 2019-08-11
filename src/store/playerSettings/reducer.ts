@@ -7,19 +7,19 @@ type Action = ActionType<typeof Actions>;
 
 import { FetchPlayersActionTypes, IPlayer } from './types';
 
-interface IPlayerSearchState {
+interface IPlayerSettingsState {
     players: IPlayer[];
     loading: boolean;
     error: boolean;
 }
 
-const initialState: IPlayerSearchState = {
+const initialState: IPlayerSettingsState = {
     players: [],
     loading: true,
     error: false
 };
 
-const reducer: Reducer<IPlayerSearchState, Action> = (state = initialState, action) => {
+const reducer: Reducer<IPlayerSettingsState, Action> = (state = initialState, action) => {
     switch (action.type) {
         case FetchPlayersActionTypes.FETCH_PLAYERS:
             return {
@@ -46,4 +46,4 @@ const reducer: Reducer<IPlayerSearchState, Action> = (state = initialState, acti
     }
 };
 
-export { reducer as playerSearchReducer, IPlayerSearchState };
+export { reducer as playerSettingsReducer, IPlayerSettingsState };

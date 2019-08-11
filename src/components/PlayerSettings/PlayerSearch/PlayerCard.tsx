@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
-import { IPlayer } from '../../../store/playerSearch/types';
+import { IPlayer } from '../../../store/playerSettings/types';
 
 interface IPlayerCardProps {
     player: IPlayer;

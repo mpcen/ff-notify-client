@@ -5,11 +5,11 @@ import { Header, Input, Overlay } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
-import * as playerSearchActions from '../../../store/playerSearch/actions';
+import * as playerSettingsActions from '../../../store/playerSettings/actions';
 
 import { AppState } from '../../../store';
-import { IPlayer } from '../../../store/playerSearch/types';
-import { IPlayerSearchState } from '../../../store/playerSearch/reducer';
+import { IPlayer } from '../../../store/playerSettings/types';
+import { IPlayerSettingsState } from '../../../store/playerSettings/reducer';
 
 import { PlayerCard } from './PlayerCard';
 
@@ -20,7 +20,7 @@ interface IPlayerSearchPropsFromState {
 }
 
 interface IPlayerSearchPropsFromDispatch {
-    fetchPlayers: typeof playerSearchActions.fetchPlayers;
+    fetchPlayers: typeof playerSettingsActions.fetchPlayers;
 }
 
 interface IPlayerSearchUnconnectedState {
@@ -105,17 +105,17 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps> 
     private _handlePlayerFollow = () => {};
 }
 
-const mapStateToProps = ({ playerSearch }: AppState): IPlayerSearchState => {
+const mapStateToProps = ({ playerSettings }: AppState): IPlayerSettingsState => {
     return {
-        error: playerSearch.error,
-        loading: playerSearch.loading,
-        players: playerSearch.players
+        error: playerSettings.error,
+        loading: playerSettings.loading,
+        players: playerSettings.players
     };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        fetchPlayers: () => dispatch(playerSearchActions.fetchPlayers())
+        fetchPlayers: () => dispatch(playerSettingsActions.fetchPlayers())
     };
 };
 

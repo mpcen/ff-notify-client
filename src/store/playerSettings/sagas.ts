@@ -1,6 +1,6 @@
 import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 import { FetchPlayersActionTypes } from './types';
-import { fetchPlayers, fetchPlayersSuccess, fetchPlayersFail } from './actions';
+import { fetchPlayersSuccess, fetchPlayersFail } from './actions';
 import { callApi } from '../../api';
 
 function* watchFetchPlayers() {

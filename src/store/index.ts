@@ -2,19 +2,19 @@ import { combineReducers } from 'redux';
 import { all, fork } from 'redux-saga/effects';
 
 import { timelineSaga } from './timeline/sagas';
-import { playerSearchSaga } from './playerSearch/sagas';
+import { playerSearchSaga } from './playerSettings/sagas';
 
 import { timelineReducer, ITimelineState } from './timeline/reducer';
-import { playerSearchReducer, IPlayerSearchState } from './playerSearch/reducer';
+import { playerSettingsReducer, IPlayerSettingsState } from './playerSettings/reducer';
 
 export interface AppState {
     readonly timeline: ITimelineState;
-    readonly playerSearch: IPlayerSearchState;
+    readonly playerSettings: IPlayerSettingsState;
 }
 
 export const rootReducer = combineReducers<AppState>({
     timeline: timelineReducer,
-    playerSearch: playerSearchReducer
+    playerSettings: playerSettingsReducer
 });
 
 export function* rootSaga() {
