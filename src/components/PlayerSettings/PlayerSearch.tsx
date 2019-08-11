@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { View, Text, FlatList } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { NavigationScreenOptions, NavigationScreenProps } from 'react-navigation';
-import { Header, Input } from 'react-native-elements';
+import { Header, Input, Overlay } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
@@ -24,6 +24,8 @@ interface IPlayerSearchPropsFromDispatch {
 interface IPlayerSearchUnconnectedState {
     searchText: string;
     filteredPlayers: IPlayer[];
+    selectedPlayer: IPlayer;
+    isOverlayVisible: boolean;
 }
 
 interface IPlayerSearchProps {}
@@ -42,7 +44,9 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps> 
 
     state: IPlayerSearchUnconnectedState = {
         searchText: '',
-        filteredPlayers: []
+        filteredPlayers: [],
+        selectedPlayer: null,
+        isOverlayVisible: false
     };
 
     public componentDidMount() {
@@ -53,6 +57,8 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps> 
         return (
             <View>
                 <Input
+                    autoCapitalize="none"
+                    autoCorrect={false}
                     placeholder="Search for a player"
                     value={this.state.searchText}
                     onChangeText={searchText => {
@@ -65,6 +71,13 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps> 
                     }}
                 />
 
+                <Overlay
+                    isVisible={this.state.isOverlayVisible}
+                    onBackdropPress={() => this.setState({ selectedPlayer: null, isOverlayVisible: false })}
+                >
+                    <Text>{this.state.isOverlayVisible ? this.state.selectedPlayer.name : ''}</Text>
+                </Overlay>
+
                 <FlatList
                     data={this.state.filteredPlayers}
                     keyExtractor={(item, index) => index.toString()}
@@ -75,7 +88,15 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps> 
     }
 
     private _renderListItem = (player: IPlayer) => {
-        return <Text>{player.name}</Text>;
+        return (
+            <TouchableOpacity onPress={() => this._handlePlayerSelect(player)}>
+                <Text>{player.name}</Text>
+            </TouchableOpacity>
+        );
+    };
+
+    private _handlePlayerSelect = (player: IPlayer) => {
+        this.setState({ searchText: player.name, selectedPlayer: player, isOverlayVisible: true });
     };
 }
 
