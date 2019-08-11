@@ -21,7 +21,7 @@ const PlayerSettingsTabs = createMaterialTopTabNavigator(
         TrackedPlayers
     },
     {
-        initialRouteName: 'TrackedPlayers',
+        initialRouteName: 'PlayerSearch',
         tabBarOptions: {
             style: {
                 paddingTop: Constants.statusBarHeight
@@ -60,7 +60,7 @@ const AppNavigator = createBottomTabNavigator(
             inactiveTintColor: 'gray',
             showLabel: false
         },
-        initialRouteName: 'Timeline'
+        initialRouteName: 'PlayerSettings'
     }
 );
 

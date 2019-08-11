@@ -2,65 +2,65 @@ import * as React from 'react';
 import { View, Text, FlatList } from 'react-native';
 import { NavigationScreenOptions, NavigationScreenProps } from 'react-navigation';
 import { Header, Input } from 'react-native-elements';
-import axios, { AxiosResponse } from 'axios';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 
-enum SearchOptions {
-    Popular,
-    Position,
-    Team
-}
+import * as playerSearchActions from '../../store/playerSearch/actions';
 
-interface IPlayerSettingsScreenState {
-    selectedSearchOption: SearchOptions;
+import { AppState } from '../../store';
+import { IPlayer } from '../../store/playerSearch/types';
+import { IPlayerSearchState } from '../../store/playerSearch/reducer';
+
+interface IPlayerSearchPropsFromState {
     players: IPlayer[];
-    filteredPlayers: IPlayer[];
-    searchText: string;
     loading: boolean;
     error: boolean;
 }
 
-export interface IPlayer {
-    name: string;
-    college: string;
-    suffix?: string;
-    teamId: number;
-    number: string;
-    position: string;
+interface IPlayerSearchPropsFromDispatch {
+    fetchPlayers: typeof playerSearchActions.fetchPlayers;
 }
 
-export class PlayerSearch extends React.Component<{}, IPlayerSettingsScreenState> {
+interface IPlayerSearchUnconnectedState {
+    searchText: string;
+    filteredPlayers: IPlayer[];
+}
+
+interface IPlayerSearchProps {}
+
+type PlayerSearchProps = IPlayerSearchProps &
+    IPlayerSearchPropsFromState &
+    IPlayerSearchPropsFromDispatch &
+    IPlayerSearchUnconnectedState;
+
+export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps> {
     static navigationOptions = ({ navigation }: NavigationScreenProps) => {
         return {
             header: <Header centerComponent={{ text: 'Player Settings - Search', style: { color: '#fff' } }} />
         } as NavigationScreenOptions;
     };
 
-    public state: IPlayerSettingsScreenState = {
-        selectedSearchOption: SearchOptions.Popular,
-        players: [],
-        filteredPlayers: [],
+    state: IPlayerSearchUnconnectedState = {
         searchText: '',
-        loading: true,
-        error: false
+        filteredPlayers: []
     };
 
-    componentDidMount() {
-        this._fetchPlayers();
+    public componentDidMount() {
+        this.props.fetchPlayers();
     }
 
     render() {
-        const { loading } = this.state;
         return (
             <View>
-                {loading ? <Text>Loading</Text> : null}
-
                 <Input
                     placeholder="Search for a player"
                     value={this.state.searchText}
                     onChangeText={searchText => {
                         this.setState({
                             searchText,
-                            filteredPlayers: this.state.players.filter(player => player.name.includes(searchText))
+                            filteredPlayers: this.props.players.filter(player =>
+                                player.name.toLowerCase().includes(searchText)
+                            )
                         });
                     }}
                 />
@@ -77,19 +77,23 @@ export class PlayerSearch extends React.Component<{}, IPlayerSettingsScreenState
     private _renderListItem = (player: IPlayer) => {
         return <Text>{player.name}</Text>;
     };
-
-    private _fetchPlayers = async () => {
-        const uri = 'http://192.168.0.210:3000/players';
-        let players: AxiosResponse<any>;
-
-        axios.get(uri);
-
-        try {
-            players = await axios.get(uri);
-
-            this.setState({ players: players.data[0].players, loading: false, error: false });
-        } catch (e) {
-            this.setState({ loading: false, error: true });
-        }
-    };
 }
+
+const mapStateToProps = ({ playerSearch }: AppState): IPlayerSearchState => {
+    return {
+        error: playerSearch.error,
+        loading: playerSearch.loading,
+        players: playerSearch.players
+    };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch) => {
+    return {
+        fetchPlayers: () => dispatch(playerSearchActions.fetchPlayers())
+    };
+};
+
+export const PlayerSearch = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(PlayerSearchUnconnected);
