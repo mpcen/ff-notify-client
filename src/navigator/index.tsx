@@ -10,8 +10,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { Timeline } from '../components/Timeline/Timeline';
 import { AlertSettings } from '../components/AlertSettings/AlertSettings';
-import { PlayerSearch } from '../components/PlayerSettings/PlayerSearch';
-import { TrackedPlayers } from '../components/PlayerSettings/TrackedPlayers';
+import { PlayerSearch } from '../components/PlayerSettings/PlayerSearch/PlayerSearch';
+import { TrackedPlayers } from '../components/PlayerSettings/TrackedPlayers/TrackedPlayers';
 
 const TimelineStack = createStackNavigator({ Timeline });
 const AlertSettingsStack = createStackNavigator({ AlertSettings });
