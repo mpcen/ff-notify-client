@@ -17,6 +17,7 @@ interface IPlayerSearchPropsFromState {
     players: IPlayer[];
     loading: boolean;
     error: boolean;
+    trackedPlayers: IPlayer[];
 }
 
 interface IPlayerSearchPropsFromDispatch {
@@ -67,8 +68,8 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
                     onChangeText={searchText => {
                         this.setState({
                             searchText,
-                            filteredPlayers: this.props.players.filter(player =>
-                                player.name.toLowerCase().includes(searchText)
+                            filteredPlayers: this.props.players.filter(({ name }) =>
+                                name.toLowerCase().includes(searchText)
                             )
                         });
                     }}
@@ -104,7 +105,9 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
     };
 
     private _handleTrackPlayer = () => {
-        this.props.trackPlayer(this.state.selectedPlayer);
+        if (!this.props.trackedPlayers.find(player => player.name === this.state.selectedPlayer.name)) {
+            this.props.trackPlayer(this.state.selectedPlayer);
+        }
     };
 }
 

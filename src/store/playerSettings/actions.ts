@@ -18,6 +18,8 @@ export const trackPlayer = (player: IPlayer) => {
     return action(TrackPlayerActionTypes.TRACK_PLAYER, player);
 };
 
-export const untrackPlayer = (data: IPlayer) => {
-    return action(TrackPlayerActionTypes.UNTRACK_PLAYER, data);
+export const untrackPlayer = (playerToUntrack: IPlayer, trackedPlayers: IPlayer[]) => {
+    const filteredPlayers = trackedPlayers.filter((player: IPlayer) => player.name !== playerToUntrack.name);
+
+    return action(TrackPlayerActionTypes.UNTRACK_PLAYER, filteredPlayers);
 };

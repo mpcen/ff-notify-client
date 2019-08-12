@@ -7,17 +7,20 @@ import * as Actions from './actions';
 type Action = ActionType<typeof Actions>;
 
 import { FetchPlayerNewsActionTypes } from './types';
+import { IPlayer } from '../playerSettings/types';
 
 interface ITimelineState {
     playerNews: IPlayerNewsItem[];
     loading: boolean;
     error: boolean;
+    trackedPlayers?: IPlayer[];
 }
 
 const initialState: ITimelineState = {
     error: false,
     loading: true,
-    playerNews: []
+    playerNews: [],
+    trackedPlayers: []
 };
 
 const reducer: Reducer<ITimelineState, Action> = (state = initialState, action) => {

@@ -44,7 +44,7 @@ const reducer: Reducer<IPlayerSettingsState, Action> = (state = initialState, ac
         case TrackPlayerActionTypes.UNTRACK_PLAYER:
             return {
                 ...state,
-                trackedPlayers: [...state.trackedPlayers, action.payload]
+                trackedPlayers: action.payload
             };
         default:
             return state;

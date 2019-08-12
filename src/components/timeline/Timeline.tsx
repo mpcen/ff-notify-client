@@ -11,22 +11,28 @@ import { PlayerNewsItem, IPlayerNewsItem } from './PlayerNewsItem/PlayerNewsItem
 import { ITimelineState } from '../../store/timeline/reducer';
 import { AppState } from '../../store';
 import { Dispatch } from 'redux';
+import { IPlayer } from '../../store/playerSettings/types';
 
 interface ITimelinePropsFromState {
     playerNews: IPlayerNewsItem[];
     loading: boolean;
     error: boolean;
+    trackedPlayers: IPlayer[];
 }
 
 interface ITimelinePropsFromDispatch {
     fetchPlayerNews: typeof timelineActions.fetchPlayerNews;
 }
 
+interface ITimelineUnconnectedState {
+    filteredPlayerNews: IPlayerNewsItem[];
+}
+
 interface ITimelineProps {}
 
 type TimelineProps = ITimelineProps & ITimelinePropsFromState & ITimelinePropsFromDispatch;
 
-class TimeLineUnconnected extends React.Component<TimelineProps> {
+class TimeLineUnconnected extends React.Component<TimelineProps, ITimelineUnconnectedState> {
     static navigationOptions = ({ navigation }: NavigationScreenProps) => {
         return {
             header: (
@@ -39,8 +45,18 @@ class TimeLineUnconnected extends React.Component<TimelineProps> {
         } as NavigationScreenOptions;
     };
 
+    state: ITimelineUnconnectedState = {
+        filteredPlayerNews: []
+    };
+
     public componentDidMount() {
         this.props.fetchPlayerNews();
+    }
+
+    public componentDidUpdate(prevProps: TimelineProps) {
+        if (prevProps.trackedPlayers.length !== this.props.trackedPlayers.length) {
+            this._updateFilteredPlayerNews();
+        }
     }
 
     public render() {
@@ -52,7 +68,7 @@ class TimeLineUnconnected extends React.Component<TimelineProps> {
                 <Stories />
 
                 <FlatList
-                    data={playerNews}
+                    data={this.state.filteredPlayerNews}
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={({ item }: { item: IPlayerNewsItem }) => {
                         return <PlayerNewsItem item={item} />;
@@ -61,6 +77,16 @@ class TimeLineUnconnected extends React.Component<TimelineProps> {
             </View>
         );
     }
+
+    private _updateFilteredPlayerNews = () => {
+        const filteredPlayerNews = this.props.playerNews.filter((playerNewsItem: IPlayerNewsItem) => {
+            return this.props.trackedPlayers.some(
+                (trackedPlayer: IPlayer) => playerNewsItem.player === trackedPlayer.name
+            );
+        });
+
+        this.setState({ filteredPlayerNews });
+    };
 }
 
 const styles = StyleSheet.create({
@@ -70,11 +96,12 @@ const styles = StyleSheet.create({
     }
 });
 
-const mapStateToProps = ({ timeline }: AppState): ITimelineState => {
+const mapStateToProps = ({ timeline, playerSettings }: AppState): ITimelineState => {
     return {
         error: timeline.error,
         loading: timeline.loading,
-        playerNews: timeline.playerNews
+        playerNews: timeline.playerNews,
+        trackedPlayers: playerSettings.trackedPlayers
     };
 };
 
