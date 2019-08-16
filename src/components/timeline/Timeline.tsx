@@ -3,15 +3,16 @@ import { NavigationScreenOptions, NavigationScreenProps } from 'react-navigation
 import { StyleSheet, View, FlatList } from 'react-native';
 import { Header } from 'react-native-elements';
 import { connect } from 'react-redux';
+import { isEqual } from 'lodash';
 
 import * as timelineActions from '../../store/timeline/actions';
-
-import { Stories } from './Stories/Stories';
-import { PlayerNewsItem, IPlayerNewsItem } from './PlayerNewsItem/PlayerNewsItem';
 import { ITimelineState } from '../../store/timeline/reducer';
 import { AppState } from '../../store';
 import { Dispatch } from 'redux';
 import { IPlayer } from '../../store/playerSettings/types';
+
+import { Stories } from './Stories/Stories';
+import { PlayerNewsItem, IPlayerNewsItem } from './PlayerNewsItem/PlayerNewsItem';
 
 interface ITimelinePropsFromState {
     playerNews: IPlayerNewsItem[];
@@ -25,6 +26,7 @@ interface ITimelinePropsFromDispatch {
 }
 
 interface ITimelineUnconnectedState {
+    firstLoadComplete: boolean;
     filteredPlayerNews: IPlayerNewsItem[];
 }
 
@@ -46,6 +48,7 @@ class TimeLineUnconnected extends React.Component<TimelineProps, ITimelineUnconn
     };
 
     state: ITimelineUnconnectedState = {
+        firstLoadComplete: false,
         filteredPlayerNews: []
     };
 
@@ -54,13 +57,12 @@ class TimeLineUnconnected extends React.Component<TimelineProps, ITimelineUnconn
     }
 
     public componentDidUpdate(prevProps: TimelineProps) {
-        if (prevProps.trackedPlayers.length !== this.props.trackedPlayers.length) {
+        if (!this.state.firstLoadComplete || !isEqual(prevProps.trackedPlayers, this.props.trackedPlayers)) {
             this._updateFilteredPlayerNews();
         }
     }
 
     public render() {
-        const playerNews = this.props.playerNews;
         const { timeLineContainer } = styles;
 
         return (
@@ -71,7 +73,7 @@ class TimeLineUnconnected extends React.Component<TimelineProps, ITimelineUnconn
                     data={this.state.filteredPlayerNews}
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={({ item }: { item: IPlayerNewsItem }) => {
-                        return <PlayerNewsItem item={item} />;
+                        return <PlayerNewsItem playerNewsItem={item} />;
                     }}
                 />
             </View>
@@ -80,12 +82,12 @@ class TimeLineUnconnected extends React.Component<TimelineProps, ITimelineUnconn
 
     private _updateFilteredPlayerNews = () => {
         const filteredPlayerNews = this.props.playerNews.filter((playerNewsItem: IPlayerNewsItem) => {
-            return this.props.trackedPlayers.some(
-                (trackedPlayer: IPlayer) => playerNewsItem.player === trackedPlayer.name
-            );
+            return this.props.trackedPlayers.some((trackedPlayer: IPlayer) => {
+                return playerNewsItem.player.name === trackedPlayer.name;
+            });
         });
 
-        this.setState({ filteredPlayerNews });
+        this.setState({ filteredPlayerNews, firstLoadComplete: true });
     };
 }
 

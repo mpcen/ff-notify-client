@@ -5,6 +5,7 @@ export interface IPlayer {
     teamId: number;
     number: string;
     position: string;
+    avatarUrl: string;
 }
 
 export interface IPlayerSettingsState {

@@ -4,23 +4,24 @@ import { Card, Text, Icon, Avatar, Divider } from 'react-native-elements';
 import { format } from 'date-fns';
 
 import { Reactions } from './Reactions';
+import { IPlayer } from '../../../store/playerSettings/types';
 
 export interface IPlayerNewsItem {
     platform: string;
     username: string;
     contentId: string;
-    player: string;
+    player: IPlayer;
     content: string;
     time: string;
 }
 
 interface IPlayerNewsItemProps {
-    item: IPlayerNewsItem;
+    playerNewsItem: IPlayerNewsItem;
 }
 
 export class PlayerNewsItem extends React.Component<IPlayerNewsItemProps> {
     render() {
-        const { item } = this.props;
+        const { playerNewsItem } = this.props;
         const {
             cardHeaderContainer,
             cardSourceContainer,
@@ -32,17 +33,15 @@ export class PlayerNewsItem extends React.Component<IPlayerNewsItemProps> {
             dividerContainer,
             avatarStyle
         } = styles;
-        const { content, contentId, player, time, username } = item;
-        const avatarUri =
-            'https://a.espncdn.com/combiner/i?img=/i/headshots/nfl/players/full/2330.png&h=96&w=96&scale=crop';
+        const { content, contentId, player, time, username } = playerNewsItem;
 
         return (
             <Card key={contentId}>
                 <View style={cardHeaderContainer}>
                     <Reactions />
 
-                    <Avatar avatarStyle={avatarStyle} rounded source={{ uri: avatarUri }} />
-                    <Text style={playerText}>{player}</Text>
+                    <Avatar avatarStyle={avatarStyle} rounded source={{ uri: playerNewsItem.player.avatarUrl }} />
+                    <Text style={playerText}>{player.name}</Text>
                 </View>
 
                 <Divider style={dividerContainer} />
