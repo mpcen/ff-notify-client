@@ -13,12 +13,14 @@ import { IPlayer } from '../../store/playerSettings/types';
 import { Stories } from './Stories/Stories';
 import { PlayerNewsItem, IPlayerNewsItem } from './PlayerNewsItem/PlayerNewsItem';
 import { TimelineHeader } from './Header';
+import { TimelineSortType } from '../../store/timeline/reducer';
 
 interface ITimelinePropsFromState {
     playerNews: IPlayerNewsItem[];
     loading: boolean;
     error: boolean;
     trackedPlayers: IPlayer[];
+    timelineSortType: TimelineSortType;
 }
 
 interface ITimelinePropsFromDispatch {
@@ -45,9 +47,7 @@ class TimeLineUnconnected extends React.Component<TimelineProps, ITimelineUnconn
         } as NavigationScreenOptions;
     };
 
-    // { type: 'material-community', icon: 'filter-variant', color: '#fff' }
-
-    state: ITimelineUnconnectedState = {
+    public state: ITimelineUnconnectedState = {
         firstLoadComplete: false,
         filteredPlayerNews: []
     };
@@ -81,27 +81,31 @@ class TimeLineUnconnected extends React.Component<TimelineProps, ITimelineUnconn
     }
 
     private _updateFilteredPlayerNews = () => {
+        let sortedPlayers: IPlayerNewsItem[];
         const filteredPlayerNews = this.props.playerNews.filter((playerNewsItem: IPlayerNewsItem) => {
             return this.props.trackedPlayers.some((trackedPlayer: IPlayer) => {
                 return playerNewsItem.player.name === trackedPlayer.name;
             });
         });
 
-        const sortFilteredPlayerNewsByPlayerName = filteredPlayerNews.sort((a: IPlayerNewsItem, b: IPlayerNewsItem) => {
-            if (a.player.name < b.player.name) return -1;
-            if (a.player.name > b.player.name) return 1;
-            return 0;
-        });
+        if (this.props.timelineSortType === TimelineSortType.Date) {
+            sortedPlayers = filteredPlayerNews.sort((a: IPlayerNewsItem, b: IPlayerNewsItem) => {
+                const aTime = a.time;
+                const bTime = b.time;
 
-        const sortFilteredPlayerNewsByDate = sortFilteredPlayerNewsByPlayerName.sort(
-            (a: IPlayerNewsItem, b: IPlayerNewsItem) => {
-                if (a.time < b.time) return -1;
-                if (a.time > b.time) return 1;
+                if (Date.parse(aTime) < Date.parse(bTime)) return 1;
+                if (Date.parse(aTime) > Date.parse(bTime)) return -1;
                 return 0;
-            }
-        );
+            });
+        } else {
+            sortedPlayers = filteredPlayerNews.sort((a: IPlayerNewsItem, b: IPlayerNewsItem) => {
+                if (a.player.name < b.player.name) return -1;
+                if (a.player.name > b.player.name) return 1;
+                return 0;
+            });
+        }
 
-        this.setState({ filteredPlayerNews: sortFilteredPlayerNewsByDate, firstLoadComplete: true });
+        this.setState({ filteredPlayerNews: sortedPlayers, firstLoadComplete: true });
     };
 }
 
@@ -117,7 +121,8 @@ const mapStateToProps = ({ timeline, playerSettings }: AppState): ITimelineProps
         error: timeline.error,
         loading: timeline.loading,
         playerNews: timeline.playerNews,
-        trackedPlayers: playerSettings.trackedPlayers
+        trackedPlayers: playerSettings.trackedPlayers,
+        timelineSortType: timeline.timelineSortType
     };
 };
 
