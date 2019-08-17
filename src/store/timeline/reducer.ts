@@ -6,21 +6,25 @@ import * as Actions from './actions';
 
 type Action = ActionType<typeof Actions>;
 
-import { FetchPlayerNewsActionTypes } from './types';
-import { IPlayer } from '../playerSettings/types';
+import { FetchPlayerNewsActionTypes, TimelineActionTypes } from './types';
+
+enum TimelineSortType {
+    Date,
+    Player
+}
 
 interface ITimelineState {
     playerNews: IPlayerNewsItem[];
     loading: boolean;
     error: boolean;
-    trackedPlayers?: IPlayer[];
+    timelineSortType: TimelineSortType;
 }
 
 const initialState: ITimelineState = {
     error: false,
     loading: true,
     playerNews: [],
-    trackedPlayers: []
+    timelineSortType: TimelineSortType.Date
 };
 
 const reducer: Reducer<ITimelineState, Action> = (state = initialState, action) => {
@@ -45,9 +49,15 @@ const reducer: Reducer<ITimelineState, Action> = (state = initialState, action) 
                 loading: false,
                 errorMessage: action.payload
             };
+
+        case TimelineActionTypes.SORT_TIMELINE_BY:
+            return {
+                ...state,
+                timelineSortType: action.payload
+            };
         default:
             return state;
     }
 };
 
-export { reducer as timelineReducer, ITimelineState };
+export { reducer as timelineReducer, ITimelineState, TimelineSortType };

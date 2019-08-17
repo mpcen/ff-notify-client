@@ -1,18 +1,18 @@
 import * as React from 'react';
 import { NavigationScreenOptions, NavigationScreenProps } from 'react-navigation';
-import { StyleSheet, View, FlatList } from 'react-native';
+import { StyleSheet, View, Text, FlatList } from 'react-native';
 import { Header } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { isEqual } from 'lodash';
 
 import * as timelineActions from '../../store/timeline/actions';
-import { ITimelineState } from '../../store/timeline/reducer';
 import { AppState } from '../../store';
 import { Dispatch } from 'redux';
 import { IPlayer } from '../../store/playerSettings/types';
 
 import { Stories } from './Stories/Stories';
 import { PlayerNewsItem, IPlayerNewsItem } from './PlayerNewsItem/PlayerNewsItem';
+import { TimelineHeader } from './Header';
 
 interface ITimelinePropsFromState {
     playerNews: IPlayerNewsItem[];
@@ -30,9 +30,7 @@ interface ITimelineUnconnectedState {
     filteredPlayerNews: IPlayerNewsItem[];
 }
 
-interface ITimelineProps {}
-
-type TimelineProps = ITimelineProps & ITimelinePropsFromState & ITimelinePropsFromDispatch;
+type TimelineProps = ITimelinePropsFromState & ITimelinePropsFromDispatch;
 
 class TimeLineUnconnected extends React.Component<TimelineProps, ITimelineUnconnectedState> {
     static navigationOptions = ({ navigation }: NavigationScreenProps) => {
@@ -41,11 +39,13 @@ class TimeLineUnconnected extends React.Component<TimelineProps, ITimelineUnconn
                 <Header
                     leftComponent={{ icon: 'menu', color: '#fff' }}
                     centerComponent={{ text: 'ACoolAppName', style: { color: '#fff', fontSize: 16 } }}
-                    rightComponent={{ type: 'material-community', icon: 'pin-outline', color: '#fff' }}
+                    rightComponent={<TimelineHeader />}
                 />
             )
         } as NavigationScreenOptions;
     };
+
+    // { type: 'material-community', icon: 'filter-variant', color: '#fff' }
 
     state: ITimelineUnconnectedState = {
         firstLoadComplete: false,
@@ -87,7 +87,21 @@ class TimeLineUnconnected extends React.Component<TimelineProps, ITimelineUnconn
             });
         });
 
-        this.setState({ filteredPlayerNews, firstLoadComplete: true });
+        const sortFilteredPlayerNewsByPlayerName = filteredPlayerNews.sort((a: IPlayerNewsItem, b: IPlayerNewsItem) => {
+            if (a.player.name < b.player.name) return -1;
+            if (a.player.name > b.player.name) return 1;
+            return 0;
+        });
+
+        const sortFilteredPlayerNewsByDate = sortFilteredPlayerNewsByPlayerName.sort(
+            (a: IPlayerNewsItem, b: IPlayerNewsItem) => {
+                if (a.time < b.time) return -1;
+                if (a.time > b.time) return 1;
+                return 0;
+            }
+        );
+
+        this.setState({ filteredPlayerNews: sortFilteredPlayerNewsByDate, firstLoadComplete: true });
     };
 }
 
@@ -98,7 +112,7 @@ const styles = StyleSheet.create({
     }
 });
 
-const mapStateToProps = ({ timeline, playerSettings }: AppState): ITimelineState => {
+const mapStateToProps = ({ timeline, playerSettings }: AppState): ITimelinePropsFromState => {
     return {
         error: timeline.error,
         loading: timeline.loading,

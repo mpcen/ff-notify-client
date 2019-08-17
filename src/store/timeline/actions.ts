@@ -1,7 +1,8 @@
 import { action } from 'typesafe-actions';
 
-import { FetchPlayerNewsActionTypes } from './types';
+import { FetchPlayerNewsActionTypes, TimelineActionTypes } from './types';
 import { IPlayerNewsItem } from '../../components/TimeLine/PlayerNewsItem/PlayerNewsItem';
+import { TimelineSortType } from './reducer';
 
 export const fetchPlayerNews = () => {
     return action(FetchPlayerNewsActionTypes.FETCH_PLAYER_NEWS);
@@ -13,4 +14,8 @@ export const fetchPlayerNewsSuccess = (data: IPlayerNewsItem[]) => {
 
 export const fetchPlayerNewsFail = (message: string) => {
     return action(FetchPlayerNewsActionTypes.FETCH_PLAYER_NEWS_FAIL, message);
+};
+
+export const sortPlayerBy = (sortType: TimelineSortType) => {
+    return action(TimelineActionTypes.SORT_TIMELINE_BY, sortType);
 };
