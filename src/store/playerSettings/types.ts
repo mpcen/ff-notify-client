@@ -1,4 +1,5 @@
 export interface IPlayer {
+    id: string;
     name: string;
     college: string;
     suffix?: string;

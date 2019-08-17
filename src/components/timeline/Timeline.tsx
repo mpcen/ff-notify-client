@@ -6,14 +6,15 @@ import { connect } from 'react-redux';
 import { isEqual } from 'lodash';
 
 import * as timelineActions from '../../store/timeline/actions';
+import { TimelineSortType } from '../../store/timeline/reducer';
 import { AppState } from '../../store';
 import { Dispatch } from 'redux';
 import { IPlayer } from '../../store/playerSettings/types';
+import { sortTimelineBy } from './utils';
 
-import { Stories } from './Stories/Stories';
+import { TrackedPlayerPanel } from './TrackedPlayerPanel/TrackedPlayerPanel';
 import { PlayerNewsItem, IPlayerNewsItem } from './PlayerNewsItem/PlayerNewsItem';
 import { TimelineHeader } from './Header';
-import { TimelineSortType } from '../../store/timeline/reducer';
 
 interface ITimelinePropsFromState {
     playerNews: IPlayerNewsItem[];
@@ -67,7 +68,7 @@ class TimeLineUnconnected extends React.Component<TimelineProps, ITimelineUnconn
 
         return (
             <View style={timeLineContainer}>
-                <Stories />
+                <TrackedPlayerPanel />
 
                 <FlatList
                     data={this.state.filteredPlayerNews}
@@ -89,20 +90,9 @@ class TimeLineUnconnected extends React.Component<TimelineProps, ITimelineUnconn
         });
 
         if (this.props.timelineSortType === TimelineSortType.Date) {
-            sortedPlayers = filteredPlayerNews.sort((a: IPlayerNewsItem, b: IPlayerNewsItem) => {
-                const aTime = a.time;
-                const bTime = b.time;
-
-                if (Date.parse(aTime) < Date.parse(bTime)) return 1;
-                if (Date.parse(aTime) > Date.parse(bTime)) return -1;
-                return 0;
-            });
+            sortedPlayers = sortTimelineBy(TimelineSortType.Date, filteredPlayerNews);
         } else {
-            sortedPlayers = filteredPlayerNews.sort((a: IPlayerNewsItem, b: IPlayerNewsItem) => {
-                if (a.player.name < b.player.name) return -1;
-                if (a.player.name > b.player.name) return 1;
-                return 0;
-            });
+            sortedPlayers = sortTimelineBy(TimelineSortType.Player, filteredPlayerNews);
         }
 
         this.setState({ filteredPlayerNews: sortedPlayers, firstLoadComplete: true });
