@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import Constants from 'expo-constants';
 import { connect } from 'react-redux';
 
@@ -17,9 +17,13 @@ type TrackedPlayerPanelProps = ITrackedPlayerPanelItemPropsFromState;
 export class TrackedPlayerPanelUnconnected extends React.Component<TrackedPlayerPanelProps> {
     render() {
         const { storiesContainer } = styles;
-
-        return (
+        const { trackedPlayers } = this.props;
+        return trackedPlayers.length ? (
             <View style={storiesContainer}>{this._renderTrackedPlayerPanelItemList(this.props.trackedPlayers)}</View>
+        ) : (
+            <View style={storiesContainer}>
+                <Text>No Tracked Players</Text>
+            </View>
         );
     }
 

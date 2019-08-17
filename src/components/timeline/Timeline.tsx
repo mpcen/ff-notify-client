@@ -58,7 +58,11 @@ class TimeLineUnconnected extends React.Component<TimelineProps, ITimelineUnconn
     }
 
     public componentDidUpdate(prevProps: TimelineProps) {
-        if (!this.state.firstLoadComplete || !isEqual(prevProps.trackedPlayers, this.props.trackedPlayers)) {
+        if (
+            !this.state.firstLoadComplete ||
+            (!isEqual(prevProps.trackedPlayers, this.props.trackedPlayers) ||
+                prevProps.timelineSortType !== this.props.timelineSortType)
+        ) {
             this._updateFilteredPlayerNews();
         }
     }
