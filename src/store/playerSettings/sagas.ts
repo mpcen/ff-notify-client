@@ -1,7 +1,9 @@
 import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
-import { FetchPlayersActionTypes, TrackPlayerActionTypes, IPlayer } from './types';
-import { fetchPlayersSuccess, fetchPlayersFail, trackPlayer, untrackPlayer } from './actions';
+import { FetchPlayersActionTypes } from './types';
+import { fetchPlayersSuccess, fetchPlayersFail } from './actions';
 import { callApi } from '../../api';
+
+const API_URL = 'https://ff-notify-api.herokuapp.com';
 
 function* watchFetchPlayers() {
     yield takeEvery(FetchPlayersActionTypes.FETCH_PLAYERS, handleFetchPlayers);
@@ -9,7 +11,7 @@ function* watchFetchPlayers() {
 
 function* handleFetchPlayers() {
     try {
-        const res = yield call(callApi, 'GET', 'http://192.168.0.210:3000/players');
+        const res = yield call(callApi, 'GET', `${API_URL}/players`);
 
         if (res.error) {
             yield put(fetchPlayersFail(res.error));

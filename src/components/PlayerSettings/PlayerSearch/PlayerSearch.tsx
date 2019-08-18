@@ -68,9 +68,10 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
                     onChangeText={searchText => {
                         this.setState({
                             searchText,
-                            filteredPlayers: this.props.players.filter(({ name }) =>
-                                name.toLowerCase().includes(searchText)
-                            )
+                            filteredPlayers: this.props.players.filter(({ name }) => {
+                                if (!name) return false;
+                                return name.toLowerCase().includes(searchText);
+                            })
                         });
                     }}
                 />

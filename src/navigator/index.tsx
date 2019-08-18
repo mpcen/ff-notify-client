@@ -60,7 +60,7 @@ const AppNavigator = createBottomTabNavigator(
             inactiveTintColor: 'gray',
             showLabel: false
         },
-        initialRouteName: 'Timeline'
+        initialRouteName: 'PlayerSettings'
     }
 );
 
