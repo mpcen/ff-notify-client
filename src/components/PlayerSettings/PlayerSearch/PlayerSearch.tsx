@@ -12,6 +12,7 @@ import { IPlayer } from '../../../store/playerSettings/types';
 import { IPlayerSettingsState } from '../../../store/playerSettings/reducer';
 
 import { PlayerCard } from './PlayerCard';
+import { PlayerListItem } from './PlayerListItem';
 
 interface IPlayerSearchPropsFromState {
     players: IPlayer[];
@@ -90,11 +91,7 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
     }
 
     private _renderPlayerListItem = (player: IPlayer) => {
-        return (
-            <TouchableOpacity onPress={() => this._handlePlayerSelect(player)}>
-                <Text>{player.name}</Text>
-            </TouchableOpacity>
-        );
+        return <PlayerListItem player={player} handlePlayerSelect={this._handlePlayerSelect} />;
     };
 
     private _handlePlayerSelect = (player: IPlayer) => {
