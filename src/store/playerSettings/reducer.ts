@@ -9,7 +9,18 @@ import { FetchPlayersActionTypes, TrackPlayerActionTypes, IPlayer, IPlayerSettin
 
 const initialState: IPlayerSettingsState = {
     players: [],
-    trackedPlayers: [],
+    trackedPlayers: [
+        {
+            id: 'Jamal AdamsLSUS',
+            name: 'Jamal Adams',
+            suffix: '',
+            college: 'LSU',
+            teamId: 24,
+            position: 'S',
+            number: '33',
+            avatarUrl: 'https://a.espncdn.com/i/headshots/nfl/players/full/3115373.png'
+        }
+    ],
     loading: true,
     error: false
 };

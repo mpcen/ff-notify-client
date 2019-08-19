@@ -1,5 +1,7 @@
 import * as React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Avatar, ListItem } from 'react-native-elements';
+
 import { IPlayer } from '../../../store/playerSettings/types';
 
 interface IPlayerListItemProps {
@@ -8,11 +10,25 @@ interface IPlayerListItemProps {
 }
 
 export const PlayerListItem = (props: IPlayerListItemProps) => {
+    const { handlePlayerSelect, player } = props;
+    const { avatarStyle } = styles;
+
     return (
-        <TouchableOpacity onPress={() => props.handlePlayerSelect(props.player)}>
-            <View>
-                <Text>{props.player.name}</Text>
-            </View>
-        </TouchableOpacity>
+        <ListItem
+            key={player.id}
+            onPress={() => handlePlayerSelect(player)}
+            leftAvatar={<Avatar rounded size="medium" avatarStyle={avatarStyle} source={{ uri: player.avatarUrl }} />}
+            rightIcon={{ name: 'add-alarm' }}
+            title={player.name}
+            subtitle={player.position}
+            bottomDivider
+        />
     );
 };
+
+const styles = StyleSheet.create({
+    avatarStyle: {
+        backgroundColor: 'white',
+        borderColor: 'white'
+    }
+});
