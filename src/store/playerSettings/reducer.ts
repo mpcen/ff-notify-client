@@ -5,22 +5,11 @@ import * as Actions from './actions';
 
 type Action = ActionType<typeof Actions>;
 
-import { FetchPlayersActionTypes, TrackPlayerActionTypes, IPlayer, IPlayerSettingsState } from './types';
+import { FetchPlayersActionTypes, TrackPlayerActionTypes, IPlayerSettingsState } from './types';
 
 const initialState: IPlayerSettingsState = {
     players: [],
-    trackedPlayers: [
-        // {
-        //     id: 'Jamal AdamsLSUS',
-        //     name: 'Jamal Adams',
-        //     suffix: '',
-        //     college: 'LSU',
-        //     teamId: 24,
-        //     position: 'S',
-        //     number: '33',
-        //     avatarUrl: 'https://a.espncdn.com/i/headshots/nfl/players/full/3115373.png'
-        // }
-    ],
+    trackedPlayers: [],
     loading: true,
     error: false
 };

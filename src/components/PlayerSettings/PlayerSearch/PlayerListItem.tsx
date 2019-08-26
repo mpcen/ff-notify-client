@@ -28,7 +28,7 @@ export const PlayerListItem = (props: IPlayerListItemProps) => {
 
 const styles = StyleSheet.create({
     avatarStyle: {
-        backgroundColor: 'white',
+        backgroundColor: '#eee',
         borderColor: 'white'
     }
 });

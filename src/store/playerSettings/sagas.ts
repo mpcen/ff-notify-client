@@ -3,15 +3,13 @@ import { FetchPlayersActionTypes } from './types';
 import { fetchPlayersSuccess, fetchPlayersFail } from './actions';
 import { callApi } from '../../api';
 
-const API_URL = 'https://ff-notify-api.herokuapp.com';
-
 function* watchFetchPlayers() {
     yield takeEvery(FetchPlayersActionTypes.FETCH_PLAYERS, handleFetchPlayers);
 }
 
 function* handleFetchPlayers() {
     try {
-        const res = yield call(callApi, 'GET', `${API_URL}/players`);
+        const res = yield call(callApi, 'GET', 'players');
 
         if (res.error) {
             yield put(fetchPlayersFail(res.error));
