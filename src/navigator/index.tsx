@@ -4,7 +4,8 @@ import {
     createBottomTabNavigator,
     createStackNavigator,
     createAppContainer,
-    createMaterialTopTabNavigator
+    createMaterialTopTabNavigator,
+    createSwitchNavigator
 } from 'react-navigation';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -12,9 +13,13 @@ import { Timeline } from '../components/Timeline/Timeline';
 import { AlertSettings } from '../components/AlertSettings/AlertSettings';
 import { PlayerSearch } from '../components/PlayerSettings/PlayerSearch/PlayerSearch';
 import { TrackedPlayers } from '../components/PlayerSettings/TrackedPlayers/TrackedPlayers';
+import { Account } from '../components/User/Account';
+import { Signin } from '../components/User/Signin';
+import { Signup } from '../components/User/Signup';
 
 const TimelineStack = createStackNavigator({ Timeline });
 const AlertSettingsStack = createStackNavigator({ AlertSettings });
+const AccountStack = createStackNavigator({ Account });
 const PlayerSettingsTabs = createMaterialTopTabNavigator(
     {
         PlayerSearch,
@@ -29,12 +34,16 @@ const PlayerSettingsTabs = createMaterialTopTabNavigator(
         }
     }
 );
-
-const AppNavigator = createBottomTabNavigator(
+const LoginStack = createStackNavigator({
+    Signup,
+    Signin
+});
+const MainFlow = createBottomTabNavigator(
     {
         Timeline: TimelineStack,
         PlayerSettings: PlayerSettingsTabs,
         AlertSettings: AlertSettingsStack
+        // Account: AccountStack
     },
     {
         defaultNavigationOptions: ({ navigation }) => ({
@@ -61,6 +70,16 @@ const AppNavigator = createBottomTabNavigator(
             showLabel: false
         },
         initialRouteName: 'PlayerSettings'
+    }
+);
+
+const AppNavigator = createSwitchNavigator(
+    {
+        LoginStack,
+        MainFlow
+    },
+    {
+        initialRouteName: 'LoginStack'
     }
 );
 
