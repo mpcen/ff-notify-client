@@ -20,7 +20,7 @@ function* handleFetchPlayerNews() {
         if (err instanceof Error) {
             yield put(fetchPlayerNewsFail(err.stack!));
         } else {
-            yield put(fetchPlayerNewsFail('An unknown error occured.'));
+            yield put(fetchPlayerNewsFail('An unknown error occurred.'));
         }
     }
 }

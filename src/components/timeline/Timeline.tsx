@@ -4,11 +4,11 @@ import { StyleSheet, View, Text, FlatList } from 'react-native';
 import { Header } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { isEqual } from 'lodash';
+import { Dispatch } from 'redux';
 
 import * as timelineActions from '../../store/timeline/actions';
 import { TimelineSortType } from '../../store/timeline/reducer';
 import { AppState } from '../../store';
-import { Dispatch } from 'redux';
 import { IPlayer } from '../../store/playerSettings/types';
 import { sortTimelineBy } from './utils';
 

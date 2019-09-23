@@ -15,7 +15,7 @@ import { PlayerSearch } from '../components/PlayerSettings/PlayerSearch/PlayerSe
 import { TrackedPlayers } from '../components/PlayerSettings/TrackedPlayers/TrackedPlayers';
 import { Account } from '../components/User/Account';
 import { Signin } from '../components/User/Signin';
-import { Signup } from '../components/User/Signup';
+import { SignUp } from '../components/User/SignUp';
 
 const TimelineStack = createStackNavigator({ Timeline });
 const AlertSettingsStack = createStackNavigator({ AlertSettings });
@@ -35,7 +35,7 @@ const PlayerSettingsTabs = createMaterialTopTabNavigator(
     }
 );
 const LoginStack = createStackNavigator({
-    Signup,
+    SignUp,
     Signin
 });
 const MainFlow = createBottomTabNavigator(
