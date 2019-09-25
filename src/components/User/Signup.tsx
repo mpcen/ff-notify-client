@@ -1,6 +1,12 @@
 import * as React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { NavigationScreenProp, NavigationState, NavigationParams, NavigationScreenOptions } from 'react-navigation';
+import {
+    NavigationScreenProp,
+    NavigationState,
+    NavigationParams,
+    NavigationScreenOptions,
+    NavigationScreenProps
+} from 'react-navigation';
 import { Text, Input, Button } from 'react-native-elements';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -25,7 +31,7 @@ interface ISignUpPropsFromDispatch {
 
 type SignUpProps = ISignUpProps & ISignUpPropsFromDispatch;
 
-class SignUpUnconnected extends React.Component<SignupProps, ISignUpState> {
+class SignUpUnconnected extends React.Component<SignUpProps, {}> {
     static navigationOptions = ({ navigation }: NavigationScreenProps) => {
         return {
             header: null
