@@ -14,19 +14,36 @@ import { AlertSettings } from '../components/AlertSettings/AlertSettings';
 import { PlayerSearch } from '../components/PlayerSettings/PlayerSearch/PlayerSearch';
 import { TrackedPlayers } from '../components/PlayerSettings/TrackedPlayers/TrackedPlayers';
 import { Account } from '../components/User/Account';
-import { Signin } from '../components/User/Signin';
+import { SignIn } from '../components/User/SignIn';
 import { SignUp } from '../components/User/SignUp';
+
+export enum NAVROUTES {
+    PlayerSearch = 'PlayerSearch',
+    TrackedPlayers = 'TrackedPlayers',
+    SignUp = 'SignUp',
+    SignIn = 'SignIn',
+    Timeline = 'Timeline',
+    PlayerSettings = 'PlayerSettings',
+    AlertSettings = 'AlertSettings',
+    Account = 'Account',
+    LogInStack = 'LogInStack',
+    MainFlow = 'MainFlow'
+}
 
 const TimelineStack = createStackNavigator({ Timeline });
 const AlertSettingsStack = createStackNavigator({ AlertSettings });
 const AccountStack = createStackNavigator({ Account });
 const PlayerSettingsTabs = createMaterialTopTabNavigator(
     {
-        PlayerSearch,
-        TrackedPlayers
+        [NAVROUTES.PlayerSearch]: {
+            screen: PlayerSearch
+        },
+        [NAVROUTES.TrackedPlayers]: {
+            screen: TrackedPlayers
+        }
     },
     {
-        initialRouteName: 'PlayerSearch',
+        initialRouteName: NAVROUTES.PlayerSearch,
         tabBarOptions: {
             style: {
                 paddingTop: Constants.statusBarHeight
@@ -34,29 +51,39 @@ const PlayerSettingsTabs = createMaterialTopTabNavigator(
         }
     }
 );
-const LoginStack = createStackNavigator({
-    SignUp,
-    Signin
+const LogInStack = createStackNavigator({
+    [NAVROUTES.SignUp]: {
+        screen: SignUp
+    },
+    [NAVROUTES.SignIn]: {
+        screen: SignIn
+    }
 });
 const MainFlow = createBottomTabNavigator(
     {
-        Timeline: TimelineStack,
-        PlayerSettings: PlayerSettingsTabs,
-        AlertSettings: AlertSettingsStack
+        [NAVROUTES.Timeline]: {
+            screen: TimelineStack
+        },
+        [NAVROUTES.PlayerSettings]: {
+            screen: PlayerSettingsTabs
+        },
+        [NAVROUTES.AlertSettings]: {
+            screen: AlertSettingsStack
+        }
         // Account: AccountStack
     },
     {
         defaultNavigationOptions: ({ navigation }) => ({
-            tabBarIcon: ({ focused, horizontal, tintColor }) => {
+            tabBarIcon: ({ tintColor }) => {
                 const { routeName } = navigation.state;
                 let IconComponent = MaterialCommunityIcons;
                 let iconName;
 
-                if (routeName === 'Timeline') {
+                if (routeName === NAVROUTES.Timeline) {
                     iconName = `home-alert`;
-                } else if (routeName === 'PlayerSettings') {
+                } else if (routeName === NAVROUTES.PlayerSettings) {
                     iconName = `account-group`;
-                } else if (routeName === 'AlertSettings') {
+                } else if (routeName === NAVROUTES.AlertSettings) {
                     iconName = `tune`;
                 }
 
@@ -69,17 +96,21 @@ const MainFlow = createBottomTabNavigator(
             inactiveTintColor: 'gray',
             showLabel: false
         },
-        initialRouteName: 'PlayerSettings'
+        initialRouteName: NAVROUTES.PlayerSettings
     }
 );
 
 const AppNavigator = createSwitchNavigator(
     {
-        LoginStack,
-        MainFlow
+        [NAVROUTES.LogInStack]: {
+            screen: LogInStack
+        },
+        [NAVROUTES.MainFlow]: {
+            screen: MainFlow
+        }
     },
     {
-        initialRouteName: 'LoginStack'
+        initialRouteName: NAVROUTES.LogInStack
     }
 );
 

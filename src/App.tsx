@@ -3,8 +3,10 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import createSagaMiddleware from '@redux-saga/core';
+import { NavigationContainerComponent } from 'react-navigation';
 
-import { rootReducer, rootSaga, AppState } from './store';
+import { setNavigator } from './navigationRef';
+import { rootReducer, rootSaga } from './store';
 
 import { AppContainer } from './navigator';
 
@@ -17,7 +19,11 @@ export class App extends React.Component {
     render() {
         return (
             <Provider store={store}>
-                <AppContainer />
+                <AppContainer
+                    ref={(navigation: NavigationContainerComponent) => {
+                        setNavigator(navigation);
+                    }}
+                />
             </Provider>
         );
     }
