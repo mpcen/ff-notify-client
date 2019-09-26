@@ -1,11 +1,13 @@
 export interface IUser {
-    password: string;
     email: string;
+    password: string;
 }
 
 export interface IUserState {
-    isSignedIn: boolean;
+    token: string | null;
     user: IUser | null;
+    message: string;
+    errorMessage: string;
 }
 
 export enum SignUpActionTypes {

@@ -1,17 +1,12 @@
 import * as React from 'react';
 import { View, StyleSheet } from 'react-native';
-import {
-    NavigationScreenProp,
-    NavigationState,
-    NavigationParams,
-    NavigationScreenOptions,
-    NavigationScreenProps
-} from 'react-navigation';
+import { NavigationScreenOptions, NavigationScreenProps } from 'react-navigation';
 import { Text, Input, Button } from 'react-native-elements';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 
 import * as userActions from '../../store/user/actions';
+import { AppState } from '../../store';
 
 import { Spacer } from '../common/Spacer';
 import { IUser } from '../../store/user/types';
@@ -21,17 +16,19 @@ interface ISignUpUnconnectedState {
     password: string;
 }
 
-interface ISignUpProps {
-    navigation: NavigationScreenProp<NavigationState, NavigationParams>;
+interface ISignUpPropsFromState {
+    errorMessage: string;
+    message: string;
 }
 
 interface ISignUpPropsFromDispatch {
     signUp: typeof userActions.signUp;
 }
 
-type SignUpProps = ISignUpProps & ISignUpPropsFromDispatch;
+type SignUpProps = ISignUpPropsFromDispatch & ISignUpPropsFromState;
+type SignUpState = ISignUpUnconnectedState;
 
-class SignUpUnconnected extends React.Component<SignUpProps, {}> {
+class SignUpUnconnected extends React.Component<SignUpProps, SignUpState> {
     static navigationOptions = ({ navigation }: NavigationScreenProps) => {
         return {
             header: null
@@ -60,6 +57,7 @@ class SignUpUnconnected extends React.Component<SignUpProps, {}> {
 
     render() {
         const { email, password } = this.state;
+
         return (
             <View style={styles.container}>
                 <Spacer>
@@ -85,6 +83,10 @@ class SignUpUnconnected extends React.Component<SignUpProps, {}> {
                     onChangeText={this.handlePasswordChange}
                 />
 
+                <Text style={this.props.errorMessage ? styles.errorMessage : styles.message}>
+                    {this.props.errorMessage || this.props.message}
+                </Text>
+
                 <Spacer>
                     <Button title="Sign Up" onPress={this.handleSignUp}></Button>
                 </Spacer>
@@ -98,8 +100,27 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         marginBottom: 200
+    },
+    errorMessage: {
+        marginLeft: 15,
+        marginTop: 15,
+        fontSize: 16,
+        color: 'red'
+    },
+    message: {
+        marginLeft: 15,
+        marginTop: 15,
+        fontSize: 16,
+        color: 'green'
     }
 });
+
+const mapStateToProps = ({ user }: AppState): ISignUpPropsFromState => {
+    return {
+        errorMessage: user.errorMessage,
+        message: user.message
+    };
+};
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
@@ -108,6 +129,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
 };
 
 export const SignUp = connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
 )(SignUpUnconnected);

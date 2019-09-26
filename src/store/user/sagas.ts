@@ -1,5 +1,7 @@
-import { all, call, fork, put, takeEvery, takeLatest } from 'redux-saga/effects';
-import { SignInActionTypes, SignOutActionTypes, SignUpActionTypes, IUser } from './types';
+import { all, call, fork, put, takeLatest } from 'redux-saga/effects';
+import { AsyncStorage } from 'react-native';
+
+import { SignUpActionTypes } from './types';
 import { signUp, signUpSuccess, signUpFail } from './actions';
 import { callApi } from '../../api';
 
@@ -14,6 +16,7 @@ function* handleSignUp({ payload }: ReturnType<typeof signUp>) {
         if (res.error) {
             yield put(signUpFail(res.error));
         } else {
+            yield call(AsyncStorage.setItem, 'token', res.token);
             yield put(signUpSuccess(res));
         }
     } catch (err) {

@@ -2,12 +2,12 @@ import { action } from 'typesafe-actions';
 
 import { SignUpActionTypes, SignInActionTypes, SignOutActionTypes, IUser } from './types';
 
-export const signUp = (data: IUser) => {
-    return action(SignUpActionTypes.SIGN_UP, data);
+export const signUp = (user: IUser) => {
+    return action(SignUpActionTypes.SIGN_UP, user);
 };
 
-export const signUpSuccess = (data: IUser) => {
-    return action(SignUpActionTypes.SIGN_UP_SUCCESS, data);
+export const signUpSuccess = (token: string) => {
+    return action(SignUpActionTypes.SIGN_UP_SUCCESS, token);
 };
 
 export const signUpFail = (message: string) => {
@@ -18,8 +18,8 @@ export const signIn = () => {
     return action(SignInActionTypes.SIGN_IN);
 };
 
-export const signInSuccess = (data: IUser) => {
-    return action(SignInActionTypes.SIGN_IN_SUCCESS, data);
+export const signInSuccess = (token: string) => {
+    return action(SignInActionTypes.SIGN_IN_SUCCESS, token);
 };
 
 export const signInFail = (message: string) => {
