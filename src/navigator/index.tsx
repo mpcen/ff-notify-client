@@ -16,19 +16,7 @@ import { TrackedPlayers } from '../components/PlayerSettings/TrackedPlayers/Trac
 import { Account } from '../components/User/Account';
 import { SignIn } from '../components/User/SignIn';
 import { SignUp } from '../components/User/SignUp';
-
-export enum NAVROUTES {
-    PlayerSearch = 'PlayerSearch',
-    TrackedPlayers = 'TrackedPlayers',
-    SignUp = 'SignUp',
-    SignIn = 'SignIn',
-    Timeline = 'Timeline',
-    PlayerSettings = 'PlayerSettings',
-    AlertSettings = 'AlertSettings',
-    Account = 'Account',
-    LogInStack = 'LogInStack',
-    MainFlow = 'MainFlow'
-}
+import { NAVROUTES } from './navRoutes';
 
 const TimelineStack = createStackNavigator({ Timeline });
 const AlertSettingsStack = createStackNavigator({ AlertSettings });

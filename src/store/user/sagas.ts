@@ -1,11 +1,11 @@
 import { all, call, fork, put, takeLatest } from 'redux-saga/effects';
 import { AsyncStorage } from 'react-native';
 
-import { navigate } from '../../navigationRef';
+import { navigate } from '../../navigator/navigationRef';
 import { SignUpActionTypes } from './types';
 import { signUp, signUpSuccess, signUpFail } from './actions';
 import { callApi } from '../../api';
-import { NAVROUTES } from '../../navigator';
+import { NAVROUTES } from '../../navigator/navRoutes';
 
 function* watchSignUp() {
     yield takeLatest(SignUpActionTypes.SIGN_UP, handleSignUp);
@@ -20,6 +20,7 @@ function* handleSignUp({ payload }: ReturnType<typeof signUp>) {
         } else {
             yield call(AsyncStorage.setItem, 'token', res.token);
             yield put(signUpSuccess(res));
+
             navigate(NAVROUTES.Timeline);
         }
     } catch (err) {

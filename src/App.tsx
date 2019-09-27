@@ -5,7 +5,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import createSagaMiddleware from '@redux-saga/core';
 import { NavigationContainerComponent } from 'react-navigation';
 
-import { setNavigator } from './navigationRef';
+import { setNavigator } from './navigator/navigationRef';
 import { rootReducer, rootSaga } from './store';
 
 import { AppContainer } from './navigator';
