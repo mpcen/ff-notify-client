@@ -5,7 +5,7 @@ import * as Actions from './actions';
 
 type Action = ActionType<typeof Actions>;
 
-import { IUserState, SignUpActionTypes, SignInActionTypes } from './types';
+import { IUserState, SignUpActionTypes, SignInActionTypes, RESET_USER } from './types';
 
 const initialState: IUserState = {
     token: null,
@@ -15,6 +15,13 @@ const initialState: IUserState = {
 
 const reducer: Reducer<IUserState, Action> = (state = initialState, action) => {
     switch (action.type) {
+        case RESET_USER:
+            return {
+                ...state,
+                errorMessage: '',
+                token: null
+            };
+
         case SignUpActionTypes.SIGN_UP_SUCCESS:
             return {
                 ...state,

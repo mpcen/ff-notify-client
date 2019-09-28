@@ -16,6 +16,7 @@ import { TrackedPlayers } from '../components/PlayerSettings/TrackedPlayers/Trac
 import { Account } from '../components/User/Account';
 import { SignIn } from '../components/User/SignIn';
 import { SignUp } from '../components/User/SignUp';
+import { ResolveAuth } from '../ResolveAuth';
 import { NAVROUTES } from './navRoutes';
 
 const TimelineStack = createStackNavigator({ Timeline });
@@ -88,12 +89,15 @@ const MainFlow = createBottomTabNavigator(
             inactiveTintColor: 'gray',
             showLabel: false
         },
-        initialRouteName: NAVROUTES.PlayerSettings
+        initialRouteName: NAVROUTES.Timeline
     }
 );
 
 const AppNavigator = createSwitchNavigator(
     {
+        [NAVROUTES.ResolveAuth]: {
+            screen: ResolveAuth
+        },
         [NAVROUTES.LogInStack]: {
             screen: LogInStack
         },
@@ -102,7 +106,7 @@ const AppNavigator = createSwitchNavigator(
         }
     },
     {
-        initialRouteName: NAVROUTES.LogInStack
+        initialRouteName: NAVROUTES.ResolveAuth
     }
 );
 

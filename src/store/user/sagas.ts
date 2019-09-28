@@ -2,8 +2,17 @@ import { all, call, fork, put, takeLatest } from 'redux-saga/effects';
 import { AsyncStorage } from 'react-native';
 
 import { navigate } from '../../navigator/navigationRef';
-import { SignUpActionTypes, SignInActionTypes } from './types';
-import { signUp, signUpSuccess, signUpFail, signInSuccess, signInFail, signIn } from './actions';
+import { SignUpActionTypes, SignInActionTypes, SignOutActionTypes } from './types';
+import {
+    signUp,
+    signUpSuccess,
+    signUpFail,
+    signInSuccess,
+    signInFail,
+    signIn,
+    signOutSuccess,
+    signOutFail
+} from './actions';
 import { callApi } from '../../api';
 import { NAVROUTES } from '../../navigator/navRoutes';
 
@@ -56,6 +65,21 @@ function* handleSignIn({ payload }: ReturnType<typeof signIn>) {
     }
 }
 
+function* watchSignOut() {
+    yield takeLatest(SignOutActionTypes.SIGN_OUT, handleSignOut);
+}
+
+function* handleSignOut() {
+    try {
+        yield call(AsyncStorage.removeItem, 'token');
+        yield put(signOutSuccess());
+
+        navigate(NAVROUTES.LogInStack);
+    } catch (err) {
+        yield put(signOutFail('Error signing out'));
+    }
+}
+
 export function* userSaga() {
-    yield all([fork(watchSignUp), fork(watchSignIn)]);
+    yield all([fork(watchSignUp), fork(watchSignIn), fork(watchSignOut)]);
 }

@@ -8,5 +8,6 @@ export enum NAVROUTES {
     AlertSettings = 'AlertSettings',
     Account = 'Account',
     LogInStack = 'LogInStack',
-    MainFlow = 'MainFlow'
+    MainFlow = 'MainFlow',
+    ResolveAuth = 'ResolveAuth'
 }

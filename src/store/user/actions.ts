@@ -1,6 +1,10 @@
 import { action } from 'typesafe-actions';
 
-import { SignUpActionTypes, SignInActionTypes, SignOutActionTypes, IUser } from './types';
+import { SignUpActionTypes, SignInActionTypes, SignOutActionTypes, IUser, RESET_USER } from './types';
+
+export const reset = () => {
+    return action(RESET_USER);
+};
 
 export const signUp = (user: IUser) => {
     return action(SignUpActionTypes.SIGN_UP, user);
@@ -30,8 +34,8 @@ export const signOut = () => {
     return action(SignOutActionTypes.SIGN_OUT);
 };
 
-export const signOutSuccess = (data: IUser) => {
-    return action(SignOutActionTypes.SIGN_OUT_SUCCESS, data);
+export const signOutSuccess = () => {
+    return action(SignOutActionTypes.SIGN_OUT_SUCCESS);
 };
 
 export const signOutFail = (message: string) => {

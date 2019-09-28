@@ -12,13 +12,15 @@ export interface IUserState {
 export enum SignUpActionTypes {
     SIGN_UP = 'SIGN_UP',
     SIGN_UP_SUCCESS = 'SIGN_UP_SUCCESS',
-    SIGN_UP_FAIL = 'SIGN_UP_FAIL'
+    SIGN_UP_FAIL = 'SIGN_UP_FAIL',
+    RESET = 'RESET'
 }
 
 export enum SignInActionTypes {
     SIGN_IN = 'SIGN_IN',
     SIGN_IN_SUCCESS = 'SIGN_IN_SUCCESS',
-    SIGN_IN_FAIL = 'SIGN_IN_FAIL'
+    SIGN_IN_FAIL = 'SIGN_IN_FAIL',
+    RESET = 'RESET'
 }
 
 export enum SignOutActionTypes {
@@ -26,3 +28,5 @@ export enum SignOutActionTypes {
     SIGN_OUT_SUCCESS = 'SIGN_OUT_SUCCESS',
     SIGN_OUT_FAIL = 'SIGN_OUT_FAIL'
 }
+
+export const RESET_USER = 'RESET_USER';

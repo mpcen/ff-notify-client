@@ -26,6 +26,7 @@ interface ISignInPropsFromState {
 
 interface ISignInPropsFromDispatch {
     signIn: typeof userActions.signIn;
+    reset: typeof userActions.reset;
 }
 
 type SignInProps = ISignInProps & ISignInPropsFromDispatch & ISignInPropsFromState;
@@ -49,7 +50,10 @@ class SignInUnconnected extends React.Component<SignInProps, {}> {
 
                 <AuthNavLink
                     text="Don't have an account? Sign up for FFNotify"
-                    onPress={() => this.props.navigation.navigate(NAVROUTES.SignUp)}
+                    onPress={() => {
+                        this.props.navigation.navigate(NAVROUTES.SignUp);
+                        this.props.reset();
+                    }}
                 />
             </View>
         );
@@ -84,7 +88,8 @@ const mapStateToProps = ({ user }: AppState): ISignInPropsFromState => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        signIn: (user: IUser) => dispatch(userActions.signIn(user))
+        signIn: (user: IUser) => dispatch(userActions.signIn(user)),
+        reset: () => dispatch(userActions.reset())
     };
 };
 

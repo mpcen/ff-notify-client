@@ -7,7 +7,6 @@ import { NavigationContainerComponent } from 'react-navigation';
 
 import { setNavigator } from './navigator/navigationRef';
 import { rootReducer, rootSaga } from './store';
-
 import { AppContainer } from './navigator';
 
 const sagaMiddleware = createSagaMiddleware();
