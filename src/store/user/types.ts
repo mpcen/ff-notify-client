@@ -6,7 +6,6 @@ export interface IUser {
 export interface IUserState {
     token: string | null;
     user: IUser | null;
-    message: string;
     errorMessage: string;
 }
 

@@ -1,21 +1,20 @@
 import * as React from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import {
     NavigationScreenOptions,
     NavigationScreenProps,
     NavigationScreenProp,
     NavigationRoute
 } from 'react-navigation';
-import { Text, Input, Button } from 'react-native-elements';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 
 import * as userActions from '../../store/user/actions';
 import { AppState } from '../../store';
-import { Spacer } from '../common/Spacer';
 import { IUser } from '../../store/user/types';
 import { AuthForm } from './AuthForm';
 import { NAVROUTES } from '../../navigator/navRoutes';
+import { AuthNavLink } from './AuthNavLink';
 
 interface ISignUpProps {
     navigation: NavigationScreenProp<NavigationRoute>;
@@ -23,7 +22,6 @@ interface ISignUpProps {
 
 interface ISignUpPropsFromState {
     errorMessage: string;
-    message: string;
 }
 
 interface ISignUpPropsFromDispatch {
@@ -49,11 +47,10 @@ class SignUpUnconnected extends React.Component<SignUpProps, {}> {
                     onSubmit={this.props.signUp}
                 />
 
-                <Spacer>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate(NAVROUTES.SignIn)}>
-                        <Text style={styles.alternateMessage}>Already have an account? Sign in instead</Text>
-                    </TouchableOpacity>
-                </Spacer>
+                <AuthNavLink
+                    text="Already have an account? Sign in instead"
+                    onPress={() => this.props.navigation.navigate(NAVROUTES.SignIn)}
+                />
             </View>
         );
     }
@@ -76,16 +73,12 @@ const styles = StyleSheet.create({
         marginTop: 15,
         fontSize: 16,
         color: 'green'
-    },
-    alternateMessage: {
-        color: 'blue'
     }
 });
 
 const mapStateToProps = ({ user }: AppState): ISignUpPropsFromState => {
     return {
-        errorMessage: user.errorMessage,
-        message: user.message
+        errorMessage: user.errorMessage
     };
 };
 

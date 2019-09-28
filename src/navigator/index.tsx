@@ -57,8 +57,10 @@ const MainFlow = createBottomTabNavigator(
         },
         [NAVROUTES.AlertSettings]: {
             screen: AlertSettingsStack
+        },
+        [NAVROUTES.Account]: {
+            screen: AccountStack
         }
-        // Account: AccountStack
     },
     {
         defaultNavigationOptions: ({ navigation }) => ({
@@ -73,6 +75,8 @@ const MainFlow = createBottomTabNavigator(
                     iconName = `account-group`;
                 } else if (routeName === NAVROUTES.AlertSettings) {
                     iconName = `tune`;
+                } else if (routeName === NAVROUTES.Account) {
+                    iconName = `account`;
                 }
 
                 // You can return any component that you like here!

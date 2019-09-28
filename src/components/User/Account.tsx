@@ -1,10 +1,20 @@
 import * as React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, Text } from 'react-native';
+import { NavigationScreenOptions, NavigationScreenProps } from 'react-navigation';
+import { Header } from 'react-native-elements';
 
-const Account = () => {
-    return <Text style={{ fontSize: 48 }}>Account</Text>;
-};
+export class Account extends React.Component {
+    static navigationOptions = ({ navigation }: NavigationScreenProps) => {
+        return {
+            header: <Header centerComponent={{ text: 'Account', style: { color: '#fff' } }} />
+        } as NavigationScreenOptions;
+    };
 
-const styles = StyleSheet.create({});
-
-export { Account };
+    render() {
+        return (
+            <View>
+                <Text>Account</Text>
+            </View>
+        );
+    }
+}
