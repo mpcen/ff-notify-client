@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { IPlayer } from '../../../store/playerSettings/types';
 
 interface IPlayerCardProps {
@@ -13,7 +13,7 @@ export const PlayerCard = (props: IPlayerCardProps) => {
             <Text>{props.player.name}</Text>
 
             <TouchableOpacity onPress={props.handleTrackPlayer}>
-                <Text>Follow</Text>
+                <Text>Track</Text>
             </TouchableOpacity>
         </View>
     );

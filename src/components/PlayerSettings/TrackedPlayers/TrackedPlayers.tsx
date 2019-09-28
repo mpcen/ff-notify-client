@@ -16,6 +16,7 @@ interface ITrackedPlayersPropsFromState {
 
 interface ITrackedPlayersPropsFromDispatch {
     untrackPlayer: typeof playerSettingsActions.untrackPlayer;
+    fetchTrackedPlayers: typeof playerSettingsActions.fetchTrackedPlayers;
 }
 
 type TrackedPlayersProps = ITrackedPlayersPropsFromState & ITrackedPlayersPropsFromDispatch;
@@ -27,6 +28,10 @@ class TrackedPlayersUnconnected extends React.Component<TrackedPlayersProps> {
         } as NavigationScreenOptions;
     };
 
+    componentDidMount() {
+        this.props.fetchTrackedPlayers();
+    }
+
     render() {
         return (
             <View>
@@ -35,9 +40,7 @@ class TrackedPlayersUnconnected extends React.Component<TrackedPlayersProps> {
                           return (
                               <View key={index}>
                                   <Text>{player.name}</Text>
-                                  <TouchableOpacity
-                                      onPress={() => this.props.untrackPlayer(player, this.props.trackedPlayers)}
-                                  >
+                                  <TouchableOpacity onPress={() => this.props.untrackPlayer(player.id)}>
                                       <Text>Untrack</Text>
                                   </TouchableOpacity>
                               </View>
@@ -57,8 +60,8 @@ const mapStateToProps = (state: AppState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        untrackPlayer: (player: IPlayer, trackedPlayers: IPlayer[]) =>
-            dispatch(playerSettingsActions.untrackPlayer(player, trackedPlayers))
+        untrackPlayer: (playerId: string) => dispatch(playerSettingsActions.untrackPlayer(playerId)),
+        fetchTrackedPlayers: () => dispatch(playerSettingsActions.fetchTrackedPlayers())
     };
 };
 

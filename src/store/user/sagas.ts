@@ -22,7 +22,7 @@ function* watchSignUp() {
 
 function* handleSignUp({ payload }: ReturnType<typeof signUp>) {
     try {
-        const res = yield call(callApi, 'POST', 'signup', payload);
+        const res = yield call(callApi, 'POST', 'signup', null, payload);
 
         if (res.error) {
             yield put(signUpFail(res.error));
@@ -47,7 +47,8 @@ function* watchSignIn() {
 
 function* handleSignIn({ payload }: ReturnType<typeof signIn>) {
     try {
-        const res = yield call(callApi, 'POST', 'signin', payload);
+        const res = yield call(callApi, 'POST', 'signin', null, payload);
+
         if (res.error) {
             yield put(signInFail(res.error));
         } else {
