@@ -14,8 +14,8 @@ export const signUpFail = (message: string) => {
     return action(SignUpActionTypes.SIGN_UP_FAIL, message);
 };
 
-export const signIn = () => {
-    return action(SignInActionTypes.SIGN_IN);
+export const signIn = (user: IUser) => {
+    return action(SignInActionTypes.SIGN_IN, user);
 };
 
 export const signInSuccess = (token: string) => {

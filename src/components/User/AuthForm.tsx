@@ -9,7 +9,7 @@ import { Spacer } from '../common/Spacer';
 interface IAuthFormProps {
     headerText: string;
     submitButtonText: string;
-    onSubmit: typeof userActions.signUp | typeof userActions.signIn;
+    onPress: typeof userActions.signUp | typeof userActions.signIn;
 }
 
 interface IAuthFormState {
@@ -77,9 +77,10 @@ export class AuthForm extends React.Component<AuthFormProps, AuthFormState> {
                 </Text>
 
                 <Spacer>
-                    <Button title="Sign Up" onPress={() => this.props.onSubmit({ email, password })}>
-                        {this.props.submitButtonText}
-                    </Button>
+                    <Button
+                        title={this.props.submitButtonText}
+                        onPress={() => this.props.onPress({ email, password })}
+                    />
                 </Spacer>
             </>
         );

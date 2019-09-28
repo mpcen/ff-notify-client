@@ -5,13 +5,12 @@ import * as Actions from './actions';
 
 type Action = ActionType<typeof Actions>;
 
-import { IUserState, SignUpActionTypes } from './types';
+import { IUserState, SignUpActionTypes, SignInActionTypes } from './types';
 
 const initialState: IUserState = {
     token: null,
     user: null,
-    errorMessage: '',
-    message: ''
+    errorMessage: ''
 };
 
 const reducer: Reducer<IUserState, Action> = (state = initialState, action) => {
@@ -20,7 +19,6 @@ const reducer: Reducer<IUserState, Action> = (state = initialState, action) => {
             return {
                 ...state,
                 errorMessage: '',
-                message: 'Signed in',
                 token: action.payload
             };
 
@@ -28,7 +26,20 @@ const reducer: Reducer<IUserState, Action> = (state = initialState, action) => {
             return {
                 ...state,
                 errorMessage: 'Error signing up',
-                message: '',
+                token: null
+            };
+
+        case SignInActionTypes.SIGN_IN_SUCCESS:
+            return {
+                ...state,
+                errorMessage: '',
+                token: action.payload
+            };
+
+        case SignInActionTypes.SIGN_IN_FAIL:
+            return {
+                ...state,
+                errorMessage: 'Invalid username or password',
                 token: null
             };
         default:

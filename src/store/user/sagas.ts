@@ -2,8 +2,8 @@ import { all, call, fork, put, takeLatest } from 'redux-saga/effects';
 import { AsyncStorage } from 'react-native';
 
 import { navigate } from '../../navigator/navigationRef';
-import { SignUpActionTypes } from './types';
-import { signUp, signUpSuccess, signUpFail } from './actions';
+import { SignUpActionTypes, SignInActionTypes } from './types';
+import { signUp, signUpSuccess, signUpFail, signInSuccess, signInFail, signIn } from './actions';
 import { callApi } from '../../api';
 import { NAVROUTES } from '../../navigator/navRoutes';
 
@@ -32,6 +32,30 @@ function* handleSignUp({ payload }: ReturnType<typeof signUp>) {
     }
 }
 
+function* watchSignIn() {
+    yield takeLatest(SignInActionTypes.SIGN_IN, handleSignIn);
+}
+
+function* handleSignIn({ payload }: ReturnType<typeof signIn>) {
+    try {
+        const res = yield call(callApi, 'POST', 'signin', payload);
+        if (res.error) {
+            yield put(signInFail(res.error));
+        } else {
+            yield call(AsyncStorage.setItem, 'token', res.token);
+            yield put(signInSuccess(res));
+
+            navigate(NAVROUTES.Timeline);
+        }
+    } catch (err) {
+        if (err instanceof Error) {
+            yield put(signInFail(err.stack));
+        } else {
+            yield put(signInFail('Invalid username or password'));
+        }
+    }
+}
+
 export function* userSaga() {
-    yield all([fork(watchSignUp)]);
+    yield all([fork(watchSignUp), fork(watchSignIn)]);
 }

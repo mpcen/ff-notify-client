@@ -44,11 +44,11 @@ class SignInUnconnected extends React.Component<SignInProps, {}> {
                     headerText="Sign into FFNotify"
                     submitButtonText="Sign in"
                     errorMessage={this.props.errorMessage}
-                    onSubmit={this.props.signIn}
+                    onPress={this.props.signIn}
                 />
 
                 <AuthNavLink
-                    text="Don't have an account account? Sign up for FFNotify"
+                    text="Don't have an account? Sign up for FFNotify"
                     onPress={() => this.props.navigation.navigate(NAVROUTES.SignUp)}
                 />
             </View>
@@ -84,7 +84,7 @@ const mapStateToProps = ({ user }: AppState): ISignInPropsFromState => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        signUp: (user: IUser) => dispatch(userActions.signUp(user))
+        signIn: (user: IUser) => dispatch(userActions.signIn(user))
     };
 };
 
