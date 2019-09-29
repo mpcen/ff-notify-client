@@ -5,6 +5,7 @@ import { timelineSaga } from './timeline/sagas';
 import { playerSettingsSaga } from './playerSettings/sagas';
 import { userSaga } from './user/sagas';
 
+import { SignOutActionTypes } from './user/types';
 import { timelineReducer, ITimelineState } from './timeline/reducer';
 import { playerSettingsReducer, IPlayerSettingsState } from './playerSettings/reducer';
 import { userReducer } from './user/reducer';
@@ -16,11 +17,19 @@ export interface AppState {
     readonly user: IUserState;
 }
 
-export const rootReducer = combineReducers<AppState>({
+const appReducer = combineReducers<AppState>({
     timeline: timelineReducer,
     playerSettings: playerSettingsReducer,
     user: userReducer
 });
+
+export const rootReducer = (state: AppState, action: any) => {
+    if (action.type === SignOutActionTypes.SIGN_OUT_SUCCESS) {
+        state = undefined;
+    }
+
+    return appReducer(state, action);
+};
 
 export function* rootSaga() {
     yield all([fork(timelineSaga), fork(playerSettingsSaga), fork(userSaga)]);

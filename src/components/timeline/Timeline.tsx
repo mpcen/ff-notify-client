@@ -41,7 +41,7 @@ class TimeLineUnconnected extends React.Component<TimelineProps, ITimelineUnconn
             header: (
                 <Header
                     leftComponent={{ icon: 'menu', color: '#fff' }}
-                    centerComponent={{ text: 'ACoolAppName', style: { color: '#fff', fontSize: 16 } }}
+                    centerComponent={{ text: 'PerSource', style: { color: '#fff', fontSize: 16 } }}
                     rightComponent={<TimelineHeader />}
                 />
             )
@@ -52,10 +52,6 @@ class TimeLineUnconnected extends React.Component<TimelineProps, ITimelineUnconn
         firstLoadComplete: false,
         filteredPlayerNews: []
     };
-
-    public componentDidMount() {
-        this.props.fetchPlayerNews();
-    }
 
     public componentDidUpdate(prevProps: TimelineProps) {
         if (

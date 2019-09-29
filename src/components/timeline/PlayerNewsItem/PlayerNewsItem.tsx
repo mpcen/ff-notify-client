@@ -5,6 +5,7 @@ import { format } from 'date-fns';
 
 import { Reactions } from './Reactions';
 import { IPlayer } from '../../../store/playerSettings/types';
+import { TEAMS } from '../../../util/teams';
 
 export interface IPlayerNewsItem {
     platform: string;
@@ -38,10 +39,12 @@ export class PlayerNewsItem extends React.Component<IPlayerNewsItemProps> {
         return (
             <Card key={contentId}>
                 <View style={cardHeaderContainer}>
-                    <Reactions />
+                    {/* <Reactions /> */}
 
                     <Avatar avatarStyle={avatarStyle} rounded source={{ uri: playerNewsItem.player.avatarUrl }} />
                     <Text style={playerText}>{player.name}</Text>
+                    <Text style={playerText}>{player.position}</Text>
+                    <Text style={playerText}>{TEAMS[player.teamId - 1].abbrev}</Text>
                 </View>
 
                 <Divider style={dividerContainer} />

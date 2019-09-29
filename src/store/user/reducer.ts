@@ -5,7 +5,7 @@ import * as Actions from './actions';
 
 type Action = ActionType<typeof Actions>;
 
-import { IUserState, SignUpActionTypes, SignInActionTypes, RESET_USER } from './types';
+import { IUserState, SignUpActionTypes, SignInActionTypes, RESET_USER, SignOutActionTypes } from './types';
 
 const initialState: IUserState = {
     token: null,

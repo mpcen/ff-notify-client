@@ -55,7 +55,7 @@ function* handleSignIn({ payload }: ReturnType<typeof signIn>) {
             yield call(AsyncStorage.setItem, 'token', res.token);
             yield put(signInSuccess(res));
 
-            navigate(NAVROUTES.Timeline);
+            navigate(NAVROUTES.ResolveAuth);
         }
     } catch (err) {
         if (err instanceof Error) {
