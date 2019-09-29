@@ -53,3 +53,16 @@ export const fetchTrackedPlayersSuccess = (trackedPlayers: IPlayer[]) => {
 export const fetchTrackedPlayersFail = (message: string) => {
     return action(TrackPlayerActionTypes.FETCH_TRACKED_PLAYERS_FAIL, message);
 };
+
+// REORDER TRACKED PLAYERS
+export const reorderTrackedPlayers = (reorderedTrackedPlayers: IPlayer[]) => {
+    return action(TrackPlayerActionTypes.REORDER_TRACKED_PLAYERS, reorderedTrackedPlayers);
+};
+
+export const reorderTrackedPlayersSuccess = (reorderedTrackedPlayers: IPlayer[]) => {
+    return action(TrackPlayerActionTypes.REORDER_TRACKED_PLAYERS_SUCCESS, reorderedTrackedPlayers);
+};
+
+export const reorderTrackedPlayersFail = (message: string) => {
+    return action(TrackPlayerActionTypes.REORDER_TRACKED_PLAYERS_FAIL, message);
+};

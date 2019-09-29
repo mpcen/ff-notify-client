@@ -14,7 +14,7 @@ import { sortTimelineBy } from './utils';
 
 import { TrackedPlayerPanel } from './TrackedPlayerPanel/TrackedPlayerPanel';
 import { PlayerNewsItem, IPlayerNewsItem } from './PlayerNewsItem/PlayerNewsItem';
-import { TimelineHeader } from './Header';
+import { TimelineFilter } from './TimelineFilter';
 
 interface ITimelinePropsFromState {
     playerNews: IPlayerNewsItem[];
@@ -40,9 +40,10 @@ class TimeLineUnconnected extends React.Component<TimelineProps, ITimelineUnconn
         return {
             header: (
                 <Header
-                    leftComponent={{ icon: 'menu', color: '#fff' }}
+                    // leftComponent={{ icon: 'menu', color: '#fff' }}
+                    leftComponent={null}
                     centerComponent={{ text: 'PerSource', style: { color: '#fff', fontSize: 16 } }}
-                    rightComponent={<TimelineHeader />}
+                    rightComponent={<TimelineFilter />}
                 />
             )
         } as NavigationScreenOptions;

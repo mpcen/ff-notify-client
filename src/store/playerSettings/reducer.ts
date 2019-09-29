@@ -80,7 +80,7 @@ const reducer: Reducer<IPlayerSettingsState, Action> = (state = initialState, ac
                 error: false,
                 errorMessage: '',
                 loading: false,
-                trackedPlayers: [...action.payload]
+                trackedPlayers: action.payload
             };
 
         // UNTRACK PLAYER
@@ -101,6 +101,41 @@ const reducer: Reducer<IPlayerSettingsState, Action> = (state = initialState, ac
                 trackedPlayers: [
                     ...state.trackedPlayers.filter(trackedPlayer => trackedPlayer.id !== action.payload.id)
                 ]
+            };
+
+        case TrackPlayerActionTypes.UNTRACK_PLAYER_FAIL:
+            return {
+                ...state,
+                loading: false,
+                error: true,
+                errorMessage: action.payload
+            };
+
+        // REORDER TRACKED PLAYERS
+        case TrackPlayerActionTypes.REORDER_TRACKED_PLAYERS:
+            return {
+                ...state,
+                loading: true,
+                error: false,
+                errorMessage: '',
+                trackedPlayers: action.payload
+            };
+
+        case TrackPlayerActionTypes.REORDER_TRACKED_PLAYERS_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                error: false,
+                errorMessage: '',
+                trackedPlayers: action.payload
+            };
+
+        case TrackPlayerActionTypes.REORDER_TRACKED_PLAYERS_FAIL:
+            return {
+                ...state,
+                loading: false,
+                error: true,
+                errorMessage: action.payload
             };
 
         default:

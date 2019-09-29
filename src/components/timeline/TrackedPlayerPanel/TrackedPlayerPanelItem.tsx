@@ -1,10 +1,12 @@
 import * as React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Badge, Avatar } from 'react-native-elements';
+
 import { IPlayer } from '../../../store/playerSettings/types';
 
 interface ITrackedPlayerPanelItemProps {
     trackedPlayer: IPlayer;
+    onLongPress: () => void;
 }
 
 export const TrackedPlayerPanelItem = (props: ITrackedPlayerPanelItemProps) => {
@@ -19,7 +21,7 @@ export const TrackedPlayerPanelItem = (props: ITrackedPlayerPanelItemProps) => {
     } = styles;
 
     return (
-        <View style={playerStoryContainer}>
+        <TouchableOpacity style={playerStoryContainer} onLongPress={props.onLongPress}>
             <Avatar
                 rounded
                 size="medium"
@@ -28,12 +30,12 @@ export const TrackedPlayerPanelItem = (props: ITrackedPlayerPanelItemProps) => {
                 source={{ uri: trackedPlayer.avatarUrl }}
             />
 
-            <Badge
+            {/* <Badge
                 containerStyle={badgeContainerStyle}
                 badgeStyle={badgeStyle}
                 value={<Text style={badgeText}>6</Text>}
-            />
-        </View>
+            /> */}
+        </TouchableOpacity>
     );
 };
 
@@ -52,8 +54,8 @@ const styles = StyleSheet.create({
     },
     badgeContainerStyle: {
         position: 'absolute',
-        bottom: 8,
-        right: 8
+        bottom: 5,
+        right: 5
     },
     badgeStyle: {
         backgroundColor: '#ff5a5f',

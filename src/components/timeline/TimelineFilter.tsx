@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { Icon, Overlay, CheckBox, Text } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
@@ -9,34 +9,34 @@ import { sortPlayerBy } from '../../store/timeline/actions';
 import { TimelineSortType } from '../../store/timeline/reducer';
 import { AppState } from '../../store';
 
-interface ITimelineHeaderPropsFromState {
+interface ITimelineFilterPropsFromState {
     timelineSortType: TimelineSortType;
 }
 
-interface ITimelineHeaderPropsFromDispatch {
+interface ITimelineFilterPropsFromDispatch {
     sortPlayerBy: typeof sortPlayerBy;
 }
 
-interface ITimelineHeaderState {
+interface ITimelineFilterState {
     isOverlayVisible: boolean;
 }
 
-type TimelineProps = ITimelineHeaderPropsFromState & ITimelineHeaderPropsFromDispatch;
+type TimelineFilterProps = ITimelineFilterPropsFromState & ITimelineFilterPropsFromDispatch;
 
-class TimelineHeaderUnconnected extends React.Component<TimelineProps, ITimelineHeaderState> {
+class TimelineFilterUnconnected extends React.Component<TimelineFilterProps, ITimelineFilterState> {
     public state = {
         isOverlayVisible: false
     };
 
     render() {
         return (
-            <View>
+            <>
                 <TouchableOpacity onPress={this._handleOnPress}>
                     <Icon name="filter-list" color="#fff" />
                 </TouchableOpacity>
 
                 <Overlay isVisible={this.state.isOverlayVisible} onBackdropPress={this._handleBackdropPress}>
-                    <View>
+                    <>
                         <Text h4>Timeline Filter</Text>
                         <CheckBox
                             center
@@ -51,9 +51,9 @@ class TimelineHeaderUnconnected extends React.Component<TimelineProps, ITimeline
                             checked={this._handleChecked(TimelineSortType.Player, this.props.timelineSortType)}
                             onPress={() => this.props.sortPlayerBy(TimelineSortType.Player)}
                         />
-                    </View>
+                    </>
                 </Overlay>
-            </View>
+            </>
         );
     }
 
@@ -70,7 +70,7 @@ class TimelineHeaderUnconnected extends React.Component<TimelineProps, ITimeline
     };
 }
 
-const mapStateToProps = ({ timeline }: AppState): ITimelineHeaderPropsFromState => {
+const mapStateToProps = ({ timeline }: AppState): ITimelineFilterPropsFromState => {
     return {
         timelineSortType: timeline.timelineSortType
     };
@@ -82,7 +82,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     };
 };
 
-export const TimelineHeader = connect(
+export const TimelineFilter = connect(
     mapStateToProps,
     mapDispatchToProps
-)(TimelineHeaderUnconnected);
+)(TimelineFilterUnconnected);

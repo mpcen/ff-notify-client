@@ -12,7 +12,10 @@ import {
     fetchTrackedPlayersSuccess,
     untrackPlayer,
     untrackPlayerFail,
-    untrackPlayerSuccess
+    untrackPlayerSuccess,
+    reorderTrackedPlayers,
+    reorderTrackedPlayersFail,
+    reorderTrackedPlayersSuccess
 } from './actions';
 import { callApi } from '../../api';
 
@@ -98,11 +101,34 @@ function* handleUntrackPlayer({ payload }: ReturnType<typeof untrackPlayer>) {
     }
 }
 
+function* watchReorderTrackedPlayers() {
+    yield takeEvery(TrackPlayerActionTypes.REORDER_TRACKED_PLAYERS, handleReorderTrackedPlayers);
+}
+
+function* handleReorderTrackedPlayers({ payload }: ReturnType<typeof reorderTrackedPlayers>) {
+    try {
+        const reorderedTrackedPlayers = payload;
+        const token = yield call(AsyncStorage.getItem, 'token');
+        const res = yield call(callApi, 'PUT', 'trackedPlayersOrder', token, {
+            trackedPlayersOrder: reorderedTrackedPlayers
+        });
+
+        if (res.error) {
+            yield put(reorderTrackedPlayersFail(res.error));
+        } else {
+            yield put(reorderTrackedPlayersSuccess(res));
+        }
+    } catch (err) {
+        yield put(reorderTrackedPlayersFail('Error when trying to reorder tracked players'));
+    }
+}
+
 export function* playerSettingsSaga() {
     yield all([
         fork(watchFetchPlayers),
         fork(watchTrackPlayer),
         fork(watchFetchTrackedPlayers),
-        fork(watchUntrackPlayer)
+        fork(watchUntrackPlayer),
+        fork(watchReorderTrackedPlayers)
     ]);
 }
