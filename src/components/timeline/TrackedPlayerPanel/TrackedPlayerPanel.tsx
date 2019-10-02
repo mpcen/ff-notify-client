@@ -10,10 +10,11 @@ import { AppState } from '../../../store';
 import * as playerSettingsActions from '../../../store/playerSettings/actions';
 
 import { TrackedPlayerPanelItem } from './TrackedPlayerPanelItem';
-import { IPlayer } from '../../../store/playerSettings/types';
+import { IPlayer, IPlayerMap } from '../../../store/playerSettings/types';
 
 interface ITrackedPlayerPanelItemPropsFromState {
-    trackedPlayers: IPlayer[];
+    trackedPlayers: string[];
+    playerMap: IPlayerMap;
 }
 
 interface ITrackedPlayerPanelPropsFromDispatch {
@@ -33,7 +34,7 @@ export class TrackedPlayerPanelUnconnected extends React.Component<TrackedPlayer
 
     render() {
         const { storiesContainer } = styles;
-        const { trackedPlayers } = this.props;
+        const { trackedPlayers, playerMap } = this.props;
 
         return trackedPlayers.length ? (
             <>
@@ -41,7 +42,7 @@ export class TrackedPlayerPanelUnconnected extends React.Component<TrackedPlayer
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
                     data={trackedPlayers}
-                    keyExtractor={(item, index) => index.toString()}
+                    keyExtractor={item => item}
                     renderItem={({ item }) => this._renderTrackedPlayerPanelItemList(item)}
                 />
 
@@ -49,7 +50,7 @@ export class TrackedPlayerPanelUnconnected extends React.Component<TrackedPlayer
                     <DraggableFlatList
                         data={this.props.trackedPlayers}
                         renderItem={this._renderItem}
-                        keyExtractor={(trackedPlayer, index) => `draggable-item-${trackedPlayer.id}`}
+                        keyExtractor={(playerId, index) => `draggable-item-${playerId}`}
                         scrollPercent={5}
                         onMoveEnd={this._handleReorderTrackedPlayers}
                     />
@@ -62,12 +63,12 @@ export class TrackedPlayerPanelUnconnected extends React.Component<TrackedPlayer
         );
     }
 
-    private _handleReorderTrackedPlayers = ({ data }: OnMoveEndInfo<IPlayer>) => {
-        const reorderedTrackedPlayers = data as IPlayer[];
+    private _handleReorderTrackedPlayers = ({ data }: OnMoveEndInfo<string>) => {
+        const reorderedTrackedPlayers = data as string[];
         this.props.reorderTrackedPlayers(reorderedTrackedPlayers);
     };
 
-    private _renderItem = ({ item, index, move, moveEnd, isActive }: RenderItemInfo<IPlayer>) => {
+    private _renderItem = ({ item, index, move, moveEnd, isActive }: RenderItemInfo<string>) => {
         return (
             <TouchableOpacity
                 style={{
@@ -86,17 +87,17 @@ export class TrackedPlayerPanelUnconnected extends React.Component<TrackedPlayer
                         fontSize: 12
                     }}
                 >
-                    {item.name}
+                    {this.props.playerMap[item].name}
                 </Text>
             </TouchableOpacity>
         );
     };
 
-    private _renderTrackedPlayerPanelItemList(trackedPlayer: IPlayer) {
+    private _renderTrackedPlayerPanelItemList(playerId: string) {
         return (
             <TrackedPlayerPanelItem
-                key={trackedPlayer.id}
-                trackedPlayer={trackedPlayer}
+                key={playerId}
+                trackedPlayer={this.props.playerMap[playerId]}
                 onLongPress={this._handleOnLongPress}
             />
         );
@@ -119,13 +120,14 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = ({ playerSettings }: AppState): ITrackedPlayerPanelItemPropsFromState => {
     return {
+        playerMap: playerSettings.playerMap,
         trackedPlayers: playerSettings.trackedPlayers
     };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        reorderTrackedPlayers: (reorderedTrackedPlayers: IPlayer[]) => {
+        reorderTrackedPlayers: (reorderedTrackedPlayers: string[]) => {
             return dispatch(playerSettingsActions.reorderTrackedPlayers(reorderedTrackedPlayers));
         }
     };

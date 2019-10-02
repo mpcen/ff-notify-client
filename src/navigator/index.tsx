@@ -56,9 +56,9 @@ const MainFlow = createBottomTabNavigator(
         [NAVROUTES.PlayerSettings]: {
             screen: PlayerSettingsTabs
         },
-        [NAVROUTES.AlertSettings]: {
-            screen: AlertSettingsStack
-        },
+        // [NAVROUTES.AlertSettings]: {
+        //     screen: AlertSettingsStack
+        // },
         [NAVROUTES.Account]: {
             screen: AccountStack
         }
@@ -74,9 +74,11 @@ const MainFlow = createBottomTabNavigator(
                     iconName = `home-alert`;
                 } else if (routeName === NAVROUTES.PlayerSettings) {
                     iconName = `account-group`;
-                } else if (routeName === NAVROUTES.AlertSettings) {
-                    iconName = `tune`;
-                } else if (routeName === NAVROUTES.Account) {
+                }
+                // else if (routeName === NAVROUTES.AlertSettings) {
+                //     iconName = `tune`;
+                // }
+                else if (routeName === NAVROUTES.Account) {
                     iconName = `account`;
                 }
 

@@ -8,17 +8,17 @@ import { Dispatch } from 'redux';
 import * as playerSettingsActions from '../../../store/playerSettings/actions';
 
 import { AppState } from '../../../store';
-import { IPlayer } from '../../../store/playerSettings/types';
+import { IPlayer, IPlayerMap } from '../../../store/playerSettings/types';
 import { IPlayerSettingsState } from '../../../store/playerSettings/reducer';
 
 import { PlayerCard } from './PlayerCard';
 import { PlayerListItem } from './PlayerListItem';
 
 interface IPlayerSearchPropsFromState {
-    players: IPlayer[];
+    playerMap: IPlayerMap;
     loading: boolean;
     error: boolean;
-    trackedPlayers: IPlayer[];
+    trackedPlayers: string[];
 }
 
 interface IPlayerSearchPropsFromDispatch {
@@ -54,10 +54,6 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
         isOverlayVisible: false
     };
 
-    public componentDidMount() {
-        this.props.fetchPlayers();
-    }
-
     render() {
         return (
             <View>
@@ -69,10 +65,7 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
                     onChangeText={searchText => {
                         this.setState({
                             searchText,
-                            filteredPlayers: this.props.players.filter(({ name }) => {
-                                if (!name) return false;
-                                return name.toLowerCase().includes(searchText);
-                            })
+                            filteredPlayers: this._filterPlayersByName(searchText)
                         });
                     }}
                 />
@@ -90,6 +83,18 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
         );
     }
 
+    private _filterPlayersByName(searchText: string) {
+        const filteredPlayers: IPlayer[] = [];
+
+        for (let player in this.props.playerMap) {
+            if (this.props.playerMap[player].name.toLowerCase().includes(searchText)) {
+                filteredPlayers.push(this.props.playerMap[player]);
+            }
+        }
+
+        return filteredPlayers;
+    }
+
     private _renderPlayerListItem = (player: IPlayer) => {
         return <PlayerListItem player={player} handlePlayerSelect={this._handlePlayerSelect} />;
     };
@@ -103,7 +108,7 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
     };
 
     private _handleTrackPlayer = () => {
-        if (!this.props.trackedPlayers.find(player => player.name === this.state.selectedPlayer.name)) {
+        if (!this.props.trackedPlayers.find(playerId => playerId === this.state.selectedPlayer.id)) {
             this.props.trackPlayer(this.state.selectedPlayer.id);
         }
     };
@@ -113,14 +118,13 @@ const mapStateToProps = ({ playerSettings }: AppState): IPlayerSettingsState => 
     return {
         error: playerSettings.error,
         loading: playerSettings.loading,
-        players: playerSettings.players,
+        playerMap: playerSettings.playerMap,
         trackedPlayers: playerSettings.trackedPlayers
     };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        fetchPlayers: () => dispatch(playerSettingsActions.fetchPlayers()),
         trackPlayer: (playerId: string) => dispatch(playerSettingsActions.trackPlayer(playerId))
     };
 };

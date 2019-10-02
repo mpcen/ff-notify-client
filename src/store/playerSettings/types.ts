@@ -9,9 +9,13 @@ export interface IPlayer {
     avatarUrl: string;
 }
 
+export interface IPlayerMap {
+    [id: string]: IPlayer;
+}
+
 export interface IPlayerSettingsState {
-    players: IPlayer[];
-    trackedPlayers: IPlayer[];
+    playerMap: IPlayerMap;
+    trackedPlayers: string[];
     loading: boolean;
     error: boolean;
 }

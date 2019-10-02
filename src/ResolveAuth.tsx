@@ -6,7 +6,6 @@ import { Dispatch } from 'redux';
 import * as playerSettingsActions from './store/playerSettings/actions';
 import * as timelineActions from './store/timeline/actions';
 
-import { AppState } from './store';
 import { navigate } from './navigator/navigationRef';
 import { NAVROUTES } from './navigator/navRoutes';
 
@@ -38,12 +37,6 @@ class ResolveAuthUnconnected extends React.Component<ResolveAuthProps> {
     }
 }
 
-const mapStateToProps = (state: AppState) => {
-    return {
-        trackedPlayers: state.playerSettings.trackedPlayers
-    };
-};
-
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
         fetchPlayers: () => dispatch(playerSettingsActions.fetchPlayers()),
@@ -53,6 +46,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
 };
 
 export const ResolveAuth = connect(
-    mapStateToProps,
+    null,
     mapDispatchToProps
 )(ResolveAuthUnconnected);

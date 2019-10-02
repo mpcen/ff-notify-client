@@ -8,7 +8,7 @@ type Action = ActionType<typeof Actions>;
 import { FetchPlayersActionTypes, TrackPlayerActionTypes, IPlayerSettingsState } from './types';
 
 const initialState: IPlayerSettingsState = {
-    players: [],
+    playerMap: {},
     trackedPlayers: [],
     loading: true,
     error: false
@@ -29,7 +29,7 @@ const reducer: Reducer<IPlayerSettingsState, Action> = (state = initialState, ac
                 ...state,
                 error: false,
                 loading: false,
-                players: action.payload
+                playerMap: action.payload
             };
 
         case FetchPlayersActionTypes.FETCH_PLAYERS_FAIL:
@@ -38,6 +38,24 @@ const reducer: Reducer<IPlayerSettingsState, Action> = (state = initialState, ac
                 error: true,
                 loading: false,
                 errorMessage: action.payload
+            };
+
+        // FETCH TRACKED PLAYERS
+        case TrackPlayerActionTypes.FETCH_TRACKED_PLAYERS:
+            return {
+                ...state,
+                error: false,
+                errorMessage: '',
+                loading: true
+            };
+
+        case TrackPlayerActionTypes.FETCH_TRACKED_PLAYERS_SUCCESS:
+            return {
+                ...state,
+                error: false,
+                errorMessage: '',
+                loading: false,
+                trackedPlayers: action.payload
             };
 
         // TRACK PLAYER
@@ -65,24 +83,6 @@ const reducer: Reducer<IPlayerSettingsState, Action> = (state = initialState, ac
                 errorMessage: action.payload
             };
 
-        // FETCH TRACKED PLAYERS
-        case TrackPlayerActionTypes.FETCH_TRACKED_PLAYERS:
-            return {
-                ...state,
-                error: false,
-                errorMessage: '',
-                loading: true
-            };
-
-        case TrackPlayerActionTypes.FETCH_TRACKED_PLAYERS_SUCCESS:
-            return {
-                ...state,
-                error: false,
-                errorMessage: '',
-                loading: false,
-                trackedPlayers: action.payload
-            };
-
         // UNTRACK PLAYER
         case TrackPlayerActionTypes.UNTRACK_PLAYER:
             return {
@@ -98,9 +98,7 @@ const reducer: Reducer<IPlayerSettingsState, Action> = (state = initialState, ac
                 loading: false,
                 error: false,
                 errorMessage: '',
-                trackedPlayers: [
-                    ...state.trackedPlayers.filter(trackedPlayer => trackedPlayer.id !== action.payload.id)
-                ]
+                trackedPlayers: [...state.trackedPlayers.filter(trackedPlayerId => trackedPlayerId !== action.payload)]
             };
 
         case TrackPlayerActionTypes.UNTRACK_PLAYER_FAIL:

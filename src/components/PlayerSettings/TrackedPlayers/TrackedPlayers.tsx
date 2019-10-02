@@ -8,10 +8,11 @@ import { Dispatch } from 'redux';
 import * as playerSettingsActions from '../../../store/playerSettings/actions';
 
 import { AppState } from '../../../store';
-import { IPlayer } from '../../../store/playerSettings/types';
+import { IPlayer, IPlayerMap } from '../../../store/playerSettings/types';
 
 interface ITrackedPlayersPropsFromState {
-    trackedPlayers: IPlayer[];
+    trackedPlayers: string[];
+    playerMap: IPlayerMap;
 }
 
 interface ITrackedPlayersPropsFromDispatch {
@@ -28,19 +29,17 @@ class TrackedPlayersUnconnected extends React.Component<TrackedPlayersProps> {
         } as NavigationScreenOptions;
     };
 
-    componentDidMount() {
-        this.props.fetchTrackedPlayers();
-    }
-
     render() {
         return (
             <View>
                 {this.props.trackedPlayers.length
-                    ? this.props.trackedPlayers.map((player: IPlayer, index: number) => {
+                    ? this.props.trackedPlayers.map((playerId: string) => {
                           return (
-                              <View key={index}>
-                                  <Text>{player.name}</Text>
-                                  <TouchableOpacity onPress={() => this.props.untrackPlayer(player.id)}>
+                              <View key={playerId}>
+                                  <Text>{this.props.playerMap[playerId].name}</Text>
+                                  <TouchableOpacity
+                                      onPress={() => this.props.untrackPlayer(this.props.playerMap[playerId].id)}
+                                  >
                                       <Text>Untrack</Text>
                                   </TouchableOpacity>
                               </View>
@@ -54,14 +53,14 @@ class TrackedPlayersUnconnected extends React.Component<TrackedPlayersProps> {
 
 const mapStateToProps = (state: AppState) => {
     return {
+        playerMap: state.playerSettings.playerMap,
         trackedPlayers: state.playerSettings.trackedPlayers
     };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        untrackPlayer: (playerId: string) => dispatch(playerSettingsActions.untrackPlayer(playerId)),
-        fetchTrackedPlayers: () => dispatch(playerSettingsActions.fetchTrackedPlayers())
+        untrackPlayer: (playerId: string) => dispatch(playerSettingsActions.untrackPlayer(playerId))
     };
 };
 

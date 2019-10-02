@@ -18,7 +18,7 @@ export const PlayerListItem = (props: IPlayerListItemProps) => {
             key={player.id}
             onPress={() => handlePlayerSelect(player)}
             leftAvatar={<Avatar rounded size="medium" avatarStyle={avatarStyle} source={{ uri: player.avatarUrl }} />}
-            rightIcon={{ name: 'add-alarm' }}
+            // rightIcon={{ name: 'add-alarm' }}
             title={player.name}
             subtitle={player.position}
             bottomDivider

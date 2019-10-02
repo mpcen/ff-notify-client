@@ -9,7 +9,7 @@ import { Dispatch } from 'redux';
 import * as timelineActions from '../../store/timeline/actions';
 import { TimelineSortType } from '../../store/timeline/reducer';
 import { AppState } from '../../store';
-import { IPlayer } from '../../store/playerSettings/types';
+import { IPlayer, IPlayerMap } from '../../store/playerSettings/types';
 import { sortTimelineBy } from './utils';
 
 import { TrackedPlayerPanel } from './TrackedPlayerPanel/TrackedPlayerPanel';
@@ -20,17 +20,17 @@ interface ITimelinePropsFromState {
     playerNews: IPlayerNewsItem[];
     loading: boolean;
     error: boolean;
-    trackedPlayers: IPlayer[];
+    trackedPlayers: string[];
     timelineSortType: TimelineSortType;
-}
-
-interface ITimelinePropsFromDispatch {
-    fetchPlayerNews: typeof timelineActions.fetchPlayerNews;
+    playerMap: IPlayerMap;
 }
 
 interface ITimelineUnconnectedState {
     firstLoadComplete: boolean;
-    filteredPlayerNews: IPlayerNewsItem[];
+}
+
+interface ITimelinePropsFromDispatch {
+    fetchPlayerNews: typeof timelineActions.fetchPlayerNews;
 }
 
 type TimelineProps = ITimelinePropsFromState & ITimelinePropsFromDispatch;
@@ -50,30 +50,25 @@ class TimeLineUnconnected extends React.Component<TimelineProps, ITimelineUnconn
     };
 
     public state: ITimelineUnconnectedState = {
-        firstLoadComplete: false,
-        filteredPlayerNews: []
+        firstLoadComplete: false
     };
-
-    public componentDidUpdate(prevProps: TimelineProps) {
-        if (
-            !this.state.firstLoadComplete ||
-            (!isEqual(prevProps.trackedPlayers, this.props.trackedPlayers) ||
-                prevProps.timelineSortType !== this.props.timelineSortType)
-        ) {
-            this._updateFilteredPlayerNews();
-        }
-    }
 
     public render() {
         const { timeLineContainer } = styles;
 
         return (
             <View style={timeLineContainer}>
-                <TrackedPlayerPanel />
+                {this.props.trackedPlayers.length && Object.keys(this.props.playerMap).length ? (
+                    <TrackedPlayerPanel />
+                ) : (
+                    <Text>No tracked players</Text>
+                )}
 
                 <FlatList
-                    data={this.state.filteredPlayerNews}
+                    data={this.props.playerNews}
                     keyExtractor={(item, index) => index.toString()}
+                    onRefresh={this.props.fetchPlayerNews}
+                    refreshing={this.props.loading}
                     renderItem={({ item }: { item: IPlayerNewsItem }) => {
                         return <PlayerNewsItem playerNewsItem={item} />;
                     }}
@@ -81,23 +76,6 @@ class TimeLineUnconnected extends React.Component<TimelineProps, ITimelineUnconn
             </View>
         );
     }
-
-    private _updateFilteredPlayerNews = () => {
-        let sortedPlayers: IPlayerNewsItem[];
-        const filteredPlayerNews = this.props.playerNews.filter((playerNewsItem: IPlayerNewsItem) => {
-            return this.props.trackedPlayers.some((trackedPlayer: IPlayer) => {
-                return playerNewsItem.player.name === trackedPlayer.name;
-            });
-        });
-
-        if (this.props.timelineSortType === TimelineSortType.Date) {
-            sortedPlayers = sortTimelineBy(TimelineSortType.Date, filteredPlayerNews);
-        } else {
-            sortedPlayers = sortTimelineBy(TimelineSortType.Player, filteredPlayerNews);
-        }
-
-        this.setState({ filteredPlayerNews: sortedPlayers, firstLoadComplete: true });
-    };
 }
 
 const styles = StyleSheet.create({
@@ -113,7 +91,8 @@ const mapStateToProps = ({ timeline, playerSettings }: AppState): ITimelineProps
         loading: timeline.loading,
         playerNews: timeline.playerNews,
         trackedPlayers: playerSettings.trackedPlayers,
-        timelineSortType: timeline.timelineSortType
+        timelineSortType: timeline.timelineSortType,
+        playerMap: playerSettings.playerMap
     };
 };
 

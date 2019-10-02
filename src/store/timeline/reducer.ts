@@ -24,7 +24,7 @@ const initialState: ITimelineState = {
     error: false,
     loading: true,
     playerNews: [],
-    timelineSortType: TimelineSortType.Date
+    timelineSortType: TimelineSortType.Player
 };
 
 const reducer: Reducer<ITimelineState, Action> = (state = initialState, action) => {
