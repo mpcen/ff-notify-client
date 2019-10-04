@@ -3,14 +3,12 @@ import { NavigationScreenOptions, NavigationScreenProps } from 'react-navigation
 import { StyleSheet, View, Text, FlatList } from 'react-native';
 import { Header } from 'react-native-elements';
 import { connect } from 'react-redux';
-import { isEqual } from 'lodash';
 import { Dispatch } from 'redux';
 
 import * as timelineActions from '../../store/timeline/actions';
-import { SortTimelineBy, IPlayerNewsItem } from '../../store/timeline/types';
+import { IPlayerNewsItem, TimelineSortType } from '../../store/timeline/types';
 import { AppState } from '../../store';
-import { IPlayer, IPlayerMap } from '../../store/playerSettings/types';
-import { sortTimelineBy } from './utils';
+import { IPlayerMap } from '../../store/playerSettings/types';
 
 import { TrackedPlayerPanel } from './TrackedPlayerPanel/TrackedPlayerPanel';
 import { TimelineFilter } from './TimelineFilter';
@@ -23,10 +21,9 @@ interface ITimelinePropsFromState {
     error: boolean;
     trackedPlayers: string[];
     playerMap: IPlayerMap;
-    sortTimelineBy: SortTimelineBy;
+    timelineSortType: TimelineSortType;
+    selectedPlayerIndex: number;
 }
-
-interface ITimelineUnconnectedState {}
 
 interface ITimelinePropsFromDispatch {
     fetchPlayerNews: typeof timelineActions.fetchPlayerNews;
@@ -35,7 +32,7 @@ interface ITimelinePropsFromDispatch {
 
 type TimelineProps = ITimelinePropsFromState & ITimelinePropsFromDispatch;
 
-class TimeLineUnconnected extends React.Component<TimelineProps, ITimelineUnconnectedState> {
+class TimeLineUnconnected extends React.Component<TimelineProps> {
     static navigationOptions = ({ navigation }: NavigationScreenProps) => {
         return {
             header: (
@@ -43,43 +40,56 @@ class TimeLineUnconnected extends React.Component<TimelineProps, ITimelineUnconn
                     // leftComponent={{ icon: 'menu', color: '#fff' }}
                     leftComponent={null}
                     centerComponent={{ text: 'PerSource', style: { color: '#fff', fontSize: 16 } }}
-                    // rightComponent={<TimelineFilter />}
-                    rightComponent={null}
+                    rightComponent={<TimelineFilter />}
                 />
             )
         } as NavigationScreenOptions;
     };
 
-    public state: ITimelineUnconnectedState = {};
+    componentDidMount() {
+        this.props.fetchPlayerNews(1, this.props.trackedPlayers[0]);
+    }
+
+    componentDidUpdate(prevProps: TimelineProps) {
+        if (prevProps.selectedPlayerIndex !== this.props.selectedPlayerIndex) {
+            this.props.refetchPlayerNews(this.props.trackedPlayers[this.props.selectedPlayerIndex]);
+        }
+
+        if (
+            prevProps.trackedPlayers[this.props.selectedPlayerIndex] !==
+            this.props.trackedPlayers[this.props.selectedPlayerIndex]
+        ) {
+            this.props.refetchPlayerNews(this.props.trackedPlayers[this.props.selectedPlayerIndex]);
+        }
+    }
 
     public render() {
         const { timeLineContainer } = styles;
 
         return (
             <View style={timeLineContainer}>
-                {this.props.trackedPlayers.length ? (
-                    <>
-                        {/* <TrackedPlayerPanel /> */}
+                {this.props.timelineSortType === TimelineSortType.Player && <TrackedPlayerPanel />}
 
-                        <FlatList
-                            data={this.props.playerNews.docs}
-                            keyExtractor={item => `${item.platform}-${item.contentId}`}
-                            onRefresh={this._handleRefresh}
-                            refreshing={this.props.loading}
-                            renderItem={({ item }: { item: IPlayerNewsItem }) => {
-                                return <PlayerNewsItem playerNewsItem={item} />;
-                            }}
-                        />
-                    </>
+                {this.props.playerNews.docs.length ? (
+                    <FlatList
+                        data={this.props.playerNews.docs}
+                        keyExtractor={item => `${item.platform}-${item.contentId}`}
+                        onRefresh={this._handleRefresh}
+                        refreshing={this.props.loading}
+                        renderItem={({ item }: { item: IPlayerNewsItem }) => {
+                            return <PlayerNewsItem playerNewsItem={item} />;
+                        }}
+                    />
                 ) : (
-                    <Text>No tracked players</Text>
+                    <Text>No player news</Text>
                 )}
             </View>
         );
     }
 
     private _handleRefresh = () => {
-        this.props.refetchPlayerNews();
+        this.props.refetchPlayerNews(this.props.trackedPlayers[0]);
+        this.setState({ selectedPlayerIndex: 0 });
     };
 }
 
@@ -90,21 +100,22 @@ const styles = StyleSheet.create({
     }
 });
 
-const mapStateToProps = ({ timeline, playerSettings, user }: AppState): ITimelinePropsFromState => {
+const mapStateToProps = ({ timeline, playerSettings, user, trackedPlayerPanel }: AppState): ITimelinePropsFromState => {
     return {
         error: timeline.error,
         loading: timeline.loading,
         playerNews: timeline.playerNews,
         playerMap: playerSettings.playerMap,
         trackedPlayers: user.userPreferences.trackedPlayers,
-        sortTimelineBy: user.userPreferences.sortTimelineBy
+        timelineSortType: user.userPreferences.timelineSortType,
+        selectedPlayerIndex: trackedPlayerPanel.selectedPlayerIndex
     };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        fetchPlayerNews: () => dispatch(timelineActions.fetchPlayerNews()),
-        refetchPlayerNews: () => dispatch(timelineActions.refetchPlayerNews())
+        fetchPlayerNews: (page: number, playerId: string) => dispatch(timelineActions.fetchPlayerNews(page, playerId)),
+        refetchPlayerNews: (playerId: string) => dispatch(timelineActions.refetchPlayerNews(playerId))
     };
 };
 

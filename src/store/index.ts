@@ -7,20 +7,25 @@ import { userSaga } from './user/sagas';
 
 import { SignOutActionTypes } from './user/types';
 import { timelineReducer, ITimelineState } from './timeline/reducer';
-import { playerSettingsReducer, IPlayerSettingsState } from './playerSettings/reducer';
+import { playerSettingsReducer } from './playerSettings/reducer';
 import { userReducer } from './user/reducer';
 import { IUserState } from './user/types';
+import { ITrackedPlayerPanelState } from './trackedPlayerPanel/types';
+import { trackedPlayerPanelReducer } from './trackedPlayerPanel/reducers';
+import { IPlayerSettingsState } from './playerSettings/types';
 
 export interface AppState {
     readonly timeline: ITimelineState;
     readonly playerSettings: IPlayerSettingsState;
     readonly user: IUserState;
+    readonly trackedPlayerPanel: ITrackedPlayerPanelState;
 }
 
 const appReducer = combineReducers<AppState>({
     timeline: timelineReducer,
     playerSettings: playerSettingsReducer,
-    user: userReducer
+    user: userReducer,
+    trackedPlayerPanel: trackedPlayerPanelReducer
 });
 
 export const rootReducer = (state: AppState, action: any) => {

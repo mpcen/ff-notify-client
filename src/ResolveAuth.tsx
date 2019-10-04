@@ -3,33 +3,48 @@ import { View, AsyncStorage } from 'react-native';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
-import * as playerSettingsActions from './store/playerSettings/actions';
 import * as userPreferencesActions from './store/user/actions';
-import * as timelineActions from './store/timeline/actions';
+import { AppState } from './store';
 
 import { navigate } from './navigator/navigationRef';
 import { NAVROUTES } from './navigator/navRoutes';
+import { IUserPreferences } from './store/user/types';
 
-interface IResolveAuthPropsFromDispatch {
-    fetchPlayers: typeof playerSettingsActions.fetchPlayers;
-    fetchUserPreferences: typeof userPreferencesActions.fetchUserPreferences;
-    fetchPlayerNews: typeof timelineActions.fetchPlayerNews;
+interface IResolveAuthPropsFromState {
+    userPreferences: IUserPreferences;
+    loading: boolean;
 }
 
-type ResolveAuthProps = IResolveAuthPropsFromDispatch;
+interface IResolveAuthPropsFromDispatch {
+    initialize: typeof userPreferencesActions.initialize;
+}
 
-class ResolveAuthUnconnected extends React.Component<ResolveAuthProps> {
+interface IResolveAuthUnconnectedState {
+    initialLoadComplete: boolean;
+}
+
+type ResolveAuthProps = IResolveAuthPropsFromDispatch & IResolveAuthPropsFromState;
+type ResolveAuthState = IResolveAuthUnconnectedState;
+
+class ResolveAuthUnconnected extends React.Component<ResolveAuthProps, ResolveAuthState> {
+    state: ResolveAuthState = {
+        initialLoadComplete: false
+    };
+
     async componentDidMount() {
         const token = await AsyncStorage.getItem('token');
 
         if (token) {
-            await this.props.fetchPlayers();
-            await this.props.fetchUserPreferences();
-            await this.props.fetchPlayerNews();
-
-            navigate(NAVROUTES.MainFlow);
+            await this.props.initialize();
         } else {
             navigate(NAVROUTES.LogInStack);
+        }
+    }
+
+    componentDidUpdate(prevProps: ResolveAuthProps, prevState: ResolveAuthState) {
+        if (!this.props.loading && !prevState.initialLoadComplete) {
+            this.setState({ initialLoadComplete: true });
+            navigate(NAVROUTES.MainFlow);
         }
     }
 
@@ -38,15 +53,20 @@ class ResolveAuthUnconnected extends React.Component<ResolveAuthProps> {
     }
 }
 
+const mapStateToProps = ({ user, playerSettings }: AppState): IResolveAuthPropsFromState => {
+    return {
+        userPreferences: user.userPreferences,
+        loading: user.loading || playerSettings.loading
+    };
+};
+
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        fetchPlayers: () => dispatch(playerSettingsActions.fetchPlayers()),
-        fetchUserPreferences: () => dispatch(userPreferencesActions.fetchUserPreferences()),
-        fetchPlayerNews: () => dispatch(timelineActions.fetchPlayerNews())
+        initialize: () => dispatch(userPreferencesActions.initialize())
     };
 };
 
 export const ResolveAuth = connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
 )(ResolveAuthUnconnected);

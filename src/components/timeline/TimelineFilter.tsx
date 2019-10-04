@@ -6,8 +6,8 @@ import { Dispatch } from 'redux';
 
 import { sortTimelineBy } from '../../store/timeline/actions';
 
-import { TimelineSortType } from '../../store/timeline/reducer';
 import { AppState } from '../../store';
+import { TimelineSortType } from '../../store/timeline/types';
 
 interface ITimelineFilterPropsFromState {
     timelineSortType: TimelineSortType;
@@ -41,24 +41,20 @@ class TimelineFilterUnconnected extends React.Component<TimelineFilterProps, ITi
                         <CheckBox
                             center
                             title="By Date"
-                            checked={this._handleChecked(TimelineSortType.Date, this.props.timelineSortType)}
+                            checked={this.props.timelineSortType === TimelineSortType.Date}
                             onPress={() => this.props.sortTimelineBy(TimelineSortType.Date)}
                         />
 
                         <CheckBox
                             center
                             title="By Player"
-                            checked={this._handleChecked(TimelineSortType.Player, this.props.timelineSortType)}
+                            checked={this.props.timelineSortType === TimelineSortType.Player}
                             onPress={() => this.props.sortTimelineBy(TimelineSortType.Player)}
                         />
                     </>
                 </Overlay>
             </>
         );
-    }
-
-    private _handleChecked(checkBox: TimelineSortType, timelineSortType: TimelineSortType) {
-        return checkBox === timelineSortType;
     }
 
     private _handleOnPress = () => {
@@ -70,9 +66,9 @@ class TimelineFilterUnconnected extends React.Component<TimelineFilterProps, ITi
     };
 }
 
-const mapStateToProps = ({ timeline }: AppState): ITimelineFilterPropsFromState => {
+const mapStateToProps = ({ user }: AppState): ITimelineFilterPropsFromState => {
     return {
-        timelineSortType: timeline.timelineSortType
+        timelineSortType: user.userPreferences.timelineSortType
     };
 };
 

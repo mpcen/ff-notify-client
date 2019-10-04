@@ -2,7 +2,13 @@ import { all, call, fork, put, takeLatest, takeEvery } from 'redux-saga/effects'
 import { AsyncStorage } from 'react-native';
 
 import { navigate } from '../../navigator/navigationRef';
-import { SignUpActionTypes, SignInActionTypes, SignOutActionTypes, UserPreferencesActionTypes } from './types';
+import {
+    SignUpActionTypes,
+    SignInActionTypes,
+    SignOutActionTypes,
+    UserPreferencesActionTypes,
+    InitializeActionTypes
+} from './types';
 import {
     signUp,
     signUpSuccess,
@@ -12,12 +18,15 @@ import {
     signIn,
     signOutSuccess,
     signOutFail,
-    fetchUserPreferences,
     fetchUserPreferencesSuccess,
-    fetchUserPreferencesFail
+    fetchUserPreferencesFail,
+    fetchUserPreferences,
+    initializeFail,
+    initializeSuccess
 } from './actions';
 import { callApi } from '../../api';
 import { NAVROUTES } from '../../navigator/navRoutes';
+import { fetchPlayers } from '../playerSettings/actions';
 
 // SIGN UP
 function* watchSignUp() {
@@ -107,6 +116,31 @@ function* handleFetchUserPreferences() {
     }
 }
 
+// INITIALIZE
+function* watchInitialize() {
+    yield takeEvery(InitializeActionTypes.INITIALIZE, handleInitialize);
+}
+
+function* handleInitialize() {
+    try {
+        yield put(fetchUserPreferences());
+        yield put(fetchPlayers());
+        yield put(initializeSuccess());
+    } catch (err) {
+        if (err instanceof Error) {
+            yield put(initializeFail(err.stack!));
+        } else {
+            yield put(initializeFail('An unknown error occurred.'));
+        }
+    }
+}
+
 export function* userSaga() {
-    yield all([fork(watchSignUp), fork(watchSignIn), fork(watchSignOut), fork(watchFetchUserPreferences)]);
+    yield all([
+        fork(watchSignUp),
+        fork(watchSignIn),
+        fork(watchSignOut),
+        fork(watchFetchUserPreferences),
+        fork(watchInitialize)
+    ]);
 }

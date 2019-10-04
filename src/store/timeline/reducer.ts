@@ -2,13 +2,7 @@ import { Reducer } from 'redux';
 import { ActionType } from 'typesafe-actions';
 
 import * as Actions from './actions';
-import {
-    FetchPlayerNewsActionTypes,
-    SortTimelineByActionTypes,
-    ITimelineState,
-    IPlayerNews,
-    IPlayerNewsItem
-} from './types';
+import { FetchPlayerNewsActionTypes, SortTimelineByActionTypes, ITimelineState, IPlayerNewsItem } from './types';
 
 type Action = ActionType<typeof Actions>;
 
@@ -77,27 +71,27 @@ const reducer: Reducer<ITimelineState, Action> = (state = initialState, action) 
             };
 
         // SORT TIMELINE BY
-        // case SortTimelineByActionTypes.SORT_TIMELINE_BY:
-        //     return {
-        //         ...state,
-        //         error: false,
-        //         loading: true
-        //     };
+        case SortTimelineByActionTypes.SORT_TIMELINE_BY:
+            return {
+                ...state,
+                error: false,
+                loading: true
+            };
 
-        // case SortTimelineByActionTypes.SORT_TIMELINE_BY_SUCCESS:
-        //     return {
-        //         ...state,
-        //         error: false,
-        //         loading: false,
-        //         timelineSortType: action.payload
-        //     };
+        case SortTimelineByActionTypes.SORT_TIMELINE_BY_SUCCESS:
+            return {
+                ...state,
+                error: false,
+                loading: false,
+                timelineSortType: action.payload
+            };
 
-        // case SortTimelineByActionTypes.SORT_TIMELINE_BY_FAIL:
-        //     return {
-        //         ...state,
-        //         error: true,
-        //         loading: false
-        //     };
+        case SortTimelineByActionTypes.SORT_TIMELINE_BY_FAIL:
+            return {
+                ...state,
+                error: true,
+                loading: false
+            };
 
         default:
             return state;

@@ -6,13 +6,14 @@ import * as Actions from './actions';
 type Action = ActionType<typeof Actions>;
 
 import { IUserState, SignUpActionTypes, SignInActionTypes, RESET_USER, UserPreferencesActionTypes } from './types';
+import { TimelineSortType } from '../timeline/types';
 
 const initialState: IUserState = {
     token: null,
-    loading: false,
+    loading: true,
     errorMessage: '',
     userPreferences: {
-        sortTimelineBy: 0,
+        timelineSortType: TimelineSortType.Date,
         trackedPlayers: [],
         userId: ''
     }

@@ -17,7 +17,7 @@ import {
 } from './actions';
 import { callApi } from '../../api';
 import { fetchPlayerNews, refetchPlayerNews } from '../timeline/actions';
-import { fetchUserPreferences } from '../user/actions';
+import { fetchUserPreferences, fetchUserPreferencesSuccess } from '../user/actions';
 
 // FETCH PLAYERS
 function* watchFetchPlayers() {
@@ -63,7 +63,7 @@ function* handleTrackPlayer({ payload }: ReturnType<typeof trackPlayer>) {
             yield put(trackPlayerFail(res.error));
         } else {
             yield put(trackPlayerSuccess());
-            yield put(fetchUserPreferences());
+            yield put(fetchUserPreferencesSuccess(res));
             yield put(refetchPlayerNews());
         }
     } catch (err) {
@@ -103,15 +103,14 @@ function* handleReorderTrackedPlayers({ payload }: ReturnType<typeof reorderTrac
     try {
         const reorderedTrackedPlayers = payload;
         const token = yield call(AsyncStorage.getItem, 'token');
-        const res = yield call(callApi, 'PUT', 'trackedPlayersOrder', token, {
-            trackedPlayersOrder: reorderedTrackedPlayers
-        });
+        const res = yield call(callApi, 'PUT', 'trackedplayers', token, reorderedTrackedPlayers);
 
         if (res.error) {
             yield put(reorderTrackedPlayersFail(res.error));
         } else {
-            yield put(reorderTrackedPlayersSuccess(res.trackedPlayersOrder));
-            yield put(fetchPlayerNews());
+            yield put(reorderTrackedPlayersSuccess());
+            yield put(fetchUserPreferencesSuccess(res));
+            // yield put(refetchPlayerNews());
         }
     } catch (err) {
         yield put(reorderTrackedPlayersFail('Error when trying to reorder tracked players'));

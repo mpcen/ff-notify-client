@@ -7,7 +7,8 @@ import {
     IUser,
     RESET_USER,
     UserPreferencesActionTypes,
-    IUserPreferences
+    IUserPreferences,
+    InitializeActionTypes
 } from './types';
 
 export const reset = () => {
@@ -64,4 +65,17 @@ export const fetchUserPreferencesSuccess = (userPreferences: IUserPreferences) =
 
 export const fetchUserPreferencesFail = (message: string) => {
     return action(UserPreferencesActionTypes.FETCH_USER_PREFERENCES_FAIL, message);
+};
+
+// INITIALIZE
+export const initialize = () => {
+    return action(InitializeActionTypes.INITIALIZE);
+};
+
+export const initializeSuccess = () => {
+    return action(InitializeActionTypes.INITIALIZE_SUCCESS);
+};
+
+export const initializeFail = (message: string) => {
+    return action(InitializeActionTypes.INITIALIZE_FAIL, message);
 };

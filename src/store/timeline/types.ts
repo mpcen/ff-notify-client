@@ -38,7 +38,7 @@ export interface IPlayerNews {
     nextPage: number;
 }
 
-export enum SortTimelineBy {
+export enum TimelineSortType {
     Date,
     Player
 }

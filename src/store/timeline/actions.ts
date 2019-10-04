@@ -1,6 +1,6 @@
 import { action } from 'typesafe-actions';
 
-import { FetchPlayerNewsActionTypes, SortTimelineByActionTypes, IPlayerNews, SortTimelineBy } from './types';
+import { FetchPlayerNewsActionTypes, SortTimelineByActionTypes, IPlayerNews, TimelineSortType } from './types';
 
 // FETCH PLAYER NEWS
 export const fetchPlayerNews = (page: number = 1, playerId?: string) => {
@@ -16,8 +16,8 @@ export const fetchPlayerNewsFail = (message: string) => {
 };
 
 // REFETCH PLAYER NEWS
-export const refetchPlayerNews = (page: number = 1, playerId?: string) => {
-    return action(FetchPlayerNewsActionTypes.REFETCH_PLAYER_NEWS, { page, playerId });
+export const refetchPlayerNews = (playerId?: string) => {
+    return action(FetchPlayerNewsActionTypes.REFETCH_PLAYER_NEWS, playerId);
 };
 
 export const refetchPlayerNewsSuccess = (playerNews: IPlayerNews) => {
@@ -29,11 +29,11 @@ export const refetchPlayerNewsFail = (message: string) => {
 };
 
 // SORT TIMELINE BY
-export const sortTimelineBy = (sortType: SortTimelineBy) => {
+export const sortTimelineBy = (sortType: TimelineSortType) => {
     return action(SortTimelineByActionTypes.SORT_TIMELINE_BY, sortType);
 };
 
-export const sortTimelineBySuccess = (sortType: SortTimelineBy) => {
+export const sortTimelineBySuccess = (sortType: TimelineSortType) => {
     return action(SortTimelineByActionTypes.SORT_TIMELINE_BY_SUCCESS, sortType);
 };
 

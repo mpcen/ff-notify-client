@@ -114,4 +114,4 @@ const reducer: Reducer<IPlayerSettingsState, Action> = (state = initialState, ac
     }
 };
 
-export { reducer as playerSettingsReducer, IPlayerSettingsState };
+export { reducer as playerSettingsReducer };

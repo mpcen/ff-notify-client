@@ -46,8 +46,8 @@ export const reorderTrackedPlayers = (reorderedTrackedPlayers: string[]) => {
     return action(TrackPlayerActionTypes.REORDER_TRACKED_PLAYERS, reorderedTrackedPlayers);
 };
 
-export const reorderTrackedPlayersSuccess = (reorderedTrackedPlayers: string[]) => {
-    return action(TrackPlayerActionTypes.REORDER_TRACKED_PLAYERS_SUCCESS, reorderedTrackedPlayers);
+export const reorderTrackedPlayersSuccess = () => {
+    return action(TrackPlayerActionTypes.REORDER_TRACKED_PLAYERS_SUCCESS);
 };
 
 export const reorderTrackedPlayersFail = (message: string) => {

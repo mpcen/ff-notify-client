@@ -14,6 +14,7 @@ import {
     refetchPlayerNewsFail
 } from './actions';
 import { callApi } from '../../api';
+import { fetchUserPreferences, fetchUserPreferencesSuccess } from '../user/actions';
 
 // FETCH PLAYER NEWS
 function* watchFetchPlayerNews() {
@@ -44,12 +45,11 @@ function* watchRefetchPlayerNews() {
 }
 
 function* handleRefetchPlayerNews({ payload }: ReturnType<typeof refetchPlayerNews>) {
-    const { page, playerId } = payload;
+    const playerId = payload;
+
     try {
         const token = yield call(AsyncStorage.getItem, 'token');
-        // This will eventually need to be smarter to handle more complicated queryStrings
-        const playerIdQueryString = playerId ? `&playerId=${playerId}` : '';
-        const res = yield call(callApi, 'GET', `recentPlayerNews?page=${page}${playerIdQueryString}`, token);
+        const res = yield call(callApi, 'GET', `recentPlayerNews?page=1&playerId=${playerId}`, token);
 
         yield put(refetchPlayerNewsSuccess(res));
     } catch (err) {
@@ -69,9 +69,10 @@ function* watchSortTimelineBy() {
 function* handleSortTimelineBy({ payload }: ReturnType<typeof sortTimelineBy>) {
     try {
         const token = yield call(AsyncStorage.getItem, 'token');
-        const res = yield call(callApi, 'PUT', 'user', token, { sortTimelineBy: payload });
+        const res = yield call(callApi, 'PUT', 'userPreferences', token, { timelineSortType: payload });
 
-        yield put(sortTimelineBySuccess(res.sortTimelineBy));
+        yield put(sortTimelineBySuccess(res.timelineSortType));
+        yield put(fetchUserPreferencesSuccess(res));
     } catch (err) {
         if (err instanceof Error) {
             yield put(sortTimelineByFail(err.stack!));

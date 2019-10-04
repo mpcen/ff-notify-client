@@ -3,10 +3,12 @@ import { Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Badge, Avatar } from 'react-native-elements';
 
 import { IPlayer } from '../../../store/playerSettings/types';
+import { selectPlayer } from '../../../store/trackedPlayerPanel/actions';
 
 interface ITrackedPlayerPanelItemProps {
     trackedPlayer: IPlayer;
     onLongPress: () => void;
+    onPress: () => void;
 }
 
 export const TrackedPlayerPanelItem = (props: ITrackedPlayerPanelItemProps) => {
@@ -21,7 +23,7 @@ export const TrackedPlayerPanelItem = (props: ITrackedPlayerPanelItemProps) => {
     } = styles;
 
     return (
-        <TouchableOpacity style={playerStoryContainer} onLongPress={props.onLongPress}>
+        <TouchableOpacity style={playerStoryContainer} onLongPress={props.onLongPress} onPress={props.onPress}>
             <Avatar
                 rounded
                 size="medium"
