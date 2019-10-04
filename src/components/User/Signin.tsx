@@ -42,14 +42,14 @@ class SignInUnconnected extends React.Component<SignInProps, {}> {
         return (
             <View style={styles.container}>
                 <AuthForm
-                    headerText="Sign into FFNotify"
+                    headerText="Sign into PerSource"
                     submitButtonText="Sign in"
                     errorMessage={this.props.errorMessage}
                     onPress={this.props.signIn}
                 />
 
                 <AuthNavLink
-                    text="Don't have an account? Sign up for FFNotify"
+                    text="Don't have an account? Sign up"
                     onPress={() => {
                         this.props.navigation.navigate(NAVROUTES.SignUp);
                         this.props.reset();

@@ -42,7 +42,7 @@ class SignUpUnconnected extends React.Component<SignUpProps, {}> {
         return (
             <View style={styles.container}>
                 <AuthForm
-                    headerText="Sign up for FFNotify"
+                    headerText="Sign up for PerSource"
                     submitButtonText="Sign up"
                     errorMessage={this.props.errorMessage}
                     onPress={this.props.signUp}

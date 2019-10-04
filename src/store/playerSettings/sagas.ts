@@ -1,4 +1,4 @@
-import { all, call, fork, put, takeEvery, select } from 'redux-saga/effects';
+import { all, call, fork, put, takeEvery, select, takeLatest } from 'redux-saga/effects';
 import { AsyncStorage } from 'react-native';
 
 import { FetchPlayersActionTypes, TrackPlayerActionTypes, IPlayerMap, IPlayer } from './types';
@@ -16,15 +16,15 @@ import {
     reorderTrackedPlayersSuccess
 } from './actions';
 import { callApi } from '../../api';
-import { fetchPlayerNews, refetchPlayerNews } from '../timeline/actions';
-import { fetchUserPreferences, fetchUserPreferencesSuccess } from '../user/actions';
+import { refetchPlayerNews } from '../timeline/actions';
+import { fetchUserPreferencesSuccess } from '../user/actions';
 import { AppState } from '..';
 import { TimelineSortType } from '../timeline/types';
 import { selectPlayer } from '../trackedPlayerPanel/actions';
 
 // FETCH PLAYERS
 function* watchFetchPlayers() {
-    yield takeEvery(FetchPlayersActionTypes.FETCH_PLAYERS, handleFetchPlayers);
+    yield takeLatest(FetchPlayersActionTypes.FETCH_PLAYERS, handleFetchPlayers);
 }
 
 function* handleFetchPlayers() {
@@ -53,7 +53,7 @@ function* handleFetchPlayers() {
 
 // TRACK PLAYER
 function* watchTrackPlayer() {
-    yield takeEvery(TrackPlayerActionTypes.TRACK_PLAYER, handleTrackPlayer);
+    yield takeLatest(TrackPlayerActionTypes.TRACK_PLAYER, handleTrackPlayer);
 }
 
 function* handleTrackPlayer({ payload }: ReturnType<typeof trackPlayer>) {
@@ -70,9 +70,9 @@ function* handleTrackPlayer({ payload }: ReturnType<typeof trackPlayer>) {
 
             const store: AppState = yield select();
 
-            if (store.user.userPreferences.timelineSortType === TimelineSortType.Date) {
-                yield put(refetchPlayerNews(''));
-            }
+            // if (store.user.userPreferences.timelineSortType === TimelineSortType.Date) {
+            //     yield put(refetchPlayerNews(''));
+            // }
         }
     } catch (err) {
         yield put(trackPlayerFail('Error when trying to track a player'));
@@ -129,7 +129,6 @@ function* handleReorderTrackedPlayers({ payload }: ReturnType<typeof reorderTrac
         } else {
             yield put(reorderTrackedPlayersSuccess());
             yield put(fetchUserPreferencesSuccess(res));
-            // yield put(refetchPlayerNews());
         }
     } catch (err) {
         yield put(reorderTrackedPlayersFail('Error when trying to reorder tracked players'));

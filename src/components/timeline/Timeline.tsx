@@ -70,11 +70,6 @@ class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> 
         ) {
             this.props.refetchPlayerNews(this.props.trackedPlayers[this.props.selectedPlayerIndex]);
         }
-
-        // if (prevProps.playerNews.page !== this.props.playerNews.page) {
-        //     this.setState({ page: this.props.playerNews.page });
-        //     this.props.fetchPlayerNews(this.props.playerNews.page, this.props.trackedPlayers[this.props.selectedPlayerIndex]);
-        // }
     }
 
     public render() {

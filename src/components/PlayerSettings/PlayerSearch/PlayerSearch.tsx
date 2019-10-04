@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, FlatList, TouchableOpacity } from 'react-native';
+import { View, FlatList } from 'react-native';
 import { NavigationScreenOptions, NavigationScreenProps } from 'react-navigation';
 import { Header, Input, Overlay } from 'react-native-elements';
 import { connect } from 'react-redux';
@@ -9,7 +9,6 @@ import * as playerSettingsActions from '../../../store/playerSettings/actions';
 
 import { AppState } from '../../../store';
 import { IPlayer, IPlayerMap } from '../../../store/playerSettings/types';
-import { IPlayerSettingsState } from '../../../store/playerSettings/reducer';
 
 import { PlayerCard } from './PlayerCard';
 import { PlayerListItem } from './PlayerListItem';
@@ -18,7 +17,6 @@ interface IPlayerSearchPropsFromState {
     playerMap: IPlayerMap;
     loading: boolean;
     error: boolean;
-    trackedPlayers: string[];
 }
 
 interface IPlayerSearchPropsFromDispatch {
@@ -33,14 +31,11 @@ interface IPlayerSearchUnconnectedState {
     isOverlayVisible: boolean;
 }
 
-interface IPlayerSearchProps {}
+type PlayerSearchProps = IPlayerSearchPropsFromState & IPlayerSearchPropsFromDispatch & IPlayerSearchUnconnectedState;
 
-type PlayerSearchProps = IPlayerSearchProps &
-    IPlayerSearchPropsFromState &
-    IPlayerSearchPropsFromDispatch &
-    IPlayerSearchUnconnectedState;
+type PlayerSearchState = IPlayerSearchUnconnectedState;
 
-export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, IPlayerSearchUnconnectedState> {
+export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, PlayerSearchState> {
     static navigationOptions = ({ navigation }: NavigationScreenProps) => {
         return {
             header: <Header centerComponent={{ text: 'Player Settings - Search', style: { color: '#fff' } }} />
@@ -112,7 +107,7 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
     };
 }
 
-const mapStateToProps = ({ playerSettings, user }: AppState): IPlayerSettingsState => {
+const mapStateToProps = ({ playerSettings }: AppState): IPlayerSearchPropsFromState => {
     return {
         error: playerSettings.error,
         loading: playerSettings.loading,

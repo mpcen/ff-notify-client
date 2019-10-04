@@ -22,7 +22,8 @@ import {
     fetchUserPreferencesFail,
     fetchUserPreferences,
     initializeFail,
-    initializeSuccess
+    initializeSuccess,
+    resetUser
 } from './actions';
 import { callApi } from '../../api';
 import { NAVROUTES } from '../../navigator/navRoutes';
@@ -42,6 +43,7 @@ function* handleSignUp({ payload }: ReturnType<typeof signUp>) {
         } else {
             yield call(AsyncStorage.setItem, 'token', res.token);
             yield put(signUpSuccess(res));
+            yield put(fetchPlayers());
 
             navigate(NAVROUTES.Timeline);
         }
@@ -88,6 +90,7 @@ function* watchSignOut() {
 function* handleSignOut() {
     try {
         yield call(AsyncStorage.removeItem, 'token');
+        yield put(resetUser());
         yield put(signOutSuccess());
 
         navigate(NAVROUTES.LogInStack);

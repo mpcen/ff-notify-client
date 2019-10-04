@@ -41,7 +41,7 @@ function* handleFetchPlayerNews({ payload }: ReturnType<typeof fetchPlayerNews>)
 
 // REFETCH PLAYER NEWS
 function* watchRefetchPlayerNews() {
-    yield takeEvery(FetchPlayerNewsActionTypes.REFETCH_PLAYER_NEWS, handleRefetchPlayerNews);
+    yield takeLatest(FetchPlayerNewsActionTypes.REFETCH_PLAYER_NEWS, handleRefetchPlayerNews);
 }
 
 function* handleRefetchPlayerNews({ payload }: ReturnType<typeof refetchPlayerNews>) {

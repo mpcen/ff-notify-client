@@ -79,3 +79,8 @@ export const initializeSuccess = () => {
 export const initializeFail = (message: string) => {
     return action(InitializeActionTypes.INITIALIZE_FAIL, message);
 };
+
+// RESET USER
+export const resetUser = () => {
+    return action(RESET_USER);
+};
