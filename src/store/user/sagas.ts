@@ -90,10 +90,11 @@ function* watchSignOut() {
 function* handleSignOut() {
     try {
         yield call(AsyncStorage.removeItem, 'token');
-        yield put(resetUser());
         yield put(signOutSuccess());
 
         navigate(NAVROUTES.LogInStack);
+
+        yield put(resetUser());
     } catch (err) {
         yield put(signOutFail('Error signing out'));
     }

@@ -1,9 +1,11 @@
 import { Reducer } from 'redux';
 import { ActionType } from 'typesafe-actions';
 
-import * as Actions from './actions';
+import * as PlayerSettingsActions from './actions';
+import * as UserActions from '../user/actions';
+import { RESET_USER } from '../user/types';
 
-type Action = ActionType<typeof Actions>;
+type Action = ActionType<typeof PlayerSettingsActions & typeof UserActions>;
 
 import { FetchPlayersActionTypes, TrackPlayerActionTypes, IPlayerSettingsState } from './types';
 
@@ -108,6 +110,10 @@ const reducer: Reducer<IPlayerSettingsState, Action> = (state = initialState, ac
                 error: true,
                 errorMessage: action.payload
             };
+
+        // RESET USER
+        case RESET_USER:
+            return initialState;
 
         default:
             return state;

@@ -21,20 +21,12 @@ export interface AppState {
     readonly trackedPlayerPanel: ITrackedPlayerPanelState;
 }
 
-const appReducer = combineReducers<AppState>({
+export const rootReducer = combineReducers<AppState>({
     timeline: timelineReducer,
     playerSettings: playerSettingsReducer,
     user: userReducer,
     trackedPlayerPanel: trackedPlayerPanelReducer
 });
-
-export const rootReducer = (state: AppState, action: any) => {
-    if (action.type === SignOutActionTypes.SIGN_OUT_SUCCESS) {
-        state = undefined;
-    }
-
-    return appReducer(state, action);
-};
 
 export function* rootSaga() {
     yield all([fork(timelineSaga), fork(playerSettingsSaga), fork(userSaga)]);

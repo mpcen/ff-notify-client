@@ -21,10 +21,6 @@ const initialState: IUserState = {
 
 const reducer: Reducer<IUserState, Action> = (state = initialState, action) => {
     switch (action.type) {
-        // RESET_USER
-        case RESET_USER:
-            return initialState;
-
         // SIGN UP
         case SignUpActionTypes.SIGN_UP_SUCCESS:
             return {
@@ -81,6 +77,9 @@ const reducer: Reducer<IUserState, Action> = (state = initialState, action) => {
                 loading: false,
                 errorMessage: action.payload
             };
+
+        case RESET_USER:
+            return initialState;
 
         default:
             return state;
