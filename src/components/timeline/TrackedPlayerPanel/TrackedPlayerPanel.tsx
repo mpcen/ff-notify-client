@@ -47,11 +47,10 @@ export class TrackedPlayerPanelUnconnected extends React.Component<TrackedPlayer
     }
 
     render() {
-        const { storiesContainer } = styles;
-        const { trackedPlayers, playerMap } = this.props;
+        const { trackedPlayers } = this.props;
 
         return (
-            <>
+            <View>
                 <FlatList
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
@@ -69,7 +68,7 @@ export class TrackedPlayerPanelUnconnected extends React.Component<TrackedPlayer
                         onMoveEnd={this._handleReorderTrackedPlayers}
                     />
                 </Overlay>
-            </>
+            </View>
         );
     }
 
@@ -127,12 +126,6 @@ export class TrackedPlayerPanelUnconnected extends React.Component<TrackedPlayer
         this.setState({ isOverlayVisible: false });
     };
 }
-
-const styles = StyleSheet.create({
-    storiesContainer: {
-        height: Constants.statusBarHeight * 3
-    }
-});
 
 const mapStateToProps = ({
     playerSettings,

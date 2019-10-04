@@ -73,10 +73,8 @@ class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> 
     }
 
     public render() {
-        const { timeLineContainer } = styles;
-
         return (
-            <View style={timeLineContainer}>
+            <View style={{ flex: 1 }}>
                 {this.props.timelineSortType === TimelineSortType.Player && <TrackedPlayerPanel />}
 
                 {this.props.playerNews.docs.length ? (
@@ -114,13 +112,6 @@ class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> 
         this.props.refetchPlayerNews(this.props.trackedPlayers[this.props.selectedPlayerIndex]);
     };
 }
-
-const styles = StyleSheet.create({
-    timeLineContainer: {
-        flex: 1,
-        backgroundColor: '#fff'
-    }
-});
 
 const mapStateToProps = ({ timeline, playerSettings, user, trackedPlayerPanel }: AppState): ITimelinePropsFromState => {
     return {

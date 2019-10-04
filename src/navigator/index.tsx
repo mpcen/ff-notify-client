@@ -89,7 +89,10 @@ const MainFlow = createBottomTabNavigator(
         tabBarOptions: {
             activeTintColor: 'tomato',
             inactiveTintColor: 'gray',
-            showLabel: false
+            showLabel: false,
+            style: {
+                height: 50
+            }
         },
         initialRouteName: NAVROUTES.Timeline
     }
