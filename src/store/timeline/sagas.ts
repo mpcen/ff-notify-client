@@ -1,4 +1,4 @@
-import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
+import { all, call, fork, put, takeEvery, takeLatest } from 'redux-saga/effects';
 import { AsyncStorage } from 'react-native';
 
 import { FetchPlayerNewsActionTypes, SortTimelineByActionTypes } from './types';
@@ -18,7 +18,7 @@ import { fetchUserPreferences, fetchUserPreferencesSuccess } from '../user/actio
 
 // FETCH PLAYER NEWS
 function* watchFetchPlayerNews() {
-    yield takeEvery(FetchPlayerNewsActionTypes.FETCH_PLAYER_NEWS, handleFetchPlayerNews);
+    yield takeLatest(FetchPlayerNewsActionTypes.FETCH_PLAYER_NEWS, handleFetchPlayerNews);
 }
 
 function* handleFetchPlayerNews({ payload }: ReturnType<typeof fetchPlayerNews>) {

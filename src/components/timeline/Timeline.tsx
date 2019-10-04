@@ -30,9 +30,14 @@ interface ITimelinePropsFromDispatch {
     refetchPlayerNews: typeof timelineActions.refetchPlayerNews;
 }
 
-type TimelineProps = ITimelinePropsFromState & ITimelinePropsFromDispatch;
+interface ITimelineUnconnectedState {
+    page: number;
+}
 
-class TimeLineUnconnected extends React.Component<TimelineProps> {
+type TimelineProps = ITimelinePropsFromState & ITimelinePropsFromDispatch;
+type TimelineState = ITimelineUnconnectedState;
+
+class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> {
     static navigationOptions = ({ navigation }: NavigationScreenProps) => {
         return {
             header: (
@@ -44,6 +49,10 @@ class TimeLineUnconnected extends React.Component<TimelineProps> {
                 />
             )
         } as NavigationScreenOptions;
+    };
+
+    state: TimelineState = {
+        page: 1
     };
 
     componentDidMount() {
@@ -61,6 +70,11 @@ class TimeLineUnconnected extends React.Component<TimelineProps> {
         ) {
             this.props.refetchPlayerNews(this.props.trackedPlayers[this.props.selectedPlayerIndex]);
         }
+
+        // if (prevProps.playerNews.page !== this.props.playerNews.page) {
+        //     this.setState({ page: this.props.playerNews.page });
+        //     this.props.fetchPlayerNews(this.props.playerNews.page, this.props.trackedPlayers[this.props.selectedPlayerIndex]);
+        // }
     }
 
     public render() {
@@ -79,6 +93,7 @@ class TimeLineUnconnected extends React.Component<TimelineProps> {
                         renderItem={({ item }: { item: IPlayerNewsItem }) => {
                             return <PlayerNewsItem playerNewsItem={item} />;
                         }}
+                        onEndReached={this._handleOnEndReached}
                     />
                 ) : (
                     <Text>No player news</Text>
@@ -87,9 +102,21 @@ class TimeLineUnconnected extends React.Component<TimelineProps> {
         );
     }
 
+    private _handleOnEndReached = () => {
+        console.log('End reached for page:', this.props.playerNews.page);
+        console.log('Next page:', this.props.playerNews.nextPage);
+
+        if (this.props.playerNews.nextPage) {
+            this.props.fetchPlayerNews(
+                this.props.playerNews.nextPage,
+                this.props.trackedPlayers[this.props.selectedPlayerIndex]
+            );
+        }
+    };
+
     private _handleRefresh = () => {
-        this.props.refetchPlayerNews(this.props.trackedPlayers[0]);
-        this.setState({ selectedPlayerIndex: 0 });
+        this.setState({});
+        this.props.refetchPlayerNews(this.props.trackedPlayers[this.props.selectedPlayerIndex]);
     };
 }
 

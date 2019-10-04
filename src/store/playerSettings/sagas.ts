@@ -1,4 +1,4 @@
-import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
+import { all, call, fork, put, takeEvery, select } from 'redux-saga/effects';
 import { AsyncStorage } from 'react-native';
 
 import { FetchPlayersActionTypes, TrackPlayerActionTypes, IPlayerMap, IPlayer } from './types';
@@ -18,6 +18,9 @@ import {
 import { callApi } from '../../api';
 import { fetchPlayerNews, refetchPlayerNews } from '../timeline/actions';
 import { fetchUserPreferences, fetchUserPreferencesSuccess } from '../user/actions';
+import { AppState } from '..';
+import { TimelineSortType } from '../timeline/types';
+import { selectPlayer } from '../trackedPlayerPanel/actions';
 
 // FETCH PLAYERS
 function* watchFetchPlayers() {
@@ -64,7 +67,12 @@ function* handleTrackPlayer({ payload }: ReturnType<typeof trackPlayer>) {
         } else {
             yield put(trackPlayerSuccess());
             yield put(fetchUserPreferencesSuccess(res));
-            yield put(refetchPlayerNews());
+
+            const store: AppState = yield select();
+
+            if (store.user.userPreferences.timelineSortType === TimelineSortType.Date) {
+                yield put(refetchPlayerNews(''));
+            }
         }
     } catch (err) {
         yield put(trackPlayerFail('Error when trying to track a player'));
@@ -85,9 +93,20 @@ function* handleUntrackPlayer({ payload }: ReturnType<typeof untrackPlayer>) {
         if (res.error) {
             yield put(untrackPlayerFail(res.error));
         } else {
+            const store: AppState = yield select();
+            const currentSelectedPlayer =
+                store.user.userPreferences.trackedPlayers[store.trackedPlayerPanel.selectedPlayerIndex];
+
+            if (
+                store.user.userPreferences.timelineSortType === TimelineSortType.Player &&
+                currentSelectedPlayer === playerId
+            ) {
+                yield put(selectPlayer(0));
+                yield put(refetchPlayerNews(store.user.userPreferences.trackedPlayers[0]));
+            }
+
             yield put(untrackPlayerSuccess());
-            yield put(fetchUserPreferences());
-            yield put(refetchPlayerNews());
+            yield put(fetchUserPreferencesSuccess(res));
         }
     } catch (err) {
         yield put(untrackPlayerFail('Error when trying to untrack player'));
