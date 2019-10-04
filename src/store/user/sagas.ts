@@ -1,8 +1,8 @@
-import { all, call, fork, put, takeLatest } from 'redux-saga/effects';
+import { all, call, fork, put, takeLatest, takeEvery } from 'redux-saga/effects';
 import { AsyncStorage } from 'react-native';
 
 import { navigate } from '../../navigator/navigationRef';
-import { SignUpActionTypes, SignInActionTypes, SignOutActionTypes } from './types';
+import { SignUpActionTypes, SignInActionTypes, SignOutActionTypes, UserPreferencesActionTypes } from './types';
 import {
     signUp,
     signUpSuccess,
@@ -11,11 +11,15 @@ import {
     signInFail,
     signIn,
     signOutSuccess,
-    signOutFail
+    signOutFail,
+    fetchUserPreferences,
+    fetchUserPreferencesSuccess,
+    fetchUserPreferencesFail
 } from './actions';
 import { callApi } from '../../api';
 import { NAVROUTES } from '../../navigator/navRoutes';
 
+// SIGN UP
 function* watchSignUp() {
     yield takeLatest(SignUpActionTypes.SIGN_UP, handleSignUp);
 }
@@ -41,6 +45,7 @@ function* handleSignUp({ payload }: ReturnType<typeof signUp>) {
     }
 }
 
+// SIGN IN
 function* watchSignIn() {
     yield takeLatest(SignInActionTypes.SIGN_IN, handleSignIn);
 }
@@ -66,6 +71,7 @@ function* handleSignIn({ payload }: ReturnType<typeof signIn>) {
     }
 }
 
+// SIGN OUT
 function* watchSignOut() {
     yield takeLatest(SignOutActionTypes.SIGN_OUT, handleSignOut);
 }
@@ -81,6 +87,26 @@ function* handleSignOut() {
     }
 }
 
+// FETCH USER PREFERENCES
+function* watchFetchUserPreferences() {
+    yield takeEvery(UserPreferencesActionTypes.FETCH_USER_PREFERENCES, handleFetchUserPreferences);
+}
+
+function* handleFetchUserPreferences() {
+    try {
+        const token = yield call(AsyncStorage.getItem, 'token');
+        const res = yield call(callApi, 'GET', `userPreferences`, token);
+
+        yield put(fetchUserPreferencesSuccess(res));
+    } catch (err) {
+        if (err instanceof Error) {
+            yield put(fetchUserPreferencesFail(err.stack!));
+        } else {
+            yield put(fetchUserPreferencesFail('An unknown error occurred.'));
+        }
+    }
+}
+
 export function* userSaga() {
-    yield all([fork(watchSignUp), fork(watchSignIn), fork(watchSignOut)]);
+    yield all([fork(watchSignUp), fork(watchSignIn), fork(watchSignOut), fork(watchFetchUserPreferences)]);
 }

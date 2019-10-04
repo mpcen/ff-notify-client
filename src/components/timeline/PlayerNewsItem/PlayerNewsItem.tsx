@@ -4,17 +4,8 @@ import { Card, Text, Icon, Avatar, Divider } from 'react-native-elements';
 import { format } from 'date-fns';
 
 import { Reactions } from './Reactions';
-import { IPlayer } from '../../../store/playerSettings/types';
 import { TEAMS } from '../../../util/teams';
-
-export interface IPlayerNewsItem {
-    platform: string;
-    username: string;
-    contentId: string;
-    player: IPlayer;
-    content: string;
-    time: string;
-}
+import { IPlayerNewsItem } from '../../../store/timeline/types';
 
 interface IPlayerNewsItemProps {
     playerNewsItem: IPlayerNewsItem;

@@ -108,18 +108,15 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
     };
 
     private _handleTrackPlayer = () => {
-        if (!this.props.trackedPlayers.find(playerId => playerId === this.state.selectedPlayer.id)) {
-            this.props.trackPlayer(this.state.selectedPlayer.id);
-        }
+        this.props.trackPlayer(this.state.selectedPlayer.id);
     };
 }
 
-const mapStateToProps = ({ playerSettings }: AppState): IPlayerSettingsState => {
+const mapStateToProps = ({ playerSettings, user }: AppState): IPlayerSettingsState => {
     return {
         error: playerSettings.error,
         loading: playerSettings.loading,
-        playerMap: playerSettings.playerMap,
-        trackedPlayers: playerSettings.trackedPlayers
+        playerMap: playerSettings.playerMap
     };
 };
 

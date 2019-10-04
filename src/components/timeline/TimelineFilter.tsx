@@ -4,7 +4,7 @@ import { Icon, Overlay, CheckBox, Text } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
-import { sortPlayerBy } from '../../store/timeline/actions';
+import { sortTimelineBy } from '../../store/timeline/actions';
 
 import { TimelineSortType } from '../../store/timeline/reducer';
 import { AppState } from '../../store';
@@ -14,7 +14,7 @@ interface ITimelineFilterPropsFromState {
 }
 
 interface ITimelineFilterPropsFromDispatch {
-    sortPlayerBy: typeof sortPlayerBy;
+    sortTimelineBy: typeof sortTimelineBy;
 }
 
 interface ITimelineFilterState {
@@ -42,14 +42,14 @@ class TimelineFilterUnconnected extends React.Component<TimelineFilterProps, ITi
                             center
                             title="By Date"
                             checked={this._handleChecked(TimelineSortType.Date, this.props.timelineSortType)}
-                            onPress={() => this.props.sortPlayerBy(TimelineSortType.Date)}
+                            onPress={() => this.props.sortTimelineBy(TimelineSortType.Date)}
                         />
 
                         <CheckBox
                             center
                             title="By Player"
                             checked={this._handleChecked(TimelineSortType.Player, this.props.timelineSortType)}
-                            onPress={() => this.props.sortPlayerBy(TimelineSortType.Player)}
+                            onPress={() => this.props.sortTimelineBy(TimelineSortType.Player)}
                         />
                     </>
                 </Overlay>
@@ -78,7 +78,7 @@ const mapStateToProps = ({ timeline }: AppState): ITimelineFilterPropsFromState 
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        sortPlayerBy: (sortType: TimelineSortType) => dispatch(sortPlayerBy(sortType))
+        sortTimelineBy: (sortType: TimelineSortType) => dispatch(sortTimelineBy(sortType))
     };
 };
 

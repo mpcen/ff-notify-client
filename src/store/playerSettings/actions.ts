@@ -20,8 +20,8 @@ export const trackPlayer = (playerId: string) => {
     return action(TrackPlayerActionTypes.TRACK_PLAYER, playerId);
 };
 
-export const trackPlayerSuccess = (playerId: string) => {
-    return action(TrackPlayerActionTypes.TRACK_PLAYER_SUCCESS, playerId);
+export const trackPlayerSuccess = () => {
+    return action(TrackPlayerActionTypes.TRACK_PLAYER_SUCCESS);
 };
 
 export const trackPlayerFail = (message: string) => {
@@ -33,25 +33,12 @@ export const untrackPlayer = (playerId: string) => {
     return action(TrackPlayerActionTypes.UNTRACK_PLAYER, playerId);
 };
 
+export const untrackPlayerSuccess = () => {
+    return action(TrackPlayerActionTypes.UNTRACK_PLAYER_SUCCESS);
+};
+
 export const untrackPlayerFail = (message: string) => {
     return action(TrackPlayerActionTypes.UNTRACK_PLAYER_FAIL, message);
-};
-
-export const untrackPlayerSuccess = (playerId: string) => {
-    return action(TrackPlayerActionTypes.UNTRACK_PLAYER_SUCCESS, playerId);
-};
-
-// FETCH TRACKED PLAYERS
-export const fetchTrackedPlayers = () => {
-    return action(TrackPlayerActionTypes.FETCH_TRACKED_PLAYERS);
-};
-
-export const fetchTrackedPlayersSuccess = (trackedPlayers: string[]) => {
-    return action(TrackPlayerActionTypes.FETCH_TRACKED_PLAYERS_SUCCESS, trackedPlayers);
-};
-
-export const fetchTrackedPlayersFail = (message: string) => {
-    return action(TrackPlayerActionTypes.FETCH_TRACKED_PLAYERS_FAIL, message);
 };
 
 // REORDER TRACKED PLAYERS

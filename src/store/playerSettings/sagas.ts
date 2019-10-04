@@ -8,8 +8,6 @@ import {
     trackPlayer,
     trackPlayerFail,
     trackPlayerSuccess,
-    fetchTrackedPlayersFail,
-    fetchTrackedPlayersSuccess,
     untrackPlayer,
     untrackPlayerFail,
     untrackPlayerSuccess,
@@ -18,7 +16,8 @@ import {
     reorderTrackedPlayersSuccess
 } from './actions';
 import { callApi } from '../../api';
-import { fetchPlayerNews } from '../timeline/actions';
+import { fetchPlayerNews, refetchPlayerNews } from '../timeline/actions';
+import { fetchUserPreferences } from '../user/actions';
 
 // FETCH PLAYERS
 function* watchFetchPlayers() {
@@ -58,36 +57,17 @@ function* handleTrackPlayer({ payload }: ReturnType<typeof trackPlayer>) {
     try {
         const playerId = payload;
         const token = yield call(AsyncStorage.getItem, 'token');
-        const res = yield call(callApi, 'POST', 'trackedPlayer', token, { playerId });
+        const res = yield call(callApi, 'POST', 'trackPlayer', token, { playerId });
 
         if (res.error) {
             yield put(trackPlayerFail(res.error));
         } else {
-            yield put(trackPlayerSuccess(res.playerId));
-            yield put(fetchPlayerNews());
+            yield put(trackPlayerSuccess());
+            yield put(fetchUserPreferences());
+            yield put(refetchPlayerNews());
         }
     } catch (err) {
         yield put(trackPlayerFail('Error when trying to track a player'));
-    }
-}
-
-// FETCH TRACKED PLAYERS
-function* watchFetchTrackedPlayers() {
-    yield takeEvery(TrackPlayerActionTypes.FETCH_TRACKED_PLAYERS, handleFetchTrackedPlayers);
-}
-
-function* handleFetchTrackedPlayers() {
-    try {
-        const token = yield call(AsyncStorage.getItem, 'token');
-        const res = yield call(callApi, 'GET', 'trackedplayers', token);
-
-        if (res.error) {
-            yield put(fetchTrackedPlayersFail(res.error));
-        } else {
-            yield put(fetchTrackedPlayersSuccess(res.trackedPlayersOrder));
-        }
-    } catch (err) {
-        yield put(fetchTrackedPlayersFail('Error when trying to fetch tracked players'));
     }
 }
 
@@ -105,8 +85,9 @@ function* handleUntrackPlayer({ payload }: ReturnType<typeof untrackPlayer>) {
         if (res.error) {
             yield put(untrackPlayerFail(res.error));
         } else {
-            yield put(untrackPlayerSuccess(res.playerId));
-            yield put(fetchPlayerNews());
+            yield put(untrackPlayerSuccess());
+            yield put(fetchUserPreferences());
+            yield put(refetchPlayerNews());
         }
     } catch (err) {
         yield put(untrackPlayerFail('Error when trying to untrack player'));
@@ -141,7 +122,6 @@ export function* playerSettingsSaga() {
     yield all([
         fork(watchFetchPlayers),
         fork(watchTrackPlayer),
-        fork(watchFetchTrackedPlayers),
         fork(watchUntrackPlayer),
         fork(watchReorderTrackedPlayers)
     ]);

@@ -7,30 +7,30 @@ import { isEqual } from 'lodash';
 import { Dispatch } from 'redux';
 
 import * as timelineActions from '../../store/timeline/actions';
-import { TimelineSortType } from '../../store/timeline/reducer';
+import { SortTimelineBy, IPlayerNewsItem } from '../../store/timeline/types';
 import { AppState } from '../../store';
 import { IPlayer, IPlayerMap } from '../../store/playerSettings/types';
 import { sortTimelineBy } from './utils';
 
 import { TrackedPlayerPanel } from './TrackedPlayerPanel/TrackedPlayerPanel';
-import { PlayerNewsItem, IPlayerNewsItem } from './PlayerNewsItem/PlayerNewsItem';
 import { TimelineFilter } from './TimelineFilter';
+import { IPlayerNews } from '../../store/timeline/types';
+import { PlayerNewsItem } from './PlayerNewsItem/PlayerNewsItem';
 
 interface ITimelinePropsFromState {
-    playerNews: IPlayerNewsItem[];
+    playerNews: IPlayerNews;
     loading: boolean;
     error: boolean;
     trackedPlayers: string[];
-    timelineSortType: TimelineSortType;
     playerMap: IPlayerMap;
+    sortTimelineBy: SortTimelineBy;
 }
 
-interface ITimelineUnconnectedState {
-    firstLoadComplete: boolean;
-}
+interface ITimelineUnconnectedState {}
 
 interface ITimelinePropsFromDispatch {
     fetchPlayerNews: typeof timelineActions.fetchPlayerNews;
+    refetchPlayerNews: typeof timelineActions.refetchPlayerNews;
 }
 
 type TimelineProps = ITimelinePropsFromState & ITimelinePropsFromDispatch;
@@ -43,39 +43,44 @@ class TimeLineUnconnected extends React.Component<TimelineProps, ITimelineUnconn
                     // leftComponent={{ icon: 'menu', color: '#fff' }}
                     leftComponent={null}
                     centerComponent={{ text: 'PerSource', style: { color: '#fff', fontSize: 16 } }}
-                    rightComponent={<TimelineFilter />}
+                    // rightComponent={<TimelineFilter />}
+                    rightComponent={null}
                 />
             )
         } as NavigationScreenOptions;
     };
 
-    public state: ITimelineUnconnectedState = {
-        firstLoadComplete: false
-    };
+    public state: ITimelineUnconnectedState = {};
 
     public render() {
         const { timeLineContainer } = styles;
 
         return (
             <View style={timeLineContainer}>
-                {this.props.trackedPlayers.length && Object.keys(this.props.playerMap).length ? (
-                    <TrackedPlayerPanel />
+                {this.props.trackedPlayers.length ? (
+                    <>
+                        {/* <TrackedPlayerPanel /> */}
+
+                        <FlatList
+                            data={this.props.playerNews.docs}
+                            keyExtractor={item => `${item.platform}-${item.contentId}`}
+                            onRefresh={this._handleRefresh}
+                            refreshing={this.props.loading}
+                            renderItem={({ item }: { item: IPlayerNewsItem }) => {
+                                return <PlayerNewsItem playerNewsItem={item} />;
+                            }}
+                        />
+                    </>
                 ) : (
                     <Text>No tracked players</Text>
                 )}
-
-                <FlatList
-                    data={this.props.playerNews}
-                    keyExtractor={(item, index) => index.toString()}
-                    onRefresh={this.props.fetchPlayerNews}
-                    refreshing={this.props.loading}
-                    renderItem={({ item }: { item: IPlayerNewsItem }) => {
-                        return <PlayerNewsItem playerNewsItem={item} />;
-                    }}
-                />
             </View>
         );
     }
+
+    private _handleRefresh = () => {
+        this.props.refetchPlayerNews();
+    };
 }
 
 const styles = StyleSheet.create({
@@ -85,20 +90,21 @@ const styles = StyleSheet.create({
     }
 });
 
-const mapStateToProps = ({ timeline, playerSettings }: AppState): ITimelinePropsFromState => {
+const mapStateToProps = ({ timeline, playerSettings, user }: AppState): ITimelinePropsFromState => {
     return {
         error: timeline.error,
         loading: timeline.loading,
         playerNews: timeline.playerNews,
-        trackedPlayers: playerSettings.trackedPlayers,
-        timelineSortType: timeline.timelineSortType,
-        playerMap: playerSettings.playerMap
+        playerMap: playerSettings.playerMap,
+        trackedPlayers: user.userPreferences.trackedPlayers,
+        sortTimelineBy: user.userPreferences.sortTimelineBy
     };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        fetchPlayerNews: () => dispatch(timelineActions.fetchPlayerNews())
+        fetchPlayerNews: () => dispatch(timelineActions.fetchPlayerNews()),
+        refetchPlayerNews: () => dispatch(timelineActions.refetchPlayerNews())
     };
 };
 

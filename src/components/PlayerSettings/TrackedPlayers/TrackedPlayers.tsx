@@ -9,6 +9,7 @@ import * as playerSettingsActions from '../../../store/playerSettings/actions';
 
 import { AppState } from '../../../store';
 import { IPlayer, IPlayerMap } from '../../../store/playerSettings/types';
+import { TrackedPlayerList } from './TrackedPlayerList';
 
 interface ITrackedPlayersPropsFromState {
     trackedPlayers: string[];
@@ -17,7 +18,6 @@ interface ITrackedPlayersPropsFromState {
 
 interface ITrackedPlayersPropsFromDispatch {
     untrackPlayer: typeof playerSettingsActions.untrackPlayer;
-    fetchTrackedPlayers: typeof playerSettingsActions.fetchTrackedPlayers;
 }
 
 type TrackedPlayersProps = ITrackedPlayersPropsFromState & ITrackedPlayersPropsFromDispatch;
@@ -31,22 +31,11 @@ class TrackedPlayersUnconnected extends React.Component<TrackedPlayersProps> {
 
     render() {
         return (
-            <View>
-                {this.props.trackedPlayers.length
-                    ? this.props.trackedPlayers.map((playerId: string) => {
-                          return (
-                              <View key={playerId}>
-                                  <Text>{this.props.playerMap[playerId].name}</Text>
-                                  <TouchableOpacity
-                                      onPress={() => this.props.untrackPlayer(this.props.playerMap[playerId].id)}
-                                  >
-                                      <Text>Untrack</Text>
-                                  </TouchableOpacity>
-                              </View>
-                          );
-                      })
-                    : null}
-            </View>
+            <TrackedPlayerList
+                trackedPlayers={this.props.trackedPlayers}
+                playerMap={this.props.playerMap}
+                untrackPlayer={this.props.untrackPlayer}
+            />
         );
     }
 }
@@ -54,7 +43,7 @@ class TrackedPlayersUnconnected extends React.Component<TrackedPlayersProps> {
 const mapStateToProps = (state: AppState) => {
     return {
         playerMap: state.playerSettings.playerMap,
-        trackedPlayers: state.playerSettings.trackedPlayers
+        trackedPlayers: state.user.userPreferences.trackedPlayers
     };
 };
 

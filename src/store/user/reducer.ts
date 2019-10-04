@@ -5,26 +5,30 @@ import * as Actions from './actions';
 
 type Action = ActionType<typeof Actions>;
 
-import { IUserState, SignUpActionTypes, SignInActionTypes, RESET_USER, SignOutActionTypes } from './types';
+import { IUserState, SignUpActionTypes, SignInActionTypes, RESET_USER, UserPreferencesActionTypes } from './types';
 
 const initialState: IUserState = {
     token: null,
-    user: null,
-    errorMessage: ''
+    loading: false,
+    errorMessage: '',
+    userPreferences: {
+        sortTimelineBy: 0,
+        trackedPlayers: [],
+        userId: ''
+    }
 };
 
 const reducer: Reducer<IUserState, Action> = (state = initialState, action) => {
     switch (action.type) {
+        // RESET_USER
         case RESET_USER:
-            return {
-                ...state,
-                errorMessage: '',
-                token: null
-            };
+            return initialState;
 
+        // SIGN UP
         case SignUpActionTypes.SIGN_UP_SUCCESS:
             return {
                 ...state,
+                loading: true,
                 errorMessage: '',
                 token: action.payload
             };
@@ -32,13 +36,16 @@ const reducer: Reducer<IUserState, Action> = (state = initialState, action) => {
         case SignUpActionTypes.SIGN_UP_FAIL:
             return {
                 ...state,
+                loading: false,
                 errorMessage: 'Error signing up',
                 token: null
             };
 
+        // SIGN IN
         case SignInActionTypes.SIGN_IN_SUCCESS:
             return {
                 ...state,
+                loading: false,
                 errorMessage: '',
                 token: action.payload
             };
@@ -46,9 +53,34 @@ const reducer: Reducer<IUserState, Action> = (state = initialState, action) => {
         case SignInActionTypes.SIGN_IN_FAIL:
             return {
                 ...state,
+                loading: false,
                 errorMessage: 'Invalid username or password',
                 token: null
             };
+
+        // FETCH USER PREFERENCES
+        case UserPreferencesActionTypes.FETCH_USER_PREFERENCES:
+            return {
+                ...state,
+                loading: true,
+                errorMessage: ''
+            };
+
+        case UserPreferencesActionTypes.FETCH_USER_PREFERENCES_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                errorMessage: '',
+                userPreferences: action.payload
+            };
+
+        case UserPreferencesActionTypes.FETCH_USER_PREFERENCES_FAIL:
+            return {
+                ...state,
+                loading: false,
+                errorMessage: action.payload
+            };
+
         default:
             return state;
     }

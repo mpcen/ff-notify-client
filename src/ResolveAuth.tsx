@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
 import * as playerSettingsActions from './store/playerSettings/actions';
+import * as userPreferencesActions from './store/user/actions';
 import * as timelineActions from './store/timeline/actions';
 
 import { navigate } from './navigator/navigationRef';
@@ -11,7 +12,7 @@ import { NAVROUTES } from './navigator/navRoutes';
 
 interface IResolveAuthPropsFromDispatch {
     fetchPlayers: typeof playerSettingsActions.fetchPlayers;
-    fetchTrackedPlayers: typeof playerSettingsActions.fetchTrackedPlayers;
+    fetchUserPreferences: typeof userPreferencesActions.fetchUserPreferences;
     fetchPlayerNews: typeof timelineActions.fetchPlayerNews;
 }
 
@@ -23,7 +24,7 @@ class ResolveAuthUnconnected extends React.Component<ResolveAuthProps> {
 
         if (token) {
             await this.props.fetchPlayers();
-            await this.props.fetchTrackedPlayers();
+            await this.props.fetchUserPreferences();
             await this.props.fetchPlayerNews();
 
             navigate(NAVROUTES.MainFlow);
@@ -40,7 +41,7 @@ class ResolveAuthUnconnected extends React.Component<ResolveAuthProps> {
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
         fetchPlayers: () => dispatch(playerSettingsActions.fetchPlayers()),
-        fetchTrackedPlayers: () => dispatch(playerSettingsActions.fetchTrackedPlayers()),
+        fetchUserPreferences: () => dispatch(userPreferencesActions.fetchUserPreferences()),
         fetchPlayerNews: () => dispatch(timelineActions.fetchPlayerNews())
     };
 };
