@@ -11,7 +11,11 @@ export const callApi = async (method: string, url: string, token: string | null,
             Authorization: `Bearer ${token}`
         }
     } as AxiosRequestConfig;
-    const response = await axios(config);
 
-    return response.data;
+    try {
+        const response = await axios(config);
+        return response.data;
+    } catch (e) {
+        return { error: 'There was an error in the generic API' };
+    }
 };
