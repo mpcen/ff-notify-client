@@ -29,7 +29,7 @@ function* watchFetchPlayers() {
 
 function* handleFetchPlayers() {
     try {
-        const token = yield call(AsyncStorage.getItem, 'token');
+        const token = yield call(AsyncStorage.getItem, 'persource-auth-token');
         const res = yield call(callApi, 'GET', 'players', token);
         const playerMap: IPlayerMap = {};
 
@@ -59,7 +59,7 @@ function* watchTrackPlayer() {
 function* handleTrackPlayer({ payload }: ReturnType<typeof trackPlayer>) {
     try {
         const playerId = payload;
-        const token = yield call(AsyncStorage.getItem, 'token');
+        const token = yield call(AsyncStorage.getItem, 'persource-auth-token');
         const res = yield call(callApi, 'POST', 'trackPlayer', token, { playerId });
 
         if (res.error) {
@@ -87,7 +87,7 @@ function* watchUntrackPlayer() {
 function* handleUntrackPlayer({ payload }: ReturnType<typeof untrackPlayer>) {
     try {
         const playerId = payload;
-        const token = yield call(AsyncStorage.getItem, 'token');
+        const token = yield call(AsyncStorage.getItem, 'persource-auth-token');
         const res = yield call(callApi, 'DELETE', 'trackedplayer', token, { playerId });
 
         if (res.error) {
@@ -125,7 +125,7 @@ function* watchReorderTrackedPlayers() {
 function* handleReorderTrackedPlayers({ payload }: ReturnType<typeof reorderTrackedPlayers>) {
     try {
         const reorderedTrackedPlayers = payload;
-        const token = yield call(AsyncStorage.getItem, 'token');
+        const token = yield call(AsyncStorage.getItem, 'persource-auth-token');
         const res = yield call(callApi, 'PUT', 'trackedplayers', token, reorderedTrackedPlayers);
 
         if (res.error) {

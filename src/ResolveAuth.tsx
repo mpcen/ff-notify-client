@@ -32,7 +32,7 @@ class ResolveAuthUnconnected extends React.Component<ResolveAuthProps, ResolveAu
     };
 
     async componentDidMount() {
-        const token = await AsyncStorage.getItem('token');
+        const token = await AsyncStorage.getItem('persource-auth-token');
 
         if (token) {
             await this.props.initialize();

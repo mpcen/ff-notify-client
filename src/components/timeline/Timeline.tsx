@@ -96,9 +96,6 @@ class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> 
     }
 
     private _handleOnEndReached = () => {
-        console.log('End reached for page:', this.props.playerNews.page);
-        console.log('Next page:', this.props.playerNews.nextPage);
-
         if (this.props.playerNews.nextPage) {
             this.props.fetchPlayerNews(
                 this.props.playerNews.nextPage,

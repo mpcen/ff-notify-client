@@ -24,7 +24,7 @@ function* watchFetchPlayerNews() {
 function* handleFetchPlayerNews({ payload }: ReturnType<typeof fetchPlayerNews>) {
     const { page, playerId } = payload;
     try {
-        const token = yield call(AsyncStorage.getItem, 'token');
+        const token = yield call(AsyncStorage.getItem, 'persource-auth-token');
         // This will eventually need to be smarter to handle more complicated queryStrings
         const playerIdQueryString = playerId ? `&playerId=${playerId}` : '';
         const res = yield call(callApi, 'GET', `recentPlayerNews?page=${page}${playerIdQueryString}`, token);
@@ -48,7 +48,7 @@ function* handleRefetchPlayerNews({ payload }: ReturnType<typeof refetchPlayerNe
     const playerId = payload;
 
     try {
-        const token = yield call(AsyncStorage.getItem, 'token');
+        const token = yield call(AsyncStorage.getItem, 'persource-auth-token');
         const res = yield call(callApi, 'GET', `recentPlayerNews?page=1&playerId=${playerId}`, token);
 
         yield put(refetchPlayerNewsSuccess(res));
@@ -68,7 +68,7 @@ function* watchSortTimelineBy() {
 
 function* handleSortTimelineBy({ payload }: ReturnType<typeof sortTimelineBy>) {
     try {
-        const token = yield call(AsyncStorage.getItem, 'token');
+        const token = yield call(AsyncStorage.getItem, 'persource-auth-token');
         const res = yield call(callApi, 'PUT', 'userPreferences', token, { timelineSortType: payload });
 
         yield put(sortTimelineBySuccess(res.timelineSortType));

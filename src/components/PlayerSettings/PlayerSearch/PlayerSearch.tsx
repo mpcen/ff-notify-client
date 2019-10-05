@@ -100,8 +100,10 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
     };
 
     private _handleTrackPlayer = (selectedPlayerId: string) => {
-        this.setState({ selectedPlayerId });
-        this.props.trackPlayer(selectedPlayerId);
+        if (!this.props.trackedPlayers.some(playerId => playerId === selectedPlayerId)) {
+            this.setState({ selectedPlayerId });
+            this.props.trackPlayer(selectedPlayerId);
+        }
     };
 }
 

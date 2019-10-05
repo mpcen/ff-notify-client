@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
-const API_URL = 'http://192.168.0.210:3000';
+const API_URL = 'https://persource-api.herokuapp.com';
 
 export const callApi = async (method: string, url: string, token: string | null, data?: any) => {
     const config = {

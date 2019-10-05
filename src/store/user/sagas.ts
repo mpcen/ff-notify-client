@@ -42,7 +42,7 @@ function* handleSignUp({ payload }: ReturnType<typeof signUp>) {
         if (res.error) {
             yield put(signUpFail(res.error));
         } else {
-            yield call(AsyncStorage.setItem, 'token', token);
+            yield call(AsyncStorage.setItem, 'persource-auth-token', token);
             yield put(signUpSuccess(token, email));
             yield put(fetchPlayers());
 
@@ -70,7 +70,7 @@ function* handleSignIn({ payload }: ReturnType<typeof signIn>) {
         if (res.error) {
             yield put(signInFail(res.error));
         } else {
-            yield call(AsyncStorage.setItem, 'token', token);
+            yield call(AsyncStorage.setItem, 'persource-auth-token', token);
             yield put(signInSuccess(token, email));
 
             navigate(NAVROUTES.ResolveAuth);
@@ -91,7 +91,7 @@ function* watchSignOut() {
 
 function* handleSignOut() {
     try {
-        yield call(AsyncStorage.removeItem, 'token');
+        yield call(AsyncStorage.removeItem, 'persource-auth-token');
         yield put(signOutSuccess());
 
         navigate(NAVROUTES.LogInStack);
@@ -109,7 +109,7 @@ function* watchFetchUserPreferences() {
 
 function* handleFetchUserPreferences() {
     try {
-        const token = yield call(AsyncStorage.getItem, 'token');
+        const token = yield call(AsyncStorage.getItem, 'persource-auth-token');
         const res = yield call(callApi, 'GET', `userPreferences`, token);
 
         yield put(fetchUserPreferencesSuccess(res));
