@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { View, FlatList } from 'react-native';
+import { View, FlatList, StyleSheet } from 'react-native';
 import { NavigationScreenOptions, NavigationScreenProps } from 'react-navigation';
-import { Header, Input, Overlay } from 'react-native-elements';
+import { Header, Input, Overlay, ListItem, Avatar } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
@@ -66,14 +66,10 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
                     }}
                 />
 
-                <Overlay isVisible={this.state.isOverlayVisible} onBackdropPress={this._handleBackdropPress}>
-                    <PlayerCard player={this.state.selectedPlayer} handleTrackPlayer={this._handleTrackPlayer} />
-                </Overlay>
-
                 <FlatList
                     data={this.state.filteredPlayers}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderItem={({ item }: { item: IPlayer }) => this._renderPlayerListItem(item)}
+                    keyExtractor={item => item.id}
+                    renderItem={({ item }) => this._renderPlayerListItem(item)}
                 />
             </View>
         );
@@ -92,25 +88,21 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
     }
 
     private _renderPlayerListItem = (player: IPlayer) => {
+        const { id, name, avatarUrl, position } = player;
+
         return (
-            <PlayerListItem
-                trackedPlayers={this.props.trackedPlayers}
-                player={player}
-                handlePlayerSelect={this._handlePlayerSelect}
+            <ListItem
+                key={id}
+                onPress={() => this.props.trackPlayer(id)}
+                leftAvatar={
+                    <Avatar rounded size="medium" avatarStyle={styles.avatarStyle} source={{ uri: avatarUrl }} />
+                }
+                title={name}
+                subtitle={position}
+                rightIcon={this.props.trackedPlayers.some(playerId => playerId === id) ? null : { name: 'add' }}
+                bottomDivider
             />
         );
-    };
-
-    private _handlePlayerSelect = (player: IPlayer) => {
-        this.setState({ selectedPlayer: player, isOverlayVisible: true });
-    };
-
-    private _handleBackdropPress = () => {
-        this.setState({ selectedPlayer: null, isOverlayVisible: false });
-    };
-
-    private _handleTrackPlayer = () => {
-        this.props.trackPlayer(this.state.selectedPlayer.id);
     };
 }
 
@@ -133,3 +125,10 @@ export const PlayerSearch = connect(
     mapStateToProps,
     mapDispatchToProps
 )(PlayerSearchUnconnected);
+
+const styles = StyleSheet.create({
+    avatarStyle: {
+        backgroundColor: '#eee',
+        borderColor: 'white'
+    }
+});

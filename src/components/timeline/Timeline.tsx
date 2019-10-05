@@ -83,10 +83,10 @@ class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> 
                         keyExtractor={item => `${item.platform}-${item.contentId}`}
                         onRefresh={this._handleRefresh}
                         refreshing={this.props.loading}
-                        renderItem={({ item }: { item: IPlayerNewsItem }) => {
+                        onEndReached={this._handleOnEndReached}
+                        renderItem={({ item }) => {
                             return <PlayerNewsItem playerNewsItem={item} />;
                         }}
-                        onEndReached={this._handleOnEndReached}
                     />
                 ) : (
                     <Text>No player news</Text>
