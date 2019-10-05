@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, TouchableOpacity } from 'react-native';
-import { Text } from 'react-native-elements';
+import { StyleSheet, View } from 'react-native';
+import { ListItem, Avatar } from 'react-native-elements';
 import { IPlayerMap } from '../../../store/playerSettings/types';
 import { untrackPlayer } from '../../../store/playerSettings/actions';
 
@@ -11,22 +11,41 @@ interface ITrackedPlayerListProps {
 }
 
 const TrackedPlayerList = (props: ITrackedPlayerListProps) => {
+    const { trackedPlayers, playerMap } = props;
+
     return (
         <View>
-            {props.trackedPlayers && props.trackedPlayers.length
-                ? props.trackedPlayers.map((playerId: string) => {
-                      return (
-                          <View key={playerId}>
-                              <Text>{props.playerMap[playerId].name}</Text>
-                              <TouchableOpacity onPress={() => props.untrackPlayer(props.playerMap[playerId].id)}>
-                                  <Text>Untrack</Text>
-                              </TouchableOpacity>
-                          </View>
-                      );
-                  })
-                : null}
+            {trackedPlayers.map(playerId => {
+                const { avatarUrl, name, position } = playerMap[playerId];
+
+                return (
+                    <ListItem
+                        key={playerId}
+                        onPress={() => props.untrackPlayer(playerId)}
+                        leftAvatar={
+                            <Avatar
+                                rounded
+                                size="medium"
+                                avatarStyle={styles.avatarStyle}
+                                source={{ uri: avatarUrl }}
+                            />
+                        }
+                        rightIcon={{ name: 'remove' }}
+                        title={name}
+                        subtitle={position}
+                        bottomDivider
+                    />
+                );
+            })}
         </View>
     );
 };
+
+const styles = StyleSheet.create({
+    avatarStyle: {
+        backgroundColor: '#eee',
+        borderColor: 'white'
+    }
+});
 
 export { TrackedPlayerList };

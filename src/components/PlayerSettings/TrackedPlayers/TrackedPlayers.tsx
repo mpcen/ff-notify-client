@@ -1,5 +1,4 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
 import { Header } from 'react-native-elements';
 import { NavigationScreenProps, NavigationScreenOptions } from 'react-navigation';
 import { connect } from 'react-redux';
@@ -8,7 +7,7 @@ import { Dispatch } from 'redux';
 import * as playerSettingsActions from '../../../store/playerSettings/actions';
 
 import { AppState } from '../../../store';
-import { IPlayer, IPlayerMap } from '../../../store/playerSettings/types';
+import { IPlayerMap } from '../../../store/playerSettings/types';
 import { TrackedPlayerList } from './TrackedPlayerList';
 
 interface ITrackedPlayersPropsFromState {

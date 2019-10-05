@@ -17,6 +17,7 @@ interface IPlayerSearchPropsFromState {
     playerMap: IPlayerMap;
     loading: boolean;
     error: boolean;
+    trackedPlayers: string[];
 }
 
 interface IPlayerSearchPropsFromDispatch {
@@ -91,7 +92,13 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
     }
 
     private _renderPlayerListItem = (player: IPlayer) => {
-        return <PlayerListItem player={player} handlePlayerSelect={this._handlePlayerSelect} />;
+        return (
+            <PlayerListItem
+                trackedPlayers={this.props.trackedPlayers}
+                player={player}
+                handlePlayerSelect={this._handlePlayerSelect}
+            />
+        );
     };
 
     private _handlePlayerSelect = (player: IPlayer) => {
@@ -107,11 +114,12 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
     };
 }
 
-const mapStateToProps = ({ playerSettings }: AppState): IPlayerSearchPropsFromState => {
+const mapStateToProps = ({ playerSettings, user }: AppState): IPlayerSearchPropsFromState => {
     return {
         error: playerSettings.error,
         loading: playerSettings.loading,
-        playerMap: playerSettings.playerMap
+        playerMap: playerSettings.playerMap,
+        trackedPlayers: user.userPreferences.trackedPlayers
     };
 };
 
