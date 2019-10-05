@@ -1,5 +1,6 @@
 import React from 'react';
-import { Header } from 'react-native-elements';
+import { Header, ListItem, Avatar } from 'react-native-elements';
+import { FlatList, StyleSheet } from 'react-native';
 import { NavigationScreenProps, NavigationScreenOptions } from 'react-navigation';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
@@ -7,7 +8,7 @@ import { Dispatch } from 'redux';
 import * as playerSettingsActions from '../../../store/playerSettings/actions';
 
 import { AppState } from '../../../store';
-import { IPlayerMap } from '../../../store/playerSettings/types';
+import { IPlayerMap, IPlayer } from '../../../store/playerSettings/types';
 import { TrackedPlayerList } from './TrackedPlayerList';
 
 interface ITrackedPlayersPropsFromState {
@@ -30,14 +31,39 @@ class TrackedPlayersUnconnected extends React.Component<TrackedPlayersProps> {
 
     render() {
         return (
-            <TrackedPlayerList
-                trackedPlayers={this.props.trackedPlayers}
-                playerMap={this.props.playerMap}
-                untrackPlayer={this.props.untrackPlayer}
+            <FlatList
+                data={this.props.trackedPlayers}
+                keyExtractor={playerId => playerId}
+                renderItem={({ item }) => this._renderPlayerListItem(this.props.playerMap[item])}
             />
         );
     }
+
+    private _renderPlayerListItem = (player: IPlayer) => {
+        const { id, name, avatarUrl, position } = player;
+
+        return (
+            <ListItem
+                key={id}
+                onPress={() => this.props.untrackPlayer(id)}
+                leftAvatar={
+                    <Avatar rounded size="medium" avatarStyle={styles.avatarStyle} source={{ uri: avatarUrl }} />
+                }
+                title={name}
+                subtitle={position}
+                rightIcon={{ name: 'remove' }}
+                bottomDivider
+            />
+        );
+    };
 }
+
+const styles = StyleSheet.create({
+    avatarStyle: {
+        backgroundColor: '#eee',
+        borderColor: 'white'
+    }
+});
 
 const mapStateToProps = (state: AppState) => {
     return {
