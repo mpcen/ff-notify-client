@@ -14,6 +14,7 @@ export interface IUserPreferences {
 export interface IUserState {
     loading: boolean;
     token: string | null;
+    email: string;
     errorMessage: string;
     userPreferences: IUserPreferences;
 }

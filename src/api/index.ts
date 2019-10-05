@@ -16,6 +16,6 @@ export const callApi = async (method: string, url: string, token: string | null,
         const response = await axios(config);
         return response.data;
     } catch (e) {
-        return { error: 'There was an error in the generic API' };
+        return { error: 'There was an error in the generic API: ' + e };
     }
 };

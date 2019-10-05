@@ -10,6 +10,7 @@ import { TimelineSortType } from '../timeline/types';
 
 const initialState: IUserState = {
     token: null,
+    email: '',
     loading: true,
     errorMessage: '',
     userPreferences: {
@@ -27,7 +28,8 @@ const reducer: Reducer<IUserState, Action> = (state = initialState, action) => {
                 ...state,
                 loading: true,
                 errorMessage: '',
-                token: action.payload
+                token: action.payload.token,
+                email: action.payload.email
             };
 
         case SignUpActionTypes.SIGN_UP_FAIL:
@@ -44,7 +46,8 @@ const reducer: Reducer<IUserState, Action> = (state = initialState, action) => {
                 ...state,
                 loading: false,
                 errorMessage: '',
-                token: action.payload
+                token: action.payload.token,
+                email: action.payload.email
             };
 
         case SignInActionTypes.SIGN_IN_FAIL:

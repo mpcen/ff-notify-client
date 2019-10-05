@@ -37,12 +37,13 @@ function* watchSignUp() {
 function* handleSignUp({ payload }: ReturnType<typeof signUp>) {
     try {
         const res = yield call(callApi, 'POST', 'signup', null, payload);
+        const { token, email } = res;
 
         if (res.error) {
             yield put(signUpFail(res.error));
         } else {
-            yield call(AsyncStorage.setItem, 'token', res.token);
-            yield put(signUpSuccess(res));
+            yield call(AsyncStorage.setItem, 'token', token);
+            yield put(signUpSuccess(token, email));
             yield put(fetchPlayers());
 
             navigate(NAVROUTES.Timeline);
@@ -64,12 +65,13 @@ function* watchSignIn() {
 function* handleSignIn({ payload }: ReturnType<typeof signIn>) {
     try {
         const res = yield call(callApi, 'POST', 'signin', null, payload);
+        const { token, email } = res;
 
         if (res.error) {
             yield put(signInFail(res.error));
         } else {
-            yield call(AsyncStorage.setItem, 'token', res.token);
-            yield put(signInSuccess(res));
+            yield call(AsyncStorage.setItem, 'token', token);
+            yield put(signInSuccess(token, email));
 
             navigate(NAVROUTES.ResolveAuth);
         }

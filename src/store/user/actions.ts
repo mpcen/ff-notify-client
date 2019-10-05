@@ -20,8 +20,8 @@ export const signUp = (user: IUser) => {
     return action(SignUpActionTypes.SIGN_UP, user);
 };
 
-export const signUpSuccess = (token: string) => {
-    return action(SignUpActionTypes.SIGN_UP_SUCCESS, token);
+export const signUpSuccess = (token: string, email: string) => {
+    return action(SignUpActionTypes.SIGN_UP_SUCCESS, { token, email });
 };
 
 export const signUpFail = (message: string) => {
@@ -33,8 +33,8 @@ export const signIn = (user: IUser) => {
     return action(SignInActionTypes.SIGN_IN, user);
 };
 
-export const signInSuccess = (token: string) => {
-    return action(SignInActionTypes.SIGN_IN_SUCCESS, token);
+export const signInSuccess = (token: string, email: string) => {
+    return action(SignInActionTypes.SIGN_IN_SUCCESS, { token, email });
 };
 
 export const signInFail = (message: string) => {
