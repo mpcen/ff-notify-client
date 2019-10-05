@@ -37,17 +37,17 @@ class TimelineFilterUnconnected extends React.Component<TimelineFilterProps, ITi
 
                 <Overlay isVisible={this.state.isOverlayVisible} onBackdropPress={this._handleBackdropPress}>
                     <>
-                        <Text h4>Timeline Filter</Text>
+                        <Text h4>Sort News By</Text>
                         <CheckBox
                             center
-                            title="By Date"
+                            title="Recent"
                             checked={this.props.timelineSortType === TimelineSortType.Date}
                             onPress={() => this.props.sortTimelineBy(TimelineSortType.Date)}
                         />
 
                         <CheckBox
                             center
-                            title="By Player"
+                            title="Player"
                             checked={this.props.timelineSortType === TimelineSortType.Player}
                             onPress={() => this.props.sortTimelineBy(TimelineSortType.Player)}
                         />

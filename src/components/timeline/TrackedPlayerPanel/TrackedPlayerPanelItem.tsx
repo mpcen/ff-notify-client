@@ -31,11 +31,11 @@ export const TrackedPlayerPanelItem = (props: ITrackedPlayerPanelItemProps) => {
                 source={{ uri: trackedPlayer.avatarUrl }}
             />
 
-            {/* <Badge
+            <Badge
                 containerStyle={badgeContainerStyle}
                 badgeStyle={badgeStyle}
                 value={<Text style={badgeText}>6</Text>}
-            /> */}
+            />
         </TouchableOpacity>
     );
 };
@@ -55,8 +55,8 @@ const styles = StyleSheet.create({
     },
     badgeContainerStyle: {
         position: 'absolute',
-        bottom: 5,
-        right: 5
+        bottom: 6,
+        right: 6
     },
     badgeStyle: {
         backgroundColor: '#ff5a5f',

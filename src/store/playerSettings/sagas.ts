@@ -70,9 +70,9 @@ function* handleTrackPlayer({ payload }: ReturnType<typeof trackPlayer>) {
 
             const store: AppState = yield select();
 
-            // if (store.user.userPreferences.timelineSortType === TimelineSortType.Date) {
-            //     yield put(refetchPlayerNews(''));
-            // }
+            if (store.user.userPreferences.timelineSortType === TimelineSortType.Date) {
+                yield put(refetchPlayerNews(''));
+            }
         }
     } catch (err) {
         yield put(trackPlayerFail('Error when trying to track a player'));
@@ -103,6 +103,8 @@ function* handleUntrackPlayer({ payload }: ReturnType<typeof untrackPlayer>) {
             ) {
                 yield put(selectPlayer(0));
                 yield put(refetchPlayerNews(store.user.userPreferences.trackedPlayers[0]));
+            } else if (store.user.userPreferences.timelineSortType === TimelineSortType.Player) {
+                yield put(refetchPlayerNews(''));
             }
 
             yield put(untrackPlayerSuccess());

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { View, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import Constants from 'expo-constants';
 import { connect } from 'react-redux';
-import { Overlay, Text } from 'react-native-elements';
+import { Overlay, Text, ListItem, Avatar } from 'react-native-elements';
 import DraggableFlatList, { RenderItemInfo, OnMoveEndInfo } from 'react-native-draggable-flatlist';
 import { Dispatch } from 'redux';
 import { isEqual } from 'lodash';
@@ -79,27 +79,20 @@ export class TrackedPlayerPanelUnconnected extends React.Component<TrackedPlayer
     };
 
     private _renderItem = ({ item, index, move, moveEnd, isActive }: RenderItemInfo<string>) => {
+        const { id, name, position, avatarUrl } = this.props.playerMap[item];
+
         return (
-            <TouchableOpacity
-                style={{
-                    height: 14,
-                    backgroundColor: isActive ? 'blue' : '',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                }}
+            <ListItem
+                key={id}
                 onLongPress={move}
-                onPressOut={moveEnd}
-            >
-                <Text
-                    style={{
-                        fontWeight: 'bold',
-                        color: 'black',
-                        fontSize: 12
-                    }}
-                >
-                    {this.props.playerMap[item].name}
-                </Text>
-            </TouchableOpacity>
+                leftAvatar={
+                    <Avatar rounded size="medium" avatarStyle={styles.avatarStyle} source={{ uri: avatarUrl }} />
+                }
+                rightIcon={{ name: 'menu' }}
+                title={name}
+                subtitle={position}
+                bottomDivider
+            />
         );
     };
 
@@ -152,3 +145,10 @@ export const TrackedPlayerPanel = connect(
     mapStateToProps,
     mapDispatchToProps
 )(TrackedPlayerPanelUnconnected);
+
+const styles = StyleSheet.create({
+    avatarStyle: {
+        backgroundColor: '#eee',
+        borderColor: 'white'
+    }
+});
