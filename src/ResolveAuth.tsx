@@ -46,7 +46,8 @@ class ResolveAuthUnconnected extends React.Component<ResolveAuthProps, ResolveAu
             this.setState({ initialLoadComplete: true });
 
             // APP ENTRY AFTER SIGN IN
-            navigate(NAVROUTES.Timeline);
+            navigate(NAVROUTES.MainFlow);
+            // navigate(NAVROUTES.PlayerSearch);
         }
     }
 

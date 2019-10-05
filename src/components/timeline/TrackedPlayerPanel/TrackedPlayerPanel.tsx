@@ -1,18 +1,16 @@
 import * as React from 'react';
-import { View, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
-import Constants from 'expo-constants';
+import { View, StyleSheet, FlatList } from 'react-native';
 import { connect } from 'react-redux';
-import { Overlay, Text, ListItem, Avatar } from 'react-native-elements';
+import { Overlay, ListItem, Avatar } from 'react-native-elements';
 import DraggableFlatList, { RenderItemInfo, OnMoveEndInfo } from 'react-native-draggable-flatlist';
 import { Dispatch } from 'redux';
-import { isEqual } from 'lodash';
 
 import { AppState } from '../../../store';
 import * as playerSettingsActions from '../../../store/playerSettings/actions';
 import * as trackedPlayerPanelActions from '../../../store/trackedPlayerPanel/actions';
 
 import { TrackedPlayerPanelItem } from './TrackedPlayerPanelItem';
-import { IPlayer, IPlayerMap } from '../../../store/playerSettings/types';
+import { IPlayerMap } from '../../../store/playerSettings/types';
 
 interface ITrackedPlayerPanelItemPropsFromState {
     playerMap: IPlayerMap;

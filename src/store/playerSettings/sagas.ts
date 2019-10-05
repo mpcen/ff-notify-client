@@ -104,7 +104,9 @@ function* handleUntrackPlayer({ payload }: ReturnType<typeof untrackPlayer>) {
                 yield put(selectPlayer(0));
                 yield put(refetchPlayerNews(store.user.userPreferences.trackedPlayers[0]));
             } else if (store.user.userPreferences.timelineSortType === TimelineSortType.Player) {
-                yield put(refetchPlayerNews(''));
+                yield put(refetchPlayerNews(currentSelectedPlayer));
+            } else if (store.user.userPreferences.timelineSortType === TimelineSortType.Date) {
+                yield put(refetchPlayerNews());
             }
 
             yield put(untrackPlayerSuccess());
