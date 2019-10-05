@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { View, FlatList, StyleSheet } from 'react-native';
 import { NavigationScreenOptions, NavigationScreenProps } from 'react-navigation';
-import { Header, Input, Overlay, ListItem, Avatar } from 'react-native-elements';
+import { Header, Input, ListItem, Avatar } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
@@ -9,9 +9,6 @@ import * as playerSettingsActions from '../../../store/playerSettings/actions';
 
 import { AppState } from '../../../store';
 import { IPlayer, IPlayerMap } from '../../../store/playerSettings/types';
-
-import { PlayerCard } from './PlayerCard';
-import { PlayerListItem } from './PlayerListItem';
 
 interface IPlayerSearchPropsFromState {
     playerMap: IPlayerMap;
@@ -28,12 +25,10 @@ interface IPlayerSearchPropsFromDispatch {
 interface IPlayerSearchUnconnectedState {
     searchText: string;
     filteredPlayers: IPlayer[];
-    selectedPlayer: IPlayer;
-    isOverlayVisible: boolean;
+    selectedPlayerId: string;
 }
 
 type PlayerSearchProps = IPlayerSearchPropsFromState & IPlayerSearchPropsFromDispatch & IPlayerSearchUnconnectedState;
-
 type PlayerSearchState = IPlayerSearchUnconnectedState;
 
 export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, PlayerSearchState> {
@@ -43,11 +38,10 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
         } as NavigationScreenOptions;
     };
 
-    state: IPlayerSearchUnconnectedState = {
+    state: PlayerSearchState = {
         searchText: '',
-        filteredPlayers: [],
-        selectedPlayer: null,
-        isOverlayVisible: false
+        selectedPlayerId: '',
+        filteredPlayers: []
     };
 
     render() {
@@ -93,7 +87,7 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
         return (
             <ListItem
                 key={id}
-                onPress={() => this.props.trackPlayer(id)}
+                onPress={() => this._handleTrackPlayer(id)}
                 leftAvatar={
                     <Avatar rounded size="medium" avatarStyle={styles.avatarStyle} source={{ uri: avatarUrl }} />
                 }
@@ -103,6 +97,11 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
                 bottomDivider
             />
         );
+    };
+
+    private _handleTrackPlayer = (selectedPlayerId: string) => {
+        this.setState({ selectedPlayerId });
+        this.props.trackPlayer(selectedPlayerId);
     };
 }
 
