@@ -1,22 +1,23 @@
 import React from 'react';
-import { Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { Header } from 'react-native-elements';
+import { Text, TouchableOpacity, StyleSheet, View } from 'react-native';
+import { Header, Button } from 'react-native-elements';
 import { NavigationScreenProps, NavigationScreenOptions } from 'react-navigation';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
 import * as userActions from '../../store/user/actions';
-import { IUser } from '../../store/user/types';
+import { IUserState } from '../../store/user/types';
+import { AppState } from '../../store';
 
-interface ITrackedPlayersPropsFromState {
-    user: IUser[];
+interface IAccountPropsFromState {
+    user: IUserState;
 }
 
 interface ITrackedPlayersPropsFromDispatch {
     signOut: typeof userActions.signOut;
 }
 
-type AccountProps = ITrackedPlayersPropsFromState & ITrackedPlayersPropsFromDispatch;
+type AccountProps = IAccountPropsFromState & ITrackedPlayersPropsFromDispatch;
 
 class AccountUnconnected extends React.Component<AccountProps, {}> {
     static navigationOptions = ({ navigation }: NavigationScreenProps) => {
@@ -26,13 +27,14 @@ class AccountUnconnected extends React.Component<AccountProps, {}> {
     };
 
     render() {
-        return (
-            <TouchableOpacity onPress={() => this.props.signOut()}>
-                <Text>Sign out</Text>
-            </TouchableOpacity>
-        );
+        return <Button title="Sign Out" type="outline" onPress={() => this.props.signOut()} />;
     }
 }
+const mapStateToProps = ({ user }: AppState): IAccountPropsFromState => {
+    return {
+        user
+    };
+};
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
@@ -43,6 +45,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
 const styles = StyleSheet.create({});
 
 export const Account = connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
 )(AccountUnconnected);
