@@ -73,7 +73,7 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
         const filteredPlayers: IPlayer[] = [];
 
         for (let player in this.props.playerMap) {
-            if (this.props.playerMap[player].name.toLowerCase().includes(searchText)) {
+            if (this.props.playerMap[player].name.toLowerCase().includes(searchText.toLowerCase())) {
                 filteredPlayers.push(this.props.playerMap[player]);
             }
         }

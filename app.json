@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "ff-notify-client",
-    "slug": "ff-notify-client",
+    "name": "PerSource",
+    "slug": "persource",
     "privacy": "public",
     "sdkVersion": "33.0.0",
     "platforms": [
