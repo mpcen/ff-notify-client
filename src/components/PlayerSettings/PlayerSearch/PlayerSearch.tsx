@@ -50,7 +50,7 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
                 <Input
                     autoCapitalize="none"
                     autoCorrect={false}
-                    placeholder="Search for a player"
+                    placeholder="Search for a player to track"
                     value={this.state.searchText}
                     onChangeText={searchText => {
                         this.setState({

@@ -81,6 +81,7 @@ const reducer: Reducer<IUserState, Action> = (state = initialState, action) => {
                 errorMessage: action.payload
             };
 
+        // RESET USER
         case RESET_USER:
             return initialState;
 

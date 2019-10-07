@@ -6,9 +6,11 @@ import { format } from 'date-fns';
 import { Reactions } from './Reactions';
 import { TEAMS } from '../../../util/teams';
 import { IPlayerNewsItem } from '../../../store/timeline/types';
+import { IPlayer } from '../../../store/playerSettings/types';
 
 interface IPlayerNewsItemProps {
     playerNewsItem: IPlayerNewsItem;
+    player: IPlayer;
 }
 
 export class PlayerNewsItem extends React.Component<IPlayerNewsItemProps> {
@@ -25,17 +27,23 @@ export class PlayerNewsItem extends React.Component<IPlayerNewsItemProps> {
             dividerContainer,
             avatarStyle
         } = styles;
-        const { content, contentId, player, time, username } = playerNewsItem;
+        const { content, contentId, time, username } = playerNewsItem;
+        const { avatarUrl, name, position, teamId } = this.props.player;
+
+        // if (name === 'James White') {
+        //     console.log('time:', time);
+        //     console.log('time:', username);
+        // }
 
         return (
             <Card key={contentId}>
                 <View style={cardHeaderContainer}>
                     {/* <Reactions /> */}
 
-                    <Avatar avatarStyle={avatarStyle} rounded source={{ uri: playerNewsItem.player.avatarUrl }} />
-                    <Text style={playerText}>{player.name}</Text>
-                    <Text style={playerText}>{player.position}</Text>
-                    <Text style={playerText}>{TEAMS[player.teamId - 1].abbrev}</Text>
+                    <Avatar avatarStyle={avatarStyle} rounded source={{ uri: avatarUrl }} />
+                    <Text style={playerText}>{name}</Text>
+                    <Text style={playerText}>{position}</Text>
+                    <Text style={playerText}>{TEAMS[teamId - 1].abbrev}</Text>
                 </View>
 
                 <Divider style={dividerContainer} />
@@ -43,7 +51,8 @@ export class PlayerNewsItem extends React.Component<IPlayerNewsItemProps> {
                 <View style={cardSourceContainer}>
                     <Icon iconStyle={socialIcon} size={12} type="material-community" name="twitter" />
                     <Text style={sourceText}>{username}</Text>
-                    <Text style={timeText}>{format(new Date(time), 'MMMM Do h:mma')}</Text>
+                    {/* <Text style={timeText}>{format(new Date(time), 'MMMM Do h:mma')}</Text> */}
+                    <Text style={timeText}>{format(new Date(time), 'MMMM do h:mm a')}</Text>
                 </View>
 
                 <View style={cardContentContainer}>

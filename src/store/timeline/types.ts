@@ -25,7 +25,7 @@ export interface IPlayerNewsItem {
     platform: string;
     username: string;
     contentId: string;
-    player: IPlayer;
+    player: { id: string; teamId: number };
     content: string;
     time: string;
 }

@@ -75,6 +75,8 @@ class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> 
     public render() {
         return (
             <View style={{ flex: 1 }}>
+                {!this.props.trackedPlayers.length ? <Text>Track some players to get updates</Text> : null}
+
                 {this.props.timelineSortType === TimelineSortType.Player && <TrackedPlayerPanel />}
 
                 {this.props.playerNews.docs.length ? (
@@ -85,7 +87,9 @@ class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> 
                         refreshing={this.props.loading}
                         onEndReached={this._handleOnEndReached}
                         renderItem={({ item }) => {
-                            return <PlayerNewsItem playerNewsItem={item} />;
+                            return (
+                                <PlayerNewsItem player={this.props.playerMap[item.player.id]} playerNewsItem={item} />
+                            );
                         }}
                     />
                 ) : (
