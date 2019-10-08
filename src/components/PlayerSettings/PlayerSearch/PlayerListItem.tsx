@@ -6,8 +6,8 @@ import { IPlayer } from '../../../store/playerSettings/types';
 
 interface IPlayerListItemProps {
     player: IPlayer;
-    handlePlayerSelect: (player: IPlayer) => void;
     trackedPlayers: string[];
+    handlePlayerSelect: (player: IPlayer) => void;
 }
 
 export const PlayerListItem = (props: IPlayerListItemProps) => {

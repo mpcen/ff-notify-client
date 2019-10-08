@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { View, FlatList, StyleSheet } from 'react-native';
 import { NavigationScreenOptions, NavigationScreenProps } from 'react-navigation';
-import { Header, Input, ListItem, Avatar } from 'react-native-elements';
+import { Header, Input, ListItem, Avatar, Text } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
@@ -10,6 +10,7 @@ import * as playerSettingsActions from '../../../store/playerSettings/actions';
 import { AppState } from '../../../store';
 import { IPlayer, IPlayerMap } from '../../../store/playerSettings/types';
 import Toast from 'react-native-root-toast';
+import { selectPlayer } from '../../../store/trackedPlayerPanel/actions';
 
 interface IPlayerSearchPropsFromState {
     playerMap: IPlayerMap;
@@ -51,9 +52,11 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
 
     componentDidUpdate(prevProps: PlayerSearchProps) {
         if (this.props.trackedPlayers.length > prevProps.trackedPlayers.length) {
-            this.setState({ isToastVisible: true, searchText: '' });
+            this.setState({
+                isToastVisible: true
+            });
             setTimeout(() => {
-                this.setState({ isToastVisible: false, selectedPlayer: '' });
+                this.setState({ isToastVisible: false });
             }, this.TOAST_TIME);
         }
     }
@@ -76,6 +79,7 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
 
                 <FlatList
                     data={this.state.filteredPlayers}
+                    extraData={this.props.trackedPlayers}
                     keyExtractor={item => item.id}
                     renderItem={({ item }) => this._renderPlayerListItem(item)}
                 />
@@ -109,18 +113,19 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
 
     private _renderPlayerListItem = (player: IPlayer) => {
         const { id, name, avatarUrl, position } = player;
-
         return (
             <ListItem
                 key={id}
+                title={name}
+                subtitle={position}
+                bottomDivider
                 onPress={() => this._handleTrackPlayer(id)}
                 leftAvatar={
                     <Avatar rounded size="medium" avatarStyle={styles.avatarStyle} source={{ uri: avatarUrl }} />
                 }
-                title={name}
-                subtitle={position}
-                rightIcon={this.props.trackedPlayers.some(playerId => playerId === id) ? null : { name: 'add' }}
-                bottomDivider
+                rightIcon={
+                    this.props.trackedPlayers.some(playerId => playerId === id) ? { name: 'remove' } : { name: 'add' }
+                }
             />
         );
     };
