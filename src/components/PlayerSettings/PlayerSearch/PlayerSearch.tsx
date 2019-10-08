@@ -26,14 +26,16 @@ interface IPlayerSearchPropsFromDispatch {
 interface IPlayerSearchUnconnectedState {
     searchText: string;
     filteredPlayers: IPlayer[];
-    selectedPlayerId: string;
-    toastVisible: boolean;
+    selectedPlayer: string;
+    isToastVisible: boolean;
 }
 
 type PlayerSearchProps = IPlayerSearchPropsFromState & IPlayerSearchPropsFromDispatch & IPlayerSearchUnconnectedState;
 type PlayerSearchState = IPlayerSearchUnconnectedState;
 
 export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, PlayerSearchState> {
+    private TOAST_TIME = 2000;
+
     static navigationOptions = ({ navigation }: NavigationScreenProps) => {
         return {
             header: <Header centerComponent={{ text: 'Player Settings - Search', style: { color: '#fff' } }} />
@@ -42,17 +44,17 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
 
     state: PlayerSearchState = {
         searchText: '',
-        selectedPlayerId: '',
+        selectedPlayer: '',
         filteredPlayers: [],
-        toastVisible: false
+        isToastVisible: false
     };
 
     componentDidUpdate(prevProps: PlayerSearchProps) {
         if (this.props.trackedPlayers.length > prevProps.trackedPlayers.length) {
-            this.setState({ toastVisible: true });
+            this.setState({ isToastVisible: true });
             setTimeout(() => {
-                this.setState({ toastVisible: false });
-            }, 1500);
+                this.setState({ isToastVisible: false, selectedPlayer: '' });
+            }, this.TOAST_TIME);
         }
     }
 
@@ -78,15 +80,15 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
                     renderItem={({ item }) => this._renderPlayerListItem(item)}
                 />
 
-                {this.state.toastVisible && (
+                {this.state.isToastVisible && (
                     <Toast
-                        visible={this.state.toastVisible}
+                        visible={this.state.isToastVisible}
                         position={-100}
                         shadow={false}
                         animation={false}
                         hideOnPress={true}
                     >
-                        {this.props.playerMap[this.state.selectedPlayerId].name} is now being tracked
+                        {this.props.playerMap[this.state.selectedPlayer].name} is now being tracked
                     </Toast>
                 )}
             </View>
@@ -123,10 +125,10 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
         );
     };
 
-    private _handleTrackPlayer = (selectedPlayerId: string) => {
-        if (!this.props.trackedPlayers.some(playerId => playerId === selectedPlayerId)) {
-            this.setState({ selectedPlayerId });
-            this.props.trackPlayer(selectedPlayerId);
+    private _handleTrackPlayer = (selectedPlayer: string) => {
+        if (!this.props.trackedPlayers.some(playerId => playerId === selectedPlayer)) {
+            this.setState({ selectedPlayer });
+            this.props.trackPlayer(selectedPlayer);
         }
     };
 }
