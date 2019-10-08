@@ -29,7 +29,6 @@ interface ITrackedPlayerPanelState {
 }
 
 type TrackedPlayerPanelProps = ITrackedPlayerPanelItemPropsFromState & ITrackedPlayerPanelPropsFromDispatch;
-
 type TrackedPanelState = ITrackedPlayerPanelState;
 
 export class TrackedPlayerPanelUnconnected extends React.Component<TrackedPlayerPanelProps, TrackedPanelState> {
@@ -38,7 +37,7 @@ export class TrackedPlayerPanelUnconnected extends React.Component<TrackedPlayer
         trackedPlayers: this.props.trackedPlayers
     };
 
-    componentDidUpdate(prevProps: TrackedPlayerPanelProps, prevState: TrackedPanelState) {
+    componentDidUpdate(prevProps: TrackedPlayerPanelProps) {
         if (prevProps.trackedPlayers.length !== this.props.trackedPlayers.length) {
             this.setState({ trackedPlayers: this.props.trackedPlayers });
         }

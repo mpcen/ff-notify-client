@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StyleSheet } from 'react-native';
 import { Avatar, ListItem } from 'react-native-elements';
 
-import { IPlayer, IPlayerMap } from '../../../store/playerSettings/types';
+import { IPlayer } from '../../../store/playerSettings/types';
 
 interface IPlayerListItemProps {
     player: IPlayer;

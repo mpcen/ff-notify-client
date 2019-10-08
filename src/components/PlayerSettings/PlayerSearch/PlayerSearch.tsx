@@ -9,6 +9,7 @@ import * as playerSettingsActions from '../../../store/playerSettings/actions';
 
 import { AppState } from '../../../store';
 import { IPlayer, IPlayerMap } from '../../../store/playerSettings/types';
+import Toast from 'react-native-root-toast';
 
 interface IPlayerSearchPropsFromState {
     playerMap: IPlayerMap;
@@ -26,6 +27,7 @@ interface IPlayerSearchUnconnectedState {
     searchText: string;
     filteredPlayers: IPlayer[];
     selectedPlayerId: string;
+    toastVisible: boolean;
 }
 
 type PlayerSearchProps = IPlayerSearchPropsFromState & IPlayerSearchPropsFromDispatch & IPlayerSearchUnconnectedState;
@@ -41,8 +43,18 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
     state: PlayerSearchState = {
         searchText: '',
         selectedPlayerId: '',
-        filteredPlayers: []
+        filteredPlayers: [],
+        toastVisible: false
     };
+
+    componentDidUpdate(prevProps: PlayerSearchProps) {
+        if (this.props.trackedPlayers.length > prevProps.trackedPlayers.length) {
+            this.setState({ toastVisible: true });
+            setTimeout(() => {
+                this.setState({ toastVisible: false });
+            }, 1500);
+        }
+    }
 
     render() {
         return (
@@ -65,6 +77,18 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
                     keyExtractor={item => item.id}
                     renderItem={({ item }) => this._renderPlayerListItem(item)}
                 />
+
+                {this.state.toastVisible && (
+                    <Toast
+                        visible={this.state.toastVisible}
+                        position={-100}
+                        shadow={false}
+                        animation={false}
+                        hideOnPress={true}
+                    >
+                        {this.props.playerMap[this.state.selectedPlayerId].name} is now being tracked
+                    </Toast>
+                )}
             </View>
         );
     }

@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
 import * as timelineActions from '../../store/timeline/actions';
-import { IPlayerNewsItem, TimelineSortType } from '../../store/timeline/types';
+import { TimelineSortType } from '../../store/timeline/types';
 import { AppState } from '../../store';
 import { IPlayerMap } from '../../store/playerSettings/types';
 
@@ -90,7 +90,6 @@ class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> 
         return (
             <>
                 {this.props.timelineSortType === TimelineSortType.Player ? <TrackedPlayerPanel /> : null}
-
                 {this.props.trackedPlayers.length && this.props.playerNews.docs.length ? (
                     <FlatList
                         data={this.props.playerNews.docs}
