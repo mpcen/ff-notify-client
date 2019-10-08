@@ -30,11 +30,6 @@ export class PlayerNewsItem extends React.Component<IPlayerNewsItemProps> {
         const { content, contentId, time, username } = playerNewsItem;
         const { avatarUrl, name, position, teamId } = this.props.player;
 
-        // if (name === 'James White') {
-        //     console.log('time:', time);
-        //     console.log('time:', username);
-        // }
-
         return (
             <Card key={contentId}>
                 <View style={cardHeaderContainer}>

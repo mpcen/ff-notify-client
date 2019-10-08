@@ -75,11 +75,23 @@ class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> 
     public render() {
         return (
             <View style={{ flex: 1 }}>
-                {!this.props.trackedPlayers.length ? <Text>Track some players to get updates</Text> : null}
+                {!this.props.trackedPlayers.length ? (
+                    <View style={styles.centeredMessageContainer}>
+                        <Text>Track some players to receive the latest news</Text>
+                    </View>
+                ) : (
+                    this._renderTimeline()
+                )}
+            </View>
+        );
+    }
 
-                {this.props.timelineSortType === TimelineSortType.Player && <TrackedPlayerPanel />}
+    private _renderTimeline() {
+        return (
+            <>
+                {this.props.timelineSortType === TimelineSortType.Player ? <TrackedPlayerPanel /> : null}
 
-                {this.props.playerNews.docs.length ? (
+                {this.props.trackedPlayers.length && this.props.playerNews.docs.length ? (
                     <FlatList
                         data={this.props.playerNews.docs}
                         keyExtractor={item => `${item.platform}-${item.contentId}`}
@@ -93,9 +105,11 @@ class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> 
                         }}
                     />
                 ) : (
-                    <Text>No player news</Text>
+                    <View style={styles.centeredMessageContainer}>
+                        <Text>No news available for your tracked players</Text>
+                    </View>
                 )}
-            </View>
+            </>
         );
     }
 
@@ -113,6 +127,14 @@ class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> 
         this.props.refetchPlayerNews(this.props.trackedPlayers[this.props.selectedPlayerIndex]);
     };
 }
+
+const styles = StyleSheet.create({
+    centeredMessageContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    }
+});
 
 const mapStateToProps = ({ timeline, playerSettings, user, trackedPlayerPanel }: AppState): ITimelinePropsFromState => {
     return {
