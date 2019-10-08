@@ -1,5 +1,5 @@
 import React from 'react';
-import { Header, ListItem, Avatar } from 'react-native-elements';
+import { Header, ListItem, Avatar, Text } from 'react-native-elements';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { NavigationScreenProps, NavigationScreenOptions } from 'react-navigation';
 import { connect } from 'react-redux';
@@ -53,12 +53,18 @@ class TrackedPlayersUnconnected extends React.Component<TrackedPlayersProps, Tra
 
     render() {
         return (
-            <View>
-                <FlatList
-                    data={this.props.trackedPlayers}
-                    keyExtractor={playerId => playerId}
-                    renderItem={({ item }) => this._renderPlayerListItem(this.props.playerMap[item])}
-                />
+            <>
+                {this.props.trackedPlayers.length ? (
+                    <FlatList
+                        data={this.props.trackedPlayers}
+                        keyExtractor={playerId => playerId}
+                        renderItem={({ item }) => this._renderPlayerListItem(this.props.playerMap[item])}
+                    />
+                ) : (
+                    <View style={styles.centeredMessageContainer}>
+                        <Text>There are no tracked players to untrack</Text>
+                    </View>
+                )}
 
                 {this.state.isToastVisible && (
                     <Toast
@@ -71,7 +77,7 @@ class TrackedPlayersUnconnected extends React.Component<TrackedPlayersProps, Tra
                         {this.props.playerMap[this.state.selectedPlayer].name} is now untracked
                     </Toast>
                 )}
-            </View>
+            </>
         );
     }
 
@@ -103,6 +109,11 @@ const styles = StyleSheet.create({
     avatarStyle: {
         backgroundColor: '#eee',
         borderColor: 'white'
+    },
+    centeredMessageContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 });
 
