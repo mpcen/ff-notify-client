@@ -51,7 +51,7 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
 
     componentDidUpdate(prevProps: PlayerSearchProps) {
         if (this.props.trackedPlayers.length > prevProps.trackedPlayers.length) {
-            this.setState({ isToastVisible: true });
+            this.setState({ isToastVisible: true, searchText: '' });
             setTimeout(() => {
                 this.setState({ isToastVisible: false, selectedPlayer: '' });
             }, this.TOAST_TIME);
