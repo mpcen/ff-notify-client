@@ -1,34 +1,25 @@
 import * as React from 'react';
-import { Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Badge, Avatar } from 'react-native-elements';
-
-import { IPlayer } from '../../../store/playerSettings/types';
+import { StyleSheet, TouchableOpacity } from 'react-native';
+import { Avatar } from 'react-native-elements';
 
 interface ITrackedPlayerPanelItemProps {
-    trackedPlayer: IPlayer;
+    selected: boolean;
+    avatarUrl: string;
     onLongPress: () => void;
     onPress: () => void;
 }
 
 export const TrackedPlayerPanelItem = (props: ITrackedPlayerPanelItemProps) => {
-    const trackedPlayer = props.trackedPlayer;
-    const {
-        playerStoryContainer,
-        avatarStyle,
-        avatarContainerStyle,
-        badgeContainerStyle,
-        badgeStyle,
-        badgeText
-    } = styles;
+    const { selected, avatarUrl, onLongPress, onPress } = props;
 
     return (
-        <TouchableOpacity style={playerStoryContainer} onLongPress={props.onLongPress} onPress={props.onPress}>
+        <TouchableOpacity style={styles.panelItemContainer} onLongPress={onLongPress} onPress={onPress}>
             <Avatar
                 rounded
                 size="medium"
-                avatarStyle={avatarStyle}
-                containerStyle={avatarContainerStyle}
-                source={{ uri: trackedPlayer.avatarUrl }}
+                avatarStyle={styles.avatarStyle}
+                containerStyle={selected ? styles.avatarContainerStyleSelected : styles.avatarContainerStyle}
+                source={{ uri: avatarUrl }}
             />
 
             {/* <Badge
@@ -41,7 +32,7 @@ export const TrackedPlayerPanelItem = (props: ITrackedPlayerPanelItemProps) => {
 };
 
 const styles = StyleSheet.create({
-    playerStoryContainer: {
+    panelItemContainer: {
         padding: 8
     },
     avatarStyle: {
@@ -49,9 +40,14 @@ const styles = StyleSheet.create({
         borderColor: 'white'
     },
     avatarContainerStyle: {
-        borderColor: '#2089dc',
+        borderColor: 'grey',
         borderStyle: 'solid',
         borderWidth: 1.5
+    },
+    avatarContainerStyleSelected: {
+        borderColor: '#2089dc',
+        borderStyle: 'solid',
+        borderWidth: 3
     },
     badgeContainerStyle: {
         position: 'absolute',

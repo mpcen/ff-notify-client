@@ -26,6 +26,7 @@ interface ITrackedPlayerPanelPropsFromDispatch {
 interface ITrackedPlayerPanelState {
     isOverlayVisible: boolean;
     trackedPlayers: string[];
+    selectedIndex: number;
 }
 
 type TrackedPlayerPanelProps = ITrackedPlayerPanelItemPropsFromState & ITrackedPlayerPanelPropsFromDispatch;
@@ -34,12 +35,17 @@ type TrackedPanelState = ITrackedPlayerPanelState;
 export class TrackedPlayerPanelUnconnected extends React.Component<TrackedPlayerPanelProps, TrackedPanelState> {
     public state: TrackedPanelState = {
         isOverlayVisible: false,
-        trackedPlayers: this.props.trackedPlayers
+        trackedPlayers: this.props.trackedPlayers,
+        selectedIndex: 0
     };
 
     componentDidUpdate(prevProps: TrackedPlayerPanelProps) {
         if (prevProps.trackedPlayers.length !== this.props.trackedPlayers.length) {
             this.setState({ trackedPlayers: this.props.trackedPlayers });
+        }
+
+        if (this.props.selectetedPlayerIndex !== this.state.selectedIndex) {
+            this.setState({ selectedIndex: this.props.selectetedPlayerIndex });
         }
     }
 
@@ -53,13 +59,17 @@ export class TrackedPlayerPanelUnconnected extends React.Component<TrackedPlayer
                     showsHorizontalScrollIndicator={false}
                     data={trackedPlayers}
                     keyExtractor={item => item}
-                    renderItem={({ item, index }) => this._renderTrackedPlayerPanelItemList(item, index)}
+                    extraData={this.state.selectedIndex}
+                    renderItem={this._renderTrackedPlayerPanelItem}
                 />
 
-                <Overlay isVisible={this.state.isOverlayVisible} onBackdropPress={this._handleBackdropPress}>
+                <Overlay
+                    isVisible={this.state.isOverlayVisible}
+                    onBackdropPress={() => this.setState({ isOverlayVisible: false })}
+                >
                     <DraggableFlatList
                         data={this.state.trackedPlayers}
-                        renderItem={this._renderItem}
+                        renderItem={this._renderDraggableItem}
                         keyExtractor={playerId => `draggable-item-${playerId}`}
                         scrollPercent={5}
                         onMoveEnd={this._handleReorderTrackedPlayers}
@@ -69,59 +79,53 @@ export class TrackedPlayerPanelUnconnected extends React.Component<TrackedPlayer
         );
     }
 
+    private _renderTrackedPlayerPanelItem = ({ item, index }: { item: string; index: number }) => {
+        return (
+            <TrackedPlayerPanelItem
+                selected={this.state.selectedIndex === index}
+                avatarUrl={this.props.playerMap[item].avatarUrl}
+                onLongPress={() => this.setState({ isOverlayVisible: true })}
+                onPress={() => {
+                    this.setState({ selectedIndex: index });
+                    this.props.selectPlayer(index);
+                }}
+            />
+        );
+    };
+
     private _handleReorderTrackedPlayers = ({ data }: OnMoveEndInfo<string>) => {
         const reorderedTrackedPlayers = data as string[];
         this.props.reorderTrackedPlayers(reorderedTrackedPlayers);
         this.setState({ trackedPlayers: reorderedTrackedPlayers });
     };
 
-    private _renderItem = ({ item, index, move, moveEnd, isActive }: RenderItemInfo<string>) => {
+    private _renderDraggableItem = ({ item, index, move, moveEnd, isActive }: RenderItemInfo<string>) => {
         const { id, name, position, avatarUrl } = this.props.playerMap[item];
 
         return (
             <ListItem
                 key={id}
                 onLongPress={move}
-                leftAvatar={
-                    <Avatar rounded size="medium" avatarStyle={styles.avatarStyle} source={{ uri: avatarUrl }} />
-                }
-                rightIcon={{ name: 'menu' }}
                 title={name}
                 subtitle={position}
                 bottomDivider
+                rightIcon={{ name: 'menu' }}
+                leftAvatar={
+                    <Avatar rounded size="medium" avatarStyle={styles.avatarStyle} source={{ uri: avatarUrl }} />
+                }
             />
         );
-    };
-
-    private _renderTrackedPlayerPanelItemList(playerId: string, playerIndex: number) {
-        return (
-            <TrackedPlayerPanelItem
-                key={playerId}
-                trackedPlayer={this.props.playerMap[playerId]}
-                onLongPress={this._handleOnLongPress}
-                onPress={() => this._handleOnPress(playerIndex)}
-            />
-        );
-    }
-
-    private _handleOnPress(playerIndex: number) {
-        this.props.selectPlayer(playerIndex);
-    }
-
-    private _handleOnLongPress = () => {
-        this.setState({ isOverlayVisible: true });
-    };
-
-    private _handleBackdropPress = () => {
-        this.setState({ isOverlayVisible: false });
     };
 }
 
-const mapStateToProps = ({
-    playerSettings,
-    user,
-    trackedPlayerPanel
-}: AppState): ITrackedPlayerPanelItemPropsFromState => {
+const styles = StyleSheet.create({
+    avatarStyle: {
+        backgroundColor: 'white',
+        borderColor: 'white'
+    }
+});
+
+const mapStateToProps = ({ playerSettings, user, trackedPlayerPanel }: AppState) => {
     return {
         playerMap: playerSettings.playerMap,
         trackedPlayers: user.userPreferences.trackedPlayers,
@@ -131,10 +135,10 @@ const mapStateToProps = ({
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
+        selectPlayer: (playerIndex: number) => dispatch(trackedPlayerPanelActions.selectPlayer(playerIndex)),
         reorderTrackedPlayers: (reorderedTrackedPlayers: string[]) => {
             return dispatch(playerSettingsActions.reorderTrackedPlayers(reorderedTrackedPlayers));
-        },
-        selectPlayer: (playerIndex: number) => dispatch(trackedPlayerPanelActions.selectPlayer(playerIndex))
+        }
     };
 };
 
@@ -142,10 +146,3 @@ export const TrackedPlayerPanel = connect(
     mapStateToProps,
     mapDispatchToProps
 )(TrackedPlayerPanelUnconnected);
-
-const styles = StyleSheet.create({
-    avatarStyle: {
-        backgroundColor: '#eee',
-        borderColor: 'white'
-    }
-});
