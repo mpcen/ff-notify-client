@@ -46,7 +46,7 @@ class TrackedPlayersUnconnected extends React.Component<TrackedPlayersProps, Tra
         if (this.props.trackedPlayers.length < prevProps.trackedPlayers.length) {
             this.setState({ isToastVisible: true });
             setTimeout(() => {
-                this.setState({ isToastVisible: false, selectedPlayer: '' });
+                this.setState({ isToastVisible: false });
             }, this.TOAST_TIME);
         }
     }
