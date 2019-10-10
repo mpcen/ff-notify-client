@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TouchableOpacity, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Header, Button } from 'react-native-elements';
 import { NavigationScreenProps, NavigationScreenOptions } from 'react-navigation';
 import { connect } from 'react-redux';
@@ -22,12 +22,21 @@ type AccountProps = IAccountPropsFromState & ITrackedPlayersPropsFromDispatch;
 class AccountUnconnected extends React.Component<AccountProps, {}> {
     static navigationOptions = ({ navigation }: NavigationScreenProps) => {
         return {
-            header: <Header centerComponent={{ text: 'Account', style: { color: '#fff' } }} />
+            header: <Header centerComponent={{ text: 'Account Settings', style: { color: '#fff' } }} />
         } as NavigationScreenOptions;
     };
 
     render() {
-        return <Button title="Sign Out" type="outline" onPress={() => this.props.signOut()} />;
+        return (
+            <View style={styles.accountSettingsContainer}>
+                <Button
+                    containerStyle={{ width: 200 }}
+                    title="Sign Out"
+                    type="outline"
+                    onPress={() => this.props.signOut()}
+                />
+            </View>
+        );
     }
 }
 const mapStateToProps = ({ user }: AppState): IAccountPropsFromState => {
@@ -42,7 +51,13 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     };
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+    accountSettingsContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    }
+});
 
 export const Account = connect(
     mapStateToProps,

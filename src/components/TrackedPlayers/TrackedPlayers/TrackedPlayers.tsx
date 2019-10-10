@@ -33,7 +33,7 @@ class TrackedPlayersUnconnected extends React.Component<TrackedPlayersProps, Tra
 
     static navigationOptions = ({ navigation }: NavigationScreenProps) => {
         return {
-            header: <Header centerComponent={{ text: 'Player Settings - Tracked Players', style: { color: '#fff' } }} />
+            header: <Header centerComponent={{ text: 'Tracked Players', style: { color: '#fff' } }} />
         } as NavigationScreenOptions;
     };
 
