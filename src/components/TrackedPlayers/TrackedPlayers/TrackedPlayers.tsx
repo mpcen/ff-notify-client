@@ -10,6 +10,7 @@ import * as playerSettingsActions from '../../../store/playerSettings/actions';
 
 import { AppState } from '../../../store';
 import { IPlayerMap, IPlayer } from '../../../store/playerSettings/types';
+import { PlayerSearch } from '../../Timeline/PlayerSearch/PlayerSearch';
 
 interface ITrackedPlayersPropsFromState {
     trackedPlayers: string[];
@@ -33,7 +34,12 @@ class TrackedPlayersUnconnected extends React.Component<TrackedPlayersProps, Tra
 
     static navigationOptions = ({ navigation }: NavigationScreenProps) => {
         return {
-            header: <Header centerComponent={{ text: 'Tracked Players', style: { color: '#fff' } }} />
+            header: (
+                <Header
+                    centerComponent={{ text: 'Tracked Players', style: { color: '#fff' } }}
+                    rightComponent={<PlayerSearch />}
+                />
+            )
         } as NavigationScreenOptions;
     };
 
