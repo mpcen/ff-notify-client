@@ -27,6 +27,8 @@ interface ITimelinePropsFromState {
 
 interface ITimelinePropsFromDispatch {
     fetchPlayerNews: typeof timelineActions.fetchPlayerNews;
+    refetchAllPlayerNews: typeof timelineActions.refetchAllPlayerNews;
+    fetchAllPlayerNews: typeof timelineActions.fetchAllPlayerNews;
     refetchPlayerNews: typeof timelineActions.refetchPlayerNews;
 }
 
@@ -55,26 +57,37 @@ class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> 
     };
 
     componentDidMount() {
-        this.props.fetchPlayerNews(1, this.props.trackedPlayers[0]);
+        if (this.props.timelineSortType === TimelineSortType.All) {
+            this.props.fetchAllPlayerNews();
+        } else {
+            this.props.fetchPlayerNews(1, this.props.trackedPlayers[0]);
+        }
     }
 
     componentDidUpdate(prevProps: TimelineProps) {
+        if (
+            this.props.timelineSortType === TimelineSortType.All &&
+            prevProps.timelineSortType !== TimelineSortType.All
+        ) {
+            return this.props.refetchAllPlayerNews();
+        }
+
         if (prevProps.selectedPlayerIndex !== this.props.selectedPlayerIndex) {
-            this.props.refetchPlayerNews(this.props.trackedPlayers[this.props.selectedPlayerIndex]);
+            return this.props.refetchPlayerNews(this.props.trackedPlayers[this.props.selectedPlayerIndex]);
         }
 
         if (
             prevProps.trackedPlayers[this.props.selectedPlayerIndex] !==
             this.props.trackedPlayers[this.props.selectedPlayerIndex]
         ) {
-            this.props.refetchPlayerNews(this.props.trackedPlayers[this.props.selectedPlayerIndex]);
+            return this.props.refetchPlayerNews(this.props.trackedPlayers[this.props.selectedPlayerIndex]);
         }
     }
 
     public render() {
         return (
             <View style={{ flex: 1 }}>
-                {!this.props.trackedPlayers.length ? (
+                {this.props.timelineSortType !== TimelineSortType.All && !this.props.trackedPlayers.length ? (
                     <View style={styles.centeredMessageContainer}>
                         <Text>Track some players to receive the latest news</Text>
                     </View>
@@ -89,7 +102,8 @@ class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> 
         return (
             <>
                 {this.props.timelineSortType === TimelineSortType.Player ? <TrackedPlayerPanel /> : null}
-                {this.props.trackedPlayers.length && this.props.playerNews.docs.length ? (
+
+                {this.props.timelineSortType === TimelineSortType.All ? (
                     <FlatList
                         data={this.props.playerNews.docs}
                         keyExtractor={item => `${item.platform}-${item.contentId}`}
@@ -102,27 +116,49 @@ class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> 
                             );
                         }}
                     />
-                ) : (
-                    <View style={styles.centeredMessageContainer}>
-                        <Text>No news available for your tracked players</Text>
-                    </View>
-                )}
+                ) : null}
+
+                {this.props.timelineSortType !== TimelineSortType.All &&
+                this.props.trackedPlayers.length &&
+                this.props.playerNews.docs.length ? (
+                    <FlatList
+                        data={this.props.playerNews.docs}
+                        keyExtractor={item => `${item.platform}-${item.contentId}`}
+                        onRefresh={this._handleRefresh}
+                        refreshing={this.props.loading}
+                        onEndReached={this._handleOnEndReached}
+                        renderItem={({ item }) => {
+                            return (
+                                <PlayerNewsItem player={this.props.playerMap[item.player.id]} playerNewsItem={item} />
+                            );
+                        }}
+                    />
+                ) : null}
             </>
         );
     }
 
     private _handleOnEndReached = () => {
-        if (this.props.playerNews.nextPage) {
-            this.props.fetchPlayerNews(
-                this.props.playerNews.nextPage,
-                this.props.trackedPlayers[this.props.selectedPlayerIndex]
-            );
+        if (this.props.timelineSortType === TimelineSortType.All) {
+            this.props.fetchAllPlayerNews(this.props.playerNews.nextPage);
+        } else {
+            if (this.props.playerNews.nextPage) {
+                this.props.fetchPlayerNews(
+                    this.props.playerNews.nextPage,
+                    this.props.trackedPlayers[this.props.selectedPlayerIndex]
+                );
+            }
         }
     };
 
     private _handleRefresh = () => {
         this.setState({});
-        this.props.refetchPlayerNews(this.props.trackedPlayers[this.props.selectedPlayerIndex]);
+
+        if (this.props.timelineSortType === TimelineSortType.All) {
+            this.props.refetchAllPlayerNews();
+        } else {
+            this.props.refetchPlayerNews(this.props.trackedPlayers[this.props.selectedPlayerIndex]);
+        }
     };
 }
 
@@ -148,6 +184,8 @@ const mapStateToProps = ({ timeline, playerSettings, user, trackedPlayerPanel }:
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
+        fetchAllPlayerNews: (page: number) => dispatch(timelineActions.fetchAllPlayerNews(page)),
+        refetchAllPlayerNews: () => dispatch(timelineActions.refetchAllPlayerNews()),
         fetchPlayerNews: (page: number, playerId: string) => dispatch(timelineActions.fetchPlayerNews(page, playerId)),
         refetchPlayerNews: (playerId: string) => dispatch(timelineActions.refetchPlayerNews(playerId))
     };

@@ -22,7 +22,57 @@ const initialState: ITimelineState = {
 
 const reducer: Reducer<ITimelineState, Action> = (state = initialState, action) => {
     switch (action.type) {
-        // FETCH PLAYER NEWS
+        // FETCH ALL PLAYER NEWS
+        case FetchPlayerNewsActionTypes.FETCH_ALL_PLAYER_NEWS:
+            return {
+                ...state,
+                loading: true
+            };
+
+        case FetchPlayerNewsActionTypes.FETCH_ALL_PLAYER_NEWS_SUCCESS:
+            return {
+                playerNews: {
+                    docs: [...state.playerNews.docs, ...action.payload.docs] as IPlayerNewsItem[],
+                    nextPage: action.payload.nextPage,
+                    page: action.payload.page,
+                    prevPage: action.payload.prevPage,
+                    totalPages: action.payload.totalPages
+                },
+                error: false,
+                loading: false
+            };
+
+        // REFETCH ALL PLAYER NEWS
+        case FetchPlayerNewsActionTypes.REFETCH_ALL_PLAYER_NEWS:
+            return {
+                ...state,
+                loading: true
+            };
+
+        case FetchPlayerNewsActionTypes.REFETCH_ALL_PLAYER_NEWS_SUCCESS:
+            return {
+                playerNews: { ...action.payload },
+                error: false,
+                loading: false
+            };
+
+        case FetchPlayerNewsActionTypes.REFETCH_ALL_PLAYER_NEWS_FAIL:
+            return {
+                ...state,
+                error: true,
+                loading: false,
+                errorMessage: action.payload
+            };
+
+        case FetchPlayerNewsActionTypes.FETCH_PLAYER_NEWS_FAIL:
+            return {
+                ...state,
+                error: true,
+                loading: false,
+                errorMessage: action.payload
+            };
+
+        // FETCH TRACKED PLAYER NEWS
         case FetchPlayerNewsActionTypes.FETCH_PLAYER_NEWS:
             return {
                 ...state,
@@ -50,7 +100,7 @@ const reducer: Reducer<ITimelineState, Action> = (state = initialState, action) 
                 errorMessage: action.payload
             };
 
-        // REFETCH PLAYER NEWS
+        // REFETCH TRACKED PLAYER NEWS
         case FetchPlayerNewsActionTypes.REFETCH_PLAYER_NEWS:
             return {
                 ...state,

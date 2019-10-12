@@ -11,12 +11,57 @@ import {
     sortTimelineByFail,
     refetchPlayerNews,
     refetchPlayerNewsSuccess,
-    refetchPlayerNewsFail
+    refetchPlayerNewsFail,
+    fetchAllPlayerNewsSuccess,
+    fetchAllPlayerNewsFail,
+    refetchAllPlayerNewsSuccess,
+    refetchAllPlayerNewsFail
 } from './actions';
 import { callApi } from '../../api';
-import { fetchUserPreferences, fetchUserPreferencesSuccess } from '../user/actions';
+import { fetchUserPreferencesSuccess } from '../user/actions';
 
-// FETCH PLAYER NEWS
+// FETCH ALL PLAYER NEWS
+function* watchFetchAllPlayerNews() {
+    yield takeLatest(FetchPlayerNewsActionTypes.FETCH_ALL_PLAYER_NEWS, handleFetchAllPlayerNews);
+}
+
+function* handleFetchAllPlayerNews({ payload }: ReturnType<typeof fetchPlayerNews>) {
+    const { page } = payload;
+    try {
+        const token = yield call(AsyncStorage.getItem, 'persource-auth-token');
+        const res = yield call(callApi, 'GET', `allPlayerNews?page=${page}`, token);
+
+        yield put(fetchAllPlayerNewsSuccess(res));
+    } catch (err) {
+        if (err instanceof Error) {
+            yield put(fetchAllPlayerNewsFail(err.stack!));
+        } else {
+            yield put(fetchAllPlayerNewsFail('An unknown error occurred.'));
+        }
+    }
+}
+
+// REFETCH ALL PLAYER NEWS
+function* watchRefetchAllPlayerNews() {
+    yield takeLatest(FetchPlayerNewsActionTypes.REFETCH_ALL_PLAYER_NEWS, handleRefetchAllPlayerNews);
+}
+
+function* handleRefetchAllPlayerNews() {
+    try {
+        const token = yield call(AsyncStorage.getItem, 'persource-auth-token');
+        const res = yield call(callApi, 'GET', `allPlayerNews?page=1`, token);
+
+        yield put(refetchAllPlayerNewsSuccess(res));
+    } catch (err) {
+        if (err instanceof Error) {
+            yield put(refetchAllPlayerNewsFail(err.stack!));
+        } else {
+            yield put(refetchAllPlayerNewsFail('An unknown error occurred.'));
+        }
+    }
+}
+
+// FETCH TRACKED PLAYER NEWS
 function* watchFetchPlayerNews() {
     yield takeLatest(FetchPlayerNewsActionTypes.FETCH_PLAYER_NEWS, handleFetchPlayerNews);
 }
@@ -39,7 +84,7 @@ function* handleFetchPlayerNews({ payload }: ReturnType<typeof fetchPlayerNews>)
     }
 }
 
-// REFETCH PLAYER NEWS
+// REFETCH TRACKED PLAYER NEWS
 function* watchRefetchPlayerNews() {
     yield takeLatest(FetchPlayerNewsActionTypes.REFETCH_PLAYER_NEWS, handleRefetchPlayerNews);
 }
@@ -84,5 +129,11 @@ function* handleSortTimelineBy({ payload }: ReturnType<typeof sortTimelineBy>) {
 }
 
 export function* timelineSaga() {
-    yield all([fork(watchFetchPlayerNews), fork(watchSortTimelineBy), fork(watchRefetchPlayerNews)]);
+    yield all([
+        fork(watchFetchPlayerNews),
+        fork(watchSortTimelineBy),
+        fork(watchRefetchPlayerNews),
+        fork(watchFetchAllPlayerNews),
+        fork(watchRefetchAllPlayerNews)
+    ]);
 }

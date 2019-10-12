@@ -87,7 +87,7 @@ const MainFlow = createBottomTabNavigator(
                 height: 50
             }
         },
-        initialRouteName: NAVROUTES.PlayerSettings
+        initialRouteName: NAVROUTES.Timeline
     }
 );
 
