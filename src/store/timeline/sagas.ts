@@ -1,7 +1,7 @@
 import { all, call, fork, put, takeEvery, takeLatest } from 'redux-saga/effects';
 import { AsyncStorage } from 'react-native';
 
-import { FetchPlayerNewsActionTypes, SortTimelineByActionTypes } from './types';
+import { FetchPlayerNewsActionTypes, SortTimelineByActionTypes, TimelineSortType } from './types';
 import {
     fetchPlayerNewsSuccess,
     fetchPlayerNewsFail,
@@ -118,7 +118,10 @@ function* handleSortTimelineBy({ payload }: ReturnType<typeof sortTimelineBy>) {
 
         yield put(sortTimelineBySuccess(res.timelineSortType));
         yield put(fetchUserPreferencesSuccess(res));
-        yield put(refetchPlayerNews(res.trackedPlayers[0]));
+
+        if (payload !== TimelineSortType.All) {
+            yield put(refetchPlayerNews(res.trackedPlayers[0]));
+        }
     } catch (err) {
         if (err instanceof Error) {
             yield put(sortTimelineByFail(err.stack!));

@@ -69,18 +69,14 @@ class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> 
             this.props.timelineSortType === TimelineSortType.All &&
             prevProps.timelineSortType !== TimelineSortType.All
         ) {
-            return this.props.refetchAllPlayerNews();
-        }
-
-        if (prevProps.selectedPlayerIndex !== this.props.selectedPlayerIndex) {
-            return this.props.refetchPlayerNews(this.props.trackedPlayers[this.props.selectedPlayerIndex]);
-        }
-
-        if (
+            this.props.refetchAllPlayerNews();
+        } else if (prevProps.selectedPlayerIndex !== this.props.selectedPlayerIndex) {
+            this.props.refetchPlayerNews(this.props.trackedPlayers[this.props.selectedPlayerIndex]);
+        } else if (
             prevProps.trackedPlayers[this.props.selectedPlayerIndex] !==
             this.props.trackedPlayers[this.props.selectedPlayerIndex]
         ) {
-            return this.props.refetchPlayerNews(this.props.trackedPlayers[this.props.selectedPlayerIndex]);
+            this.props.refetchPlayerNews(this.props.trackedPlayers[this.props.selectedPlayerIndex]);
         }
     }
 
@@ -140,7 +136,9 @@ class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> 
 
     private _handleOnEndReached = () => {
         if (this.props.timelineSortType === TimelineSortType.All) {
-            this.props.fetchAllPlayerNews(this.props.playerNews.nextPage);
+            if (this.props.playerNews.nextPage) {
+                this.props.fetchAllPlayerNews(this.props.playerNews.nextPage);
+            }
         } else {
             if (this.props.playerNews.nextPage) {
                 this.props.fetchPlayerNews(
@@ -154,7 +152,7 @@ class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> 
     private _handleRefresh = () => {
         this.setState({});
 
-        if (this.props.timelineSortType === TimelineSortType.All) {
+        if (this.props.timelineSortType === TimelineSortType.All && !this.props.loading) {
             this.props.refetchAllPlayerNews();
         } else {
             this.props.refetchPlayerNews(this.props.trackedPlayers[this.props.selectedPlayerIndex]);
