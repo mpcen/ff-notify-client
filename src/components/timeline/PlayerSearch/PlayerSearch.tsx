@@ -1,14 +1,15 @@
 import * as React from 'react';
 import { TouchableOpacity, View, StyleSheet, FlatList, Dimensions } from 'react-native';
-import { Icon, Overlay, Input, ListItem, Avatar } from 'react-native-elements';
+import { Icon, Overlay, Input, ListItem, Avatar, SearchBar } from 'react-native-elements';
 import Toast from 'react-native-root-toast';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
 import * as playerSettingsActions from '../../../store/playerSettings/actions';
+import { IPlayerMap, IPlayer } from '../../../store/playerSettings/types';
 import { AppState } from '../../../store';
 
-import { IPlayerMap, IPlayer } from '../../../store/playerSettings/types';
+import { InputClearer } from '../../common/InputClearer';
 
 interface IPlayerSearchPropsFromState {
     playerMap: IPlayerMap;
@@ -44,10 +45,6 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
     };
 
     componentDidUpdate(prevProps: PlayerSearchProps, prevState: PlayerSearchState) {
-        if (this.state.selectedPlayer !== prevState.selectedPlayer) {
-            this.props.trackPlayer(this.state.selectedPlayer);
-        }
-
         if (this.props.trackedPlayers.length > prevProps.trackedPlayers.length) {
             this.setState({
                 isToastVisible: true
@@ -60,53 +57,48 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
 
     render() {
         return (
-            <>
-                <TouchableOpacity onPress={this._handleOnPress}>
-                    <Icon name="search" color="#fff" />
-                </TouchableOpacity>
+            <View>
+                <Input
+                    placeholder="Search for a player to track"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    value={this.state.searchText}
+                    onChangeText={searchText => {
+                        this.setState({
+                            searchText,
+                            filteredPlayers: this._filterPlayersByName(searchText)
+                        });
+                    }}
+                    rightIcon={
+                        this.state.searchText ? (
+                            <InputClearer
+                                iconName="clear"
+                                color="gray"
+                                onPress={() => this.setState({ searchText: '' })}
+                            />
+                        ) : null
+                    }
+                />
 
-                <Overlay
-                    fullScreen={false}
-                    height={Math.round(Dimensions.get('window').height) - 350}
-                    isVisible={this.state.isOverlayVisible}
-                    onBackdropPress={this._handleBackdropPress}
-                >
-                    <View>
-                        <Input
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholder="Search for a player to track"
-                            value={this.state.searchText}
-                            onChangeText={searchText => {
-                                this.setState({
-                                    searchText,
-                                    filteredPlayers: this._filterPlayersByName(searchText)
-                                });
-                            }}
-                        />
+                <FlatList
+                    data={this.state.filteredPlayers}
+                    extraData={this.props.trackedPlayers}
+                    keyExtractor={item => item.id}
+                    renderItem={({ item }) => this._renderPlayerListItem(item)}
+                />
 
-                        <FlatList
-                            style={{ height: Math.round(Dimensions.get('window').height) - 410 }}
-                            data={this.state.filteredPlayers}
-                            extraData={this.props.trackedPlayers}
-                            keyExtractor={item => item.id}
-                            renderItem={({ item }) => this._renderPlayerListItem(item)}
-                        />
-
-                        {this.state.isToastVisible && this.state.selectedPlayer && (
-                            <Toast
-                                visible={this.state.isToastVisible}
-                                position={-100}
-                                shadow={false}
-                                animation={false}
-                                hideOnPress={true}
-                            >
-                                {this.props.playerMap[this.state.selectedPlayer].name} is now being tracked
-                            </Toast>
-                        )}
-                    </View>
-                </Overlay>
-            </>
+                {this.state.isToastVisible && this.state.selectedPlayer && (
+                    <Toast
+                        visible={this.state.isToastVisible}
+                        position={-100}
+                        shadow={false}
+                        animation={false}
+                        hideOnPress={true}
+                    >
+                        {this.props.playerMap[this.state.selectedPlayer].name} is now being tracked
+                    </Toast>
+                )}
+            </View>
         );
     }
 
@@ -143,16 +135,9 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
 
     private _handleTrackPlayer = (selectedPlayer: string) => {
         if (!this.props.trackedPlayers.some(playerId => playerId === selectedPlayer)) {
+            this.props.trackPlayer(selectedPlayer);
             this.setState({ selectedPlayer });
         }
-    };
-
-    private _handleOnPress = () => {
-        this.setState({ isOverlayVisible: true });
-    };
-
-    private _handleBackdropPress = () => {
-        this.setState({ isOverlayVisible: false });
     };
 }
 

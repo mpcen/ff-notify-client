@@ -3,9 +3,11 @@ import {
     createBottomTabNavigator,
     createStackNavigator,
     createAppContainer,
-    createSwitchNavigator
+    createSwitchNavigator,
+    createMaterialTopTabNavigator
 } from 'react-navigation';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import Constants from 'expo-constants';
 
 import { Timeline } from '../components/Timeline/Timeline';
 import { TrackedPlayers } from '../components/TrackedPlayers/TrackedPlayers/TrackedPlayers';
@@ -14,10 +16,29 @@ import { SignIn } from '../components/Account/SignIn';
 import { SignUp } from '../components/Account/SignUp';
 import { ResolveAuth } from '../ResolveAuth';
 import { NAVROUTES } from './navRoutes';
+import { PlayerSearch } from '../components/Timeline/PlayerSearch/PlayerSearch';
 
 const TimelineStack = createStackNavigator({ Timeline });
-const TrackedPlayersStack = createStackNavigator({ TrackedPlayers });
 const AccountStack = createStackNavigator({ Account });
+
+const PlayerSettingsTabs = createMaterialTopTabNavigator(
+    {
+        [NAVROUTES.PlayerSearch]: {
+            screen: PlayerSearch
+        },
+        [NAVROUTES.TrackedPlayers]: {
+            screen: TrackedPlayers
+        }
+    },
+    {
+        initialRouteName: NAVROUTES.TrackedPlayers,
+        tabBarOptions: {
+            style: {
+                paddingTop: Constants.statusBarHeight
+            }
+        }
+    }
+);
 
 const LogInStack = createStackNavigator({
     [NAVROUTES.SignUp]: {
@@ -32,8 +53,8 @@ const MainFlow = createBottomTabNavigator(
         [NAVROUTES.Timeline]: {
             screen: TimelineStack
         },
-        [NAVROUTES.TrackedPlayers]: {
-            screen: TrackedPlayersStack
+        [NAVROUTES.PlayerSettings]: {
+            screen: PlayerSettingsTabs
         },
         [NAVROUTES.Account]: {
             screen: AccountStack
@@ -48,7 +69,7 @@ const MainFlow = createBottomTabNavigator(
 
                 if (routeName === NAVROUTES.Timeline) {
                     iconName = `chart-timeline`;
-                } else if (routeName === NAVROUTES.TrackedPlayers) {
+                } else if (routeName === NAVROUTES.PlayerSettings) {
                     iconName = `account-group`;
                 } else if (routeName === NAVROUTES.Account) {
                     iconName = `settings`;
@@ -66,7 +87,7 @@ const MainFlow = createBottomTabNavigator(
                 height: 50
             }
         },
-        initialRouteName: NAVROUTES.Timeline
+        initialRouteName: NAVROUTES.PlayerSettings
     }
 );
 
