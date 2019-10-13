@@ -58,15 +58,21 @@ export class PlayerNewsItem extends React.Component<IPlayerNewsItemProps> {
     }
 
     private _renderChildNodes = () => {
-        return this.props.playerNewsItem.childNodes.map((childNode: IChildNode, index) => {
-            const key = childNode.data + '-' + index;
+        const { contentId, content, username, childNodes } = this.props.playerNewsItem;
+        const key = username + contentId;
+
+        if (!childNodes.length) {
+            return <Text key={username + contentId}>{content}</Text>;
+        }
+
+        return childNodes.map((childNode: IChildNode) => {
             if (childNode.contentType === 'text') {
-                return <Text key={key}>{childNode.data.trim()} </Text>;
+                return <Text key={key + childNode.data}>{childNode.data.trim()} </Text>;
             }
 
             if (childNode.username) {
                 return (
-                    <Text key={key} style={styles.contentLink}>
+                    <Text key={key + childNode.data} style={styles.contentLink}>
                         {childNode.data.replace('/', '@').trim()}{' '}
                     </Text>
                 );
@@ -74,7 +80,7 @@ export class PlayerNewsItem extends React.Component<IPlayerNewsItemProps> {
 
             if (childNode.data.includes('hashtag')) {
                 return (
-                    <Text key={key} style={styles.contentLink}>
+                    <Text key={key + childNode.data} style={styles.contentLink}>
                         {childNode.data.replace('/hashtag/', '#').replace('?src=hash', ' ')}
                     </Text>
                 );
