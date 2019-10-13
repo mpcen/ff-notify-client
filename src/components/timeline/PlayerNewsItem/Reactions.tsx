@@ -8,10 +8,10 @@ export class Reactions extends React.Component {
 
         return (
             <View style={reactionContainer}>
-                <View style={reactionIconContainer}>
+                {/* <View style={reactionIconContainer}>
                     <Icon iconStyle={[reactionIcon, { color: '#F4D35E' }]} type="material-community" name="train" />
                     <Text style={reactionCount}>37k</Text>
-                </View>
+                </View> */}
 
                 <View style={reactionIconContainer}>
                     <Icon

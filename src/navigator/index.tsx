@@ -48,46 +48,51 @@ const LogInStack = createStackNavigator({
         screen: SignIn
     }
 });
+
 const MainFlow = createBottomTabNavigator(
     {
         [NAVROUTES.Timeline]: {
-            screen: TimelineStack
+            screen: TimelineStack,
+            navigationOptions: {
+                tabBarLabel: 'NEWS',
+                tabBarIcon: ({ tintColor }: any) => (
+                    <MaterialCommunityIcons name="chart-timeline" size={25} color={tintColor} />
+                )
+            }
         },
         [NAVROUTES.PlayerSettings]: {
-            screen: PlayerSettingsTabs
+            screen: PlayerSettingsTabs,
+            navigationOptions: {
+                tabBarLabel: 'MY PLAYERS',
+                tabBarIcon: ({ tintColor }: any) => (
+                    <MaterialCommunityIcons name="account-group" size={25} color={tintColor} />
+                )
+            }
         },
         [NAVROUTES.Account]: {
-            screen: AccountStack
+            screen: AccountStack,
+            navigationOptions: {
+                tabBarLabel: 'ACCOUNT',
+
+                tabBarIcon: ({ tintColor }: any) => (
+                    <MaterialCommunityIcons name="settings" size={25} color={tintColor} />
+                )
+            }
         }
     },
     {
-        defaultNavigationOptions: ({ navigation }) => ({
-            tabBarIcon: ({ tintColor }) => {
-                const { routeName } = navigation.state;
-                let IconComponent = MaterialCommunityIcons;
-                let iconName;
-
-                if (routeName === NAVROUTES.Timeline) {
-                    iconName = `chart-timeline`;
-                } else if (routeName === NAVROUTES.PlayerSettings) {
-                    iconName = `account-group`;
-                } else if (routeName === NAVROUTES.Account) {
-                    iconName = `settings`;
-                }
-
-                // You can return any component that you like here!
-                return <IconComponent name={iconName} size={25} color={tintColor} />;
-            }
-        }),
         tabBarOptions: {
             activeTintColor: 'tomato',
-            inactiveTintColor: 'gray',
-            showLabel: false,
+            inactiveTintColor: 'grey',
             style: {
-                height: 50
+                backgroundColor: 'white',
+                borderTopWidth: 0,
+                shadowOffset: { width: 5, height: 3 },
+                shadowColor: 'black',
+                shadowOpacity: 0.5,
+                elevation: 5
             }
-        },
-        initialRouteName: NAVROUTES.Timeline
+        }
     }
 );
 

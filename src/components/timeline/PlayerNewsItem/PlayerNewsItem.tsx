@@ -17,40 +17,37 @@ interface IPlayerNewsItemProps {
 export class PlayerNewsItem extends React.Component<IPlayerNewsItemProps> {
     render() {
         const { playerNewsItem } = this.props;
-        const {
-            cardHeaderContainer,
-            cardSourceContainer,
-            cardContentContainer,
-            socialIcon,
-            sourceText,
-            timeText,
-            playerText,
-            dividerContainer,
-            avatarStyle
-        } = styles;
         const { content, contentId, time, username } = playerNewsItem;
         const { avatarUrl, name, position, teamId } = this.props.player;
 
         return (
-            <Card key={contentId}>
-                <View style={cardHeaderContainer}>
+            <Card key={contentId} containerStyle={styles.cardContainer}>
+                <View style={styles.cardHeaderContainer}>
                     {/* <Reactions /> */}
 
-                    <Avatar avatarStyle={avatarStyle} rounded source={{ uri: avatarUrl }} />
-                    <Text style={playerText}>{name}</Text>
-                    <Text style={playerText}>{position}</Text>
-                    <Text style={playerText}>{TEAMS[teamId - 1].abbrev}</Text>
+                    <View>
+                        <Avatar avatarStyle={styles.avatarStyle} rounded source={{ uri: avatarUrl }} />
+                    </View>
+
+                    <View>
+                        <Text style={styles.playerText}>{name}</Text>
+                        <View style={{ flexDirection: 'row', marginLeft: 4 }}>
+                            <Text style={styles.playerInfoText}>{position}</Text>
+                            <Text style={styles.playerInfoText}> | </Text>
+                            <Text style={styles.playerInfoText}>{TEAMS[teamId - 1].abbrev}</Text>
+                        </View>
+                    </View>
                 </View>
 
-                <Divider style={dividerContainer} />
+                <Divider style={styles.dividerContainer} />
 
-                <View style={cardSourceContainer}>
-                    <Icon iconStyle={socialIcon} size={12} type="material-community" name="twitter" />
-                    <Text style={sourceText}>{username}</Text>
-                    <Text style={timeText}>{format(new Date(time), 'MMMM do h:mm a')}</Text>
+                <View style={styles.cardSourceContainer}>
+                    <Icon iconStyle={styles.socialIcon} size={12} type="material-community" name="twitter" />
+                    <Text style={styles.sourceText}>{username}</Text>
+                    <Text style={styles.timeText}>{format(new Date(time), 'MMMM do h:mm a')}</Text>
                 </View>
 
-                <View style={cardContentContainer}>
+                <View style={styles.cardContentContainer}>
                     <Text>{this._renderChildNodes()}</Text>
                 </View>
             </Card>
@@ -86,16 +83,20 @@ export class PlayerNewsItem extends React.Component<IPlayerNewsItemProps> {
                 );
             }
 
-            return (
-                <Text key={key} style={styles.contentLink}>
-                    {childNode.data}
-                </Text>
-            );
+            // return (
+            //     <Text key={key} style={styles.contentLink}>
+            //         {childNode.data}
+            //     </Text>
+            // );
         });
     };
 }
 
 const styles = StyleSheet.create({
+    cardContainer: {
+        borderRadius: 10,
+        borderWidth: 0
+    },
     cardHeaderContainer: {
         flex: 1,
         flexDirection: 'row',
@@ -124,7 +125,9 @@ const styles = StyleSheet.create({
     cardContentContainer: {
         flexDirection: 'row',
         flexWrap: 'wrap',
-        flex: 1
+        flex: 1,
+        paddingTop: 10,
+        paddingBottom: 10
     },
     socialIcon: {
         color: '#1DA1F2'
@@ -133,9 +136,13 @@ const styles = StyleSheet.create({
         marginLeft: 4,
         color: '#444'
     },
+    playerInfoText: {
+        fontSize: 10,
+        color: 'grey'
+    },
     dividerContainer: {
         marginTop: 12,
-        marginBottom: 12
+        marginBottom: 4
     },
     contentLink: {
         color: '#1DA1F2'

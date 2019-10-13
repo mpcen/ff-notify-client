@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { NavigationScreenOptions, NavigationScreenProps } from 'react-navigation';
-import { StyleSheet, View, Text, FlatList } from 'react-native';
+import { StyleSheet, View, Text, FlatList, SafeAreaView } from 'react-native';
 import { Header } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';

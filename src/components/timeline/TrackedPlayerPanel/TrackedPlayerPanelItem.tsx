@@ -36,13 +36,12 @@ const styles = StyleSheet.create({
         padding: 8
     },
     avatarStyle: {
-        backgroundColor: 'white',
+        backgroundColor: '#eee',
         borderColor: 'white'
     },
     avatarContainerStyle: {
-        borderColor: 'grey',
-        borderStyle: 'solid',
-        borderWidth: 1.5
+        backgroundColor: 'grey',
+        borderColor: '#ddd'
     },
     avatarContainerStyleSelected: {
         borderColor: '#2089dc',
