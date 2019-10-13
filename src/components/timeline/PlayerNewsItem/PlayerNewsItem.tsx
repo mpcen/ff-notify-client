@@ -2,10 +2,11 @@ import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Card, Text, Icon, Avatar, Divider } from 'react-native-elements';
 import { format } from 'date-fns';
+import {} from 'react-navigation';
 
 import { Reactions } from './Reactions';
 import { TEAMS } from '../../../util/teams';
-import { IPlayerNewsItem } from '../../../store/timeline/types';
+import { IPlayerNewsItem, IChildNode } from '../../../store/timeline/types';
 import { IPlayer } from '../../../store/playerSettings/types';
 
 interface IPlayerNewsItemProps {
@@ -46,16 +47,46 @@ export class PlayerNewsItem extends React.Component<IPlayerNewsItemProps> {
                 <View style={cardSourceContainer}>
                     <Icon iconStyle={socialIcon} size={12} type="material-community" name="twitter" />
                     <Text style={sourceText}>{username}</Text>
-                    {/* <Text style={timeText}>{format(new Date(time), 'MMMM Do h:mma')}</Text> */}
                     <Text style={timeText}>{format(new Date(time), 'MMMM do h:mm a')}</Text>
                 </View>
 
                 <View style={cardContentContainer}>
-                    <Text>{content}</Text>
+                    <Text>{this._renderChildNodes()}</Text>
                 </View>
             </Card>
         );
     }
+
+    private _renderChildNodes = () => {
+        return this.props.playerNewsItem.childNodes.map((childNode: IChildNode, index) => {
+            const key = childNode.data + '-' + index;
+            if (childNode.contentType === 'text') {
+                return <Text key={key}>{childNode.data.trim()} </Text>;
+            }
+
+            if (childNode.username) {
+                return (
+                    <Text key={key} style={styles.contentLink}>
+                        {childNode.data.replace('/', '@').trim()}{' '}
+                    </Text>
+                );
+            }
+
+            if (childNode.data.includes('hashtag')) {
+                return (
+                    <Text key={key} style={styles.contentLink}>
+                        {childNode.data.replace('/hashtag/', '#').replace('?src=hash', ' ')}
+                    </Text>
+                );
+            }
+
+            return (
+                <Text key={key} style={styles.contentLink}>
+                    {childNode.data}
+                </Text>
+            );
+        });
+    };
 }
 
 const styles = StyleSheet.create({
@@ -84,9 +115,13 @@ const styles = StyleSheet.create({
         color: '#999',
         fontStyle: 'italic'
     },
-    cardContentContainer: {},
+    cardContentContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        flex: 1
+    },
     socialIcon: {
-        color: '#1da1f2'
+        color: '#1DA1F2'
     },
     playerText: {
         marginLeft: 4,
@@ -95,5 +130,8 @@ const styles = StyleSheet.create({
     dividerContainer: {
         marginTop: 12,
         marginBottom: 12
+    },
+    contentLink: {
+        color: '#1DA1F2'
     }
 });

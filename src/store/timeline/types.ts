@@ -32,6 +32,15 @@ export interface IPlayerNewsItem {
     player: { id: string; teamId: number };
     content: string;
     time: string;
+    childNodes: IChildNode[];
+}
+
+export interface IChildNode {
+    contentType: string;
+    data: string | null;
+    text: boolean;
+    link: boolean;
+    username: boolean;
 }
 
 export interface IPlayerNews {
