@@ -8,6 +8,7 @@ import {
 } from 'react-navigation';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
+import { Header } from 'react-navigation';
 
 import { Timeline } from '../components/Timeline/Timeline';
 import { TrackedPlayers } from '../components/TrackedPlayers/TrackedPlayers/TrackedPlayers';
@@ -16,7 +17,8 @@ import { SignIn } from '../components/Account/SignIn';
 import { SignUp } from '../components/Account/SignUp';
 import { ResolveAuth } from '../ResolveAuth';
 import { NAVROUTES } from './navRoutes';
-import { PlayerSearch } from '../components/Timeline/PlayerSearch/PlayerSearch';
+import { PlayerSearch } from '../components/TrackedPlayers/PlayerSearch/PlayerSearch';
+import { StatusBar, Platform } from 'react-native';
 
 const TimelineStack = createStackNavigator({ Timeline });
 const AccountStack = createStackNavigator({ Account });
@@ -24,17 +26,30 @@ const AccountStack = createStackNavigator({ Account });
 const PlayerSettingsTabs = createMaterialTopTabNavigator(
     {
         [NAVROUTES.PlayerSearch]: {
-            screen: PlayerSearch
+            screen: PlayerSearch,
+            navigationOptions: {
+                tabBarLabel: 'SEARCH PLAYER'
+            }
         },
         [NAVROUTES.TrackedPlayers]: {
-            screen: TrackedPlayers
+            screen: TrackedPlayers,
+            navigationOptions: {
+                tabBarLabel: 'TRACKING'
+            }
         }
     },
     {
         initialRouteName: NAVROUTES.TrackedPlayers,
         tabBarOptions: {
             style: {
-                paddingTop: Constants.statusBarHeight
+                paddingTop: Constants.statusBarHeight,
+                backgroundColor: '#2089dc',
+                height: Platform.OS === 'ios' ? Header.HEIGHT : Header.HEIGHT + StatusBar.currentHeight,
+                elevation: 0,
+                shadowRadius: 0
+            },
+            indicatorStyle: {
+                backgroundColor: '#ff5a5f'
             }
         }
     }
@@ -83,15 +98,7 @@ const MainFlow = createBottomTabNavigator(
     {
         tabBarOptions: {
             activeTintColor: 'tomato',
-            inactiveTintColor: 'grey',
-            style: {
-                backgroundColor: 'white',
-                borderTopWidth: 0,
-                shadowOffset: { width: 5, height: 3 },
-                shadowColor: 'black',
-                shadowOpacity: 0.5,
-                elevation: 5
-            }
+            inactiveTintColor: 'grey'
         }
     }
 );

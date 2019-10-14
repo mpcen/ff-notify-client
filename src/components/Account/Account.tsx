@@ -22,7 +22,7 @@ type AccountProps = IAccountPropsFromState & ITrackedPlayersPropsFromDispatch;
 class AccountUnconnected extends React.Component<AccountProps, {}> {
     static navigationOptions = ({ navigation }: NavigationScreenProps) => {
         return {
-            header: <Header centerComponent={{ text: 'Account Settings', style: { color: '#fff' } }} />
+            header: <Header centerComponent={{ text: 'ACCOUNT', style: { color: '#fff' } }} />
         } as NavigationScreenOptions;
     };
 

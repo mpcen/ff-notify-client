@@ -10,7 +10,7 @@ import * as playerSettingsActions from '../../../store/playerSettings/actions';
 
 import { AppState } from '../../../store';
 import { IPlayerMap, IPlayer } from '../../../store/playerSettings/types';
-import { PlayerSearch } from '../../Timeline/PlayerSearch/PlayerSearch';
+import { PlayerSearch } from '../PlayerSearch/PlayerSearch';
 
 interface ITrackedPlayersPropsFromState {
     trackedPlayers: string[];

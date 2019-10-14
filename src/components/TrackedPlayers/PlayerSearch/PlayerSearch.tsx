@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { TouchableOpacity, View, StyleSheet, FlatList, Dimensions } from 'react-native';
-import { Icon, Overlay, Input, ListItem, Avatar, SearchBar } from 'react-native-elements';
+import { View, StyleSheet, FlatList } from 'react-native';
+import { Input, ListItem, Avatar } from 'react-native-elements';
 import Toast from 'react-native-root-toast';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
