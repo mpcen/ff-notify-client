@@ -108,7 +108,7 @@ function* handleRefetchPlayerNews({ payload }: ReturnType<typeof refetchPlayerNe
 
 // SORT TIMELINE BY
 function* watchSortTimelineBy() {
-    yield takeEvery(SortTimelineByActionTypes.SORT_TIMELINE_BY, handleSortTimelineBy);
+    yield takeLatest(SortTimelineByActionTypes.SORT_TIMELINE_BY, handleSortTimelineBy);
 }
 
 function* handleSortTimelineBy({ payload }: ReturnType<typeof sortTimelineBy>) {
