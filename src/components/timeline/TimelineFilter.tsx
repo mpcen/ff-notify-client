@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { TouchableOpacity, View } from 'react-native';
-import { Icon, Overlay, Text, Button } from 'react-native-elements';
+import { Icon, Overlay, Text, Button, ListItem } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
@@ -41,73 +41,47 @@ class TimelineFilterUnconnected extends React.Component<TimelineFilterProps, ITi
                     onBackdropPress={this._handleBackdropPress}
                     height={275}
                 >
-                    <View
-                        style={{
-                            flex: 1,
-                            alignItems: 'center',
-                            justifyContent: 'center'
-                        }}
-                    >
-                        <Text style={{ fontSize: 20 }}>Sort News Feed By</Text>
+                    <View style={{ alignSelf: 'stretch', flex: 1 }}>
+                        <Text style={{ fontSize: 20, color: '#212121', alignSelf: 'center' }}>Sort News Feed By</Text>
 
-                        <View
-                            style={{
-                                flex: 1,
-                                alignItems: 'flex-start',
-                                marginTop: 20
-                            }}
-                        >
-                            <Button
-                                containerStyle={{ marginBottom: 20, alignSelf: 'stretch' }}
-                                titleStyle={{ marginLeft: 25 }}
+                        <View style={{ flex: 1, justifyContent: 'center' }}>
+                            <ListItem
+                                containerStyle={{
+                                    backgroundColor:
+                                        this.props.timelineSortType === TimelineSortType.Player ? '#f4f4f4' : 'white',
+                                    borderLeftWidth: 3,
+                                    borderColor:
+                                        this.props.timelineSortType === TimelineSortType.Player ? '#2089dc' : 'white'
+                                }}
                                 title="Single Tracked Player"
-                                type={this.props.timelineSortType === TimelineSortType.Player ? 'solid' : 'clear'}
                                 onPress={() => this.props.sortTimelineBy(TimelineSortType.Player)}
-                                icon={
-                                    <MaterialCommunityIcons
-                                        name="account"
-                                        size={25}
-                                        color={
-                                            this.props.timelineSortType === TimelineSortType.Player
-                                                ? 'white'
-                                                : '#2089dc'
-                                        }
-                                    />
-                                }
+                                leftIcon={<MaterialCommunityIcons name="account" size={25} color="#2089dc" />}
                             />
 
-                            <Button
-                                containerStyle={{ marginBottom: 20, alignSelf: 'stretch' }}
-                                titleStyle={{ marginLeft: 25 }}
+                            <ListItem
+                                containerStyle={{
+                                    backgroundColor:
+                                        this.props.timelineSortType === TimelineSortType.Date ? '#f4f4f4' : 'white',
+                                    borderLeftWidth: 3,
+                                    borderColor:
+                                        this.props.timelineSortType === TimelineSortType.Date ? '#2089dc' : 'white'
+                                }}
                                 title="All Tracked Players"
-                                type={this.props.timelineSortType === TimelineSortType.Date ? 'solid' : 'clear'}
                                 onPress={() => this.props.sortTimelineBy(TimelineSortType.Date)}
-                                icon={
-                                    <MaterialCommunityIcons
-                                        name="account-multiple"
-                                        size={25}
-                                        color={
-                                            this.props.timelineSortType === TimelineSortType.Date ? 'white' : '#2089dc'
-                                        }
-                                    />
-                                }
+                                leftIcon={<MaterialCommunityIcons name="account-multiple" size={25} color="#2089dc" />}
                             />
 
-                            <Button
-                                containerStyle={{ alignSelf: 'stretch' }}
-                                titleStyle={{ marginLeft: 25 }}
+                            <ListItem
+                                containerStyle={{
+                                    backgroundColor:
+                                        this.props.timelineSortType === TimelineSortType.All ? '#f4f4f4' : 'white',
+                                    borderLeftWidth: 3,
+                                    borderColor:
+                                        this.props.timelineSortType === TimelineSortType.All ? '#2089dc' : 'white'
+                                }}
                                 title="All Players"
-                                type={this.props.timelineSortType === TimelineSortType.All ? 'solid' : 'clear'}
                                 onPress={() => this.props.sortTimelineBy(TimelineSortType.All)}
-                                icon={
-                                    <MaterialCommunityIcons
-                                        name="account-group"
-                                        size={25}
-                                        color={
-                                            this.props.timelineSortType === TimelineSortType.All ? 'white' : '#2089dc'
-                                        }
-                                    />
-                                }
+                                leftIcon={<MaterialCommunityIcons name="account-group" size={25} color="#2089dc" />}
                             />
                         </View>
                     </View>
