@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { TouchableOpacity, View } from 'react-native';
-import { Icon, Overlay, Text, Button, ListItem } from 'react-native-elements';
+import { Icon, Overlay, Text, ListItem } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
@@ -31,9 +31,40 @@ class TimelineFilterUnconnected extends React.Component<TimelineFilterProps, ITi
 
     render() {
         return (
-            <>
-                <TouchableOpacity onPress={this._handleOnPress}>
-                    <Icon name="filter-list" color="#fff" />
+            <View>
+                <TouchableOpacity
+                    style={{
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        position: 'relative',
+                        width: 54,
+                        height: 44,
+                        right: 10
+                    }}
+                    onPress={this._handleOnPress}
+                >
+                    <Icon
+                        containerStyle={{
+                            position: 'absolute'
+                        }}
+                        size={38}
+                        name="filter-list"
+                        color="#fff"
+                    />
+                    <Icon
+                        type="material-community"
+                        containerStyle={{
+                            position: 'absolute',
+                            bottom: 0,
+                            right: 0,
+                            width: 22,
+                            height: 22,
+                            alignSelf: 'center'
+                        }}
+                        size={14}
+                        name={this._renderFilterTypeIcon()}
+                        color="#fff"
+                    />
                 </TouchableOpacity>
 
                 <Overlay
@@ -86,9 +117,23 @@ class TimelineFilterUnconnected extends React.Component<TimelineFilterProps, ITi
                         </View>
                     </View>
                 </Overlay>
-            </>
+            </View>
         );
     }
+
+    private _renderFilterTypeIcon = () => {
+        if (this.props.timelineSortType === TimelineSortType.All) {
+            return 'account-group';
+        }
+
+        if (this.props.timelineSortType === TimelineSortType.Date) {
+            return 'account-multiple';
+        }
+
+        if (this.props.timelineSortType === TimelineSortType.Player) {
+            return 'account';
+        }
+    };
 
     private _handleOnPress = () => {
         this.setState({ isOverlayVisible: true });

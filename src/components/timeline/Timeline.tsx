@@ -96,7 +96,7 @@ class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> 
 
     private _renderTimeline() {
         return (
-            <>
+            <View>
                 {this.props.timelineSortType === TimelineSortType.Player ? <TrackedPlayerPanel /> : null}
 
                 {this.props.timelineSortType === TimelineSortType.All ? (
@@ -130,7 +130,7 @@ class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> 
                         }}
                     />
                 ) : null}
-            </>
+            </View>
         );
     }
 
