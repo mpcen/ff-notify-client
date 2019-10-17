@@ -77,6 +77,7 @@ class TimelineFilterUnconnected extends React.Component<TimelineFilterProps, ITi
 
                         <View style={{ flex: 1, justifyContent: 'center' }}>
                             <ListItem
+                                disabled={this.props.timelineSortType === TimelineSortType.Player}
                                 containerStyle={{
                                     backgroundColor:
                                         this.props.timelineSortType === TimelineSortType.Player ? '#f4f4f4' : 'white',
@@ -90,6 +91,7 @@ class TimelineFilterUnconnected extends React.Component<TimelineFilterProps, ITi
                             />
 
                             <ListItem
+                                disabled={this.props.timelineSortType === TimelineSortType.Date}
                                 containerStyle={{
                                     backgroundColor:
                                         this.props.timelineSortType === TimelineSortType.Date ? '#f4f4f4' : 'white',
@@ -103,6 +105,7 @@ class TimelineFilterUnconnected extends React.Component<TimelineFilterProps, ITi
                             />
 
                             <ListItem
+                                disabled={this.props.timelineSortType === TimelineSortType.All}
                                 containerStyle={{
                                     backgroundColor:
                                         this.props.timelineSortType === TimelineSortType.All ? '#f4f4f4' : 'white',
