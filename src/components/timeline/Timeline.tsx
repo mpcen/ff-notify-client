@@ -58,7 +58,7 @@ class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> 
             header: (
                 <Header
                     leftComponent={null}
-                    centerComponent={{ text: 'PerSource', style: { color: '#fff', fontSize: 16 } }}
+                    centerComponent={{ text: 'PerSource', style: { color: '#fff', fontSize: 20 } }}
                     rightComponent={<TimelineFilter />}
                 />
             )

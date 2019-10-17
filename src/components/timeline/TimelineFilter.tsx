@@ -38,31 +38,22 @@ class TimelineFilterUnconnected extends React.Component<TimelineFilterProps, ITi
                         alignItems: 'center',
                         position: 'relative',
                         width: 54,
-                        height: 44,
-                        right: 10
+                        height: 44
                     }}
                     onPress={this._handleOnPress}
                 >
                     <Icon
-                        containerStyle={{
-                            position: 'absolute'
-                        }}
-                        size={38}
-                        name="filter-list"
+                        containerStyle={{ position: 'absolute', bottom: 22 }}
+                        type="material-community"
+                        size={18}
+                        name={this._renderFilterTypeIcon()}
                         color="#fff"
                     />
                     <Icon
                         type="material-community"
-                        containerStyle={{
-                            position: 'absolute',
-                            bottom: 0,
-                            right: 0,
-                            width: 22,
-                            height: 22,
-                            alignSelf: 'center'
-                        }}
-                        size={14}
-                        name={this._renderFilterTypeIcon()}
+                        containerStyle={{ position: 'absolute', top: 14 }}
+                        size={28}
+                        name="chevron-down"
                         color="#fff"
                     />
                 </TouchableOpacity>
