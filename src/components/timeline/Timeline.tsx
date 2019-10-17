@@ -115,7 +115,7 @@ class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> 
                 {this.props.timelineSortType === TimelineSortType.All ? (
                     <FlatList
                         data={this.props.playerNews.docs}
-                        keyExtractor={item => `${item.platform}-${item.contentId}`}
+                        keyExtractor={item => `${item.platform}-${item.username}-${item.contentId}`}
                         onRefresh={this._handleRefresh}
                         refreshing={this.props.loading}
                         onEndReached={this._handleOnEndReached}
@@ -128,6 +128,7 @@ class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> 
                 ) : null}
 
                 {this.props.timelineSortType !== TimelineSortType.All &&
+                this.props.trackedPlayers &&
                 this.props.trackedPlayers.length &&
                 this.props.playerNews.docs.length ? (
                     <FlatList

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, View, TouchableOpacity, Linking } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Card, Text, Icon, Avatar, Divider } from 'react-native-elements';
 import { format } from 'date-fns';
 import { WebBrowser } from 'expo';
@@ -17,11 +17,11 @@ interface IPlayerNewsItemProps {
 export class PlayerNewsItem extends React.Component<IPlayerNewsItemProps> {
     render() {
         const { playerNewsItem } = this.props;
-        const { content, contentId, time, username } = playerNewsItem;
+        const { contentId, time, username, platform } = playerNewsItem;
         const { avatarUrl, name, position, teamId } = this.props.player;
 
         return (
-            <Card key={contentId} containerStyle={styles.cardContainer}>
+            <Card containerStyle={styles.cardContainer}>
                 <View style={styles.cardHeaderContainer}>
                     {/* <Reactions /> */}
 
@@ -31,7 +31,7 @@ export class PlayerNewsItem extends React.Component<IPlayerNewsItemProps> {
 
                     <View>
                         <Text style={styles.playerText}>{name}</Text>
-                        <View style={{ flexDirection: 'row', marginLeft: 4 }}>
+                        <View style={styles.playerInfoTextContainer}>
                             <Text style={styles.playerInfoText}>{position}</Text>
                             <Text style={styles.playerInfoText}> | </Text>
                             <Text style={styles.playerInfoText}>{TEAMS[teamId - 1].abbrev}</Text>
@@ -53,23 +53,24 @@ export class PlayerNewsItem extends React.Component<IPlayerNewsItemProps> {
     }
 
     private _renderChildNodes = () => {
-        const { contentId, content, username, childNodes } = this.props.playerNewsItem;
-        const key = username + contentId;
+        const { contentId, content, username, childNodes, platform } = this.props.playerNewsItem;
+        const key = `${platform}-${username}-${contentId}`;
 
         if (!childNodes.length) {
-            return <Text key={username + contentId}>{content}</Text>;
+            return <Text key={`${key}-${content}`}>{content}</Text>;
         }
 
         return childNodes.map((childNode: IChildNode) => {
+            const data = childNode.data.trim();
             if (childNode.contentType === 'text') {
-                return <Text key={key + childNode.data}>{childNode.data.trim()} </Text>;
+                return <Text key={`${key}-${data}`}>{data} </Text>;
             }
 
             if (childNode.username) {
                 const username = childNode.data.replace('/', '@').trim();
                 return (
                     <Text
-                        key={key + childNode.data}
+                        key={`${key}-${username}`}
                         style={styles.contentLink}
                         onPress={() => WebBrowser.openBrowserAsync(`https://twitter.com/${username}`)}
                     >
@@ -79,15 +80,20 @@ export class PlayerNewsItem extends React.Component<IPlayerNewsItemProps> {
             }
 
             if (childNode.data.includes('hashtag')) {
+                const data = childNode.data.replace('/hashtag/', '#').replace('?src=hash', ' ');
                 return (
-                    <Text key={key + childNode.data} style={styles.contentLink}>
-                        {childNode.data.replace('/hashtag/', '#').replace('?src=hash', ' ')}
+                    <Text key={`${key}-${data}}`} style={styles.contentLink}>
+                        {data}
                     </Text>
                 );
             }
 
             return (
-                <Text key={key} style={styles.contentLink} onPress={() => WebBrowser.openBrowserAsync(childNode.data)}>
+                <Text
+                    key={`${key}-${childNode.data}`}
+                    style={styles.contentLink}
+                    onPress={() => WebBrowser.openBrowserAsync(childNode.data)}
+                >
                     {childNode.data + ' '}
                 </Text>
             );
@@ -137,6 +143,10 @@ const styles = StyleSheet.create({
     playerText: {
         marginLeft: 4,
         color: '#444'
+    },
+    playerInfoTextContainer: {
+        flexDirection: 'row',
+        marginLeft: 4
     },
     playerInfoText: {
         fontSize: 10,
