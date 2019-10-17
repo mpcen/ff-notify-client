@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Linking } from 'react-native';
 import { Card, Text, Icon, Avatar, Divider } from 'react-native-elements';
 import { format } from 'date-fns';
-import {} from 'react-navigation';
+import { WebBrowser } from 'expo';
 
 import { Reactions } from './Reactions';
 import { TEAMS } from '../../../util/teams';
@@ -47,9 +47,7 @@ export class PlayerNewsItem extends React.Component<IPlayerNewsItemProps> {
                     <Text style={styles.timeText}>{format(new Date(time), 'MMMM do h:mm a')}</Text>
                 </View>
 
-                <View style={styles.cardContentContainer}>
-                    <Text>{this._renderChildNodes()}</Text>
-                </View>
+                <Text style={styles.cardContentContainer}>{this._renderChildNodes()}</Text>
             </Card>
         );
     }
@@ -68,9 +66,14 @@ export class PlayerNewsItem extends React.Component<IPlayerNewsItemProps> {
             }
 
             if (childNode.username) {
+                const username = childNode.data.replace('/', '@').trim();
                 return (
-                    <Text key={key + childNode.data} style={styles.contentLink}>
-                        {childNode.data.replace('/', '@').trim()}{' '}
+                    <Text
+                        key={key + childNode.data}
+                        style={styles.contentLink}
+                        onPress={() => WebBrowser.openBrowserAsync(`https://twitter.com/${username}`)}
+                    >
+                        {username}{' '}
                     </Text>
                 );
             }
@@ -83,11 +86,11 @@ export class PlayerNewsItem extends React.Component<IPlayerNewsItemProps> {
                 );
             }
 
-            // return (
-            //     <Text key={key} style={styles.contentLink}>
-            //         {childNode.data}
-            //     </Text>
-            // );
+            return (
+                <Text key={key} style={styles.contentLink} onPress={() => WebBrowser.openBrowserAsync(childNode.data)}>
+                    {childNode.data + ' '}
+                </Text>
+            );
         });
     };
 }
@@ -125,7 +128,6 @@ const styles = StyleSheet.create({
     cardContentContainer: {
         flexDirection: 'row',
         flexWrap: 'wrap',
-        flex: 1,
         paddingTop: 10,
         paddingBottom: 10
     },
@@ -145,6 +147,7 @@ const styles = StyleSheet.create({
         marginBottom: 4
     },
     contentLink: {
+        flexDirection: 'row',
         color: '#1DA1F2'
     }
 });

@@ -4,7 +4,8 @@ import {
     createStackNavigator,
     createAppContainer,
     createSwitchNavigator,
-    createMaterialTopTabNavigator
+    createMaterialTopTabNavigator,
+    NavigationScreenOptions
 } from 'react-navigation';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
@@ -34,7 +35,7 @@ const PlayerSettingsTabs = createMaterialTopTabNavigator(
         [NAVROUTES.TrackedPlayers]: {
             screen: TrackedPlayers,
             navigationOptions: {
-                tabBarLabel: 'TRACKING'
+                tabBarLabel: 'TRACKED PLAYERS'
             }
         }
     },
@@ -73,12 +74,12 @@ const MainFlow = createBottomTabNavigator(
                 tabBarIcon: ({ tintColor }: any) => (
                     <MaterialCommunityIcons name="chart-timeline" size={25} color={tintColor} />
                 )
-            }
+            } as NavigationScreenOptions
         },
         [NAVROUTES.PlayerSettings]: {
             screen: PlayerSettingsTabs,
             navigationOptions: {
-                tabBarLabel: 'MY PLAYERS',
+                tabBarLabel: 'PLAYERS',
                 tabBarIcon: ({ tintColor }: any) => (
                     <MaterialCommunityIcons name="account-group" size={25} color={tintColor} />
                 )

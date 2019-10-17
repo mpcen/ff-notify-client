@@ -1,6 +1,13 @@
 import * as React from 'react';
-import { NavigationScreenOptions, NavigationScreenProps } from 'react-navigation';
-import { StyleSheet, View, Text, FlatList, SafeAreaView } from 'react-native';
+import {
+    NavigationScreenOptions,
+    NavigationScreenProps,
+    NavigationScreenProp,
+    NavigationParams,
+    NavigationState,
+    FlatList
+} from 'react-navigation';
+import { StyleSheet, View, Text, InteractionManager } from 'react-native';
 import { Header } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
@@ -14,6 +21,10 @@ import { TrackedPlayerPanel } from './TrackedPlayerPanel/TrackedPlayerPanel';
 import { TimelineFilter } from './TimelineFilter';
 import { IPlayerNews } from '../../store/timeline/types';
 import { PlayerNewsItem } from './PlayerNewsItem/PlayerNewsItem';
+
+interface ITimelineUnconnectedProps {
+    navigation: NavigationScreenProp<NavigationState, NavigationParams>;
+}
 
 interface ITimelinePropsFromState {
     playerNews: IPlayerNews;
@@ -36,10 +47,12 @@ interface ITimelineUnconnectedState {
     page: number;
 }
 
-type TimelineProps = ITimelinePropsFromState & ITimelinePropsFromDispatch;
+type TimelineProps = ITimelinePropsFromState & ITimelinePropsFromDispatch & ITimelineUnconnectedProps;
 type TimelineState = ITimelineUnconnectedState;
 
 class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> {
+    private flatListRef = React.createRef<FlatList<any>>();
+
     static navigationOptions = ({ navigation }: NavigationScreenProps) => {
         return {
             header: (
@@ -118,6 +131,7 @@ class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> 
                 this.props.trackedPlayers.length &&
                 this.props.playerNews.docs.length ? (
                     <FlatList
+                        ref={this.flatListRef}
                         data={this.props.playerNews.docs}
                         keyExtractor={item => `${item.platform}-${item.contentId}`}
                         onRefresh={this._handleRefresh}

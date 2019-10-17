@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
+import { View, StyleSheet, FlatList, TouchableOpacity, Linking, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { Overlay, ListItem, Avatar } from 'react-native-elements';
 import DraggableFlatList, { RenderItemInfo, OnMoveEndInfo } from 'react-native-draggable-flatlist';
@@ -50,14 +50,12 @@ export class TrackedPlayerPanelUnconnected extends React.Component<TrackedPlayer
     }
 
     render() {
-        const { trackedPlayers } = this.props;
-
         return (
             <View>
                 <FlatList
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
-                    data={trackedPlayers}
+                    data={this.props.trackedPlayers}
                     keyExtractor={item => item}
                     extraData={this.state.selectedIndex}
                     renderItem={this._renderTrackedPlayerPanelItem}
