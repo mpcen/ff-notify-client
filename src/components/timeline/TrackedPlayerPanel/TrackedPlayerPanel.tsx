@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { View, StyleSheet, FlatList, TouchableOpacity, Linking, Text } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import { FlatList } from 'react-navigation';
 import { connect } from 'react-redux';
 import { Overlay, ListItem, Avatar } from 'react-native-elements';
 import DraggableFlatList, { RenderItemInfo, OnMoveEndInfo } from 'react-native-draggable-flatlist';
@@ -11,6 +12,10 @@ import * as trackedPlayerPanelActions from '../../../store/trackedPlayerPanel/ac
 
 import { TrackedPlayerPanelItem } from './TrackedPlayerPanelItem';
 import { IPlayerMap } from '../../../store/playerSettings/types';
+
+interface ITrackedPlayerPanelUnconnectedProps {
+    scrollToTop: () => void;
+}
 
 interface ITrackedPlayerPanelItemPropsFromState {
     playerMap: IPlayerMap;
@@ -29,7 +34,9 @@ interface ITrackedPlayerPanelState {
     selectedIndex: number;
 }
 
-type TrackedPlayerPanelProps = ITrackedPlayerPanelItemPropsFromState & ITrackedPlayerPanelPropsFromDispatch;
+type TrackedPlayerPanelProps = ITrackedPlayerPanelItemPropsFromState &
+    ITrackedPlayerPanelPropsFromDispatch &
+    ITrackedPlayerPanelUnconnectedProps;
 type TrackedPanelState = ITrackedPlayerPanelState;
 
 export class TrackedPlayerPanelUnconnected extends React.Component<TrackedPlayerPanelProps, TrackedPanelState> {
@@ -39,7 +46,7 @@ export class TrackedPlayerPanelUnconnected extends React.Component<TrackedPlayer
         selectedIndex: 0
     };
 
-    componentDidUpdate(prevProps: TrackedPlayerPanelProps) {
+    componentDidUpdate(prevProps: TrackedPlayerPanelProps, prevState: TrackedPanelState) {
         if (prevProps.trackedPlayers.length !== this.props.trackedPlayers.length) {
             this.setState({ trackedPlayers: this.props.trackedPlayers });
         }
@@ -86,6 +93,7 @@ export class TrackedPlayerPanelUnconnected extends React.Component<TrackedPlayer
                 onPress={() => {
                     this.setState({ selectedIndex: index });
                     this.props.selectPlayer(index);
+                    this.props.scrollToTop();
                 }}
             />
         );

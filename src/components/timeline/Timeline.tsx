@@ -7,7 +7,7 @@ import {
     NavigationState,
     FlatList
 } from 'react-navigation';
-import { StyleSheet, View, Text, InteractionManager } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { Header } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
@@ -109,8 +109,10 @@ class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> 
 
     private _renderTimeline() {
         return (
-            <View>
-                {this.props.timelineSortType === TimelineSortType.Player ? <TrackedPlayerPanel /> : null}
+            <View style={{ flex: 1 }}>
+                {this.props.timelineSortType === TimelineSortType.Player ? (
+                    <TrackedPlayerPanel scrollToTop={this._scrollToTop} />
+                ) : null}
 
                 {this.props.timelineSortType === TimelineSortType.All ? (
                     <FlatList
@@ -132,6 +134,8 @@ class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> 
                 this.props.trackedPlayers.length &&
                 this.props.playerNews.docs.length ? (
                     <FlatList
+                        extraData={this.props.selectedPlayerIndex}
+                        contentContainerStyle={{ paddingBottom: 10 }}
                         ref={this.flatListRef}
                         data={this.props.playerNews.docs}
                         keyExtractor={item => `${item.platform}-${item.contentId}`}
@@ -148,6 +152,10 @@ class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> 
             </View>
         );
     }
+
+    private _scrollToTop = () => {
+        this.flatListRef.current.scrollToIndex({ animated: true, index: 0 });
+    };
 
     private _handleOnEndReached = () => {
         if (this.props.timelineSortType === TimelineSortType.All) {

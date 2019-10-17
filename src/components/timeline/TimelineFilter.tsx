@@ -85,7 +85,7 @@ class TimelineFilterUnconnected extends React.Component<TimelineFilterProps, ITi
                                         this.props.timelineSortType === TimelineSortType.Player ? '#2089dc' : 'white'
                                 }}
                                 title="Single Tracked Player"
-                                onPress={() => this.props.sortTimelineBy(TimelineSortType.Player)}
+                                onPress={() => this._handleSelectSortType(TimelineSortType.Player)}
                                 leftIcon={<MaterialCommunityIcons name="account" size={25} color="#2089dc" />}
                             />
 
@@ -98,7 +98,7 @@ class TimelineFilterUnconnected extends React.Component<TimelineFilterProps, ITi
                                         this.props.timelineSortType === TimelineSortType.Date ? '#2089dc' : 'white'
                                 }}
                                 title="All Tracked Players"
-                                onPress={() => this.props.sortTimelineBy(TimelineSortType.Date)}
+                                onPress={() => this._handleSelectSortType(TimelineSortType.Date)}
                                 leftIcon={<MaterialCommunityIcons name="account-multiple" size={25} color="#2089dc" />}
                             />
 
@@ -111,7 +111,7 @@ class TimelineFilterUnconnected extends React.Component<TimelineFilterProps, ITi
                                         this.props.timelineSortType === TimelineSortType.All ? '#2089dc' : 'white'
                                 }}
                                 title="All Players"
-                                onPress={() => this.props.sortTimelineBy(TimelineSortType.All)}
+                                onPress={() => this._handleSelectSortType(TimelineSortType.All)}
                                 leftIcon={<MaterialCommunityIcons name="account-group" size={25} color="#2089dc" />}
                             />
                         </View>
@@ -120,6 +120,11 @@ class TimelineFilterUnconnected extends React.Component<TimelineFilterProps, ITi
             </View>
         );
     }
+
+    private _handleSelectSortType = (sortType: TimelineSortType) => {
+        this.setState({ isOverlayVisible: false });
+        this.props.sortTimelineBy(sortType);
+    };
 
     private _renderFilterTypeIcon = () => {
         if (this.props.timelineSortType === TimelineSortType.All) {
