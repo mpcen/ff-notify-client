@@ -36,7 +36,7 @@ const reducer: Reducer<IUserState, Action> = (state = initialState, action) => {
             return {
                 ...state,
                 loading: false,
-                errorMessage: 'Error signing up',
+                errorMessage: action.payload,
                 token: null
             };
 
@@ -54,7 +54,7 @@ const reducer: Reducer<IUserState, Action> = (state = initialState, action) => {
             return {
                 ...state,
                 loading: false,
-                errorMessage: 'Invalid username or password',
+                errorMessage: action.payload,
                 token: null
             };
 

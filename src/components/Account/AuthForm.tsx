@@ -77,14 +77,15 @@ export class AuthForm extends React.Component<AuthFormProps, AuthFormState> {
                 </Text>
 
                 <Spacer>
-                    <Button
-                        title={this.props.submitButtonText}
-                        onPress={() => this.props.onPress({ email, password })}
-                    />
+                    <Button title={this.props.submitButtonText} onPress={() => this._handleSubmit(email, password)} />
                 </Spacer>
             </>
         );
     }
+
+    private _handleSubmit = (email: string, password: string) => {
+        this.props.onPress({ email, password });
+    };
 }
 
 const styles = StyleSheet.create({

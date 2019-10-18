@@ -1,6 +1,11 @@
 import { all, call, fork, put, takeLatest, takeEvery } from 'redux-saga/effects';
 import { AsyncStorage } from 'react-native';
+import { validate } from 'email-validator';
 
+import { validatePassword } from '../../util/validatePassword';
+import { callApi } from '../../api';
+import { NAVROUTES } from '../../navigator/navRoutes';
+import { fetchPlayers } from '../playerSettings/actions';
 import { navigate } from '../../navigator/navigationRef';
 import {
     SignUpActionTypes,
@@ -25,9 +30,6 @@ import {
     initializeSuccess,
     resetUser
 } from './actions';
-import { callApi } from '../../api';
-import { NAVROUTES } from '../../navigator/navRoutes';
-import { fetchPlayers } from '../playerSettings/actions';
 
 // SIGN UP
 function* watchSignUp() {
@@ -35,6 +37,17 @@ function* watchSignUp() {
 }
 
 function* handleSignUp({ payload }: ReturnType<typeof signUp>) {
+    const validEmail = validate(payload.email);
+    const validPassword = validatePassword(payload.password);
+
+    if (!validEmail) {
+        return yield put(signInFail('Invalid email'));
+    }
+
+    if (!validPassword) {
+        return yield put(signInFail('Password must be at least 8 characters'));
+    }
+
     try {
         const res = yield call(callApi, 'POST', 'signup', null, payload);
         const { token, email } = res;
@@ -63,6 +76,12 @@ function* watchSignIn() {
 }
 
 function* handleSignIn({ payload }: ReturnType<typeof signIn>) {
+    const validEmail = validate(payload.email);
+
+    if (!validEmail) {
+        return yield put(signInFail('Invalid email'));
+    }
+
     try {
         const res = yield call(callApi, 'POST', 'signin', null, payload);
         const { token, email } = res;

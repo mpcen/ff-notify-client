@@ -37,7 +37,7 @@ class TimelineFilterUnconnected extends React.Component<TimelineFilterProps, ITi
                         justifyContent: 'center',
                         alignItems: 'center',
                         position: 'relative',
-                        width: 54,
+                        width: 30,
                         height: 44
                     }}
                     onPress={this._handleOnPress}
