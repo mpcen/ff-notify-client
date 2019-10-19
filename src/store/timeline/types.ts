@@ -52,7 +52,7 @@ export interface IPlayerNews {
 }
 
 export enum TimelineSortType {
-    Date,
-    Player,
-    All
+    Date, // 0
+    Player, // 1
+    All // 2
 }

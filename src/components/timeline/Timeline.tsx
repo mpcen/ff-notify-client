@@ -98,7 +98,7 @@ class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> 
             <View style={{ flex: 1 }}>
                 {this.props.timelineSortType !== TimelineSortType.All && !this.props.trackedPlayers.length ? (
                     <View style={styles.centeredMessageContainer}>
-                        <Text>Track some players to receive the latest news</Text>
+                        <Text>Get started by tracking some players</Text>
                     </View>
                 ) : (
                     this._renderTimeline()

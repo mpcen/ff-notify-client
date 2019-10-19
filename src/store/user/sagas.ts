@@ -48,6 +48,10 @@ function* handleSignUp({ payload }: ReturnType<typeof signUp>) {
         return yield put(signInFail('Password must be at least 8 characters'));
     }
 
+    if (payload.password !== payload.passwordConfirm) {
+        return yield put(signInFail('Passwords do not match'));
+    }
+
     try {
         const res = yield call(callApi, 'POST', 'signup', null, payload);
         const { token, email } = res;
@@ -77,9 +81,14 @@ function* watchSignIn() {
 
 function* handleSignIn({ payload }: ReturnType<typeof signIn>) {
     const validEmail = validate(payload.email);
+    const validPassword = validatePassword(payload.password);
 
     if (!validEmail) {
         return yield put(signInFail('Invalid email'));
+    }
+
+    if (!validPassword) {
+        return yield put(signInFail('Invalid password'));
     }
 
     try {

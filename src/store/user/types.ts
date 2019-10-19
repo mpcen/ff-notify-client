@@ -3,6 +3,7 @@ import { TimelineSortType } from '../timeline/types';
 export interface IUser {
     email: string;
     password: string;
+    passwordConfirm?: string;
 }
 
 export interface IUserPreferences {

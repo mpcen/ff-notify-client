@@ -14,7 +14,7 @@ const initialState: IUserState = {
     loading: true,
     errorMessage: '',
     userPreferences: {
-        timelineSortType: TimelineSortType.Date,
+        timelineSortType: TimelineSortType.All,
         trackedPlayers: [],
         userId: ''
     }

@@ -10,11 +10,13 @@ interface IAuthFormProps {
     headerText: string;
     submitButtonText: string;
     onPress: typeof userActions.signUp | typeof userActions.signIn;
+    isSignUp?: boolean;
 }
 
 interface IAuthFormState {
     email: string;
     password: string;
+    passwordConfirm?: string;
 }
 
 interface IAuthFormPropsFromState {
@@ -33,19 +35,12 @@ export class AuthForm extends React.Component<AuthFormProps, AuthFormState> {
 
     public state: IAuthFormState = {
         email: '',
-        password: ''
-    };
-
-    private handleEmailChange = (text: string) => {
-        this.setState({ email: text });
-    };
-
-    private handlePasswordChange = (text: string) => {
-        this.setState({ password: text });
+        password: '',
+        passwordConfirm: ''
     };
 
     render() {
-        const { email, password } = this.state;
+        const { email, password, passwordConfirm } = this.state;
 
         return (
             <>
@@ -72,19 +67,48 @@ export class AuthForm extends React.Component<AuthFormProps, AuthFormState> {
                     onChangeText={this.handlePasswordChange}
                 />
 
+                {this.props.isSignUp && (
+                    <>
+                        <Spacer />
+                        <Input
+                            secureTextEntry
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            label="Confirm Password"
+                            value={passwordConfirm}
+                            onChangeText={this.handlePasswordConfirmChange}
+                        />
+                    </>
+                )}
+
                 <Text style={this.props.errorMessage ? styles.errorMessage : styles.message}>
                     {this.props.errorMessage}
                 </Text>
 
                 <Spacer>
-                    <Button title={this.props.submitButtonText} onPress={() => this._handleSubmit(email, password)} />
+                    <Button
+                        title={this.props.submitButtonText}
+                        onPress={() => this._handleSubmit(email, password, passwordConfirm)}
+                    />
                 </Spacer>
             </>
         );
     }
 
-    private _handleSubmit = (email: string, password: string) => {
-        this.props.onPress({ email, password });
+    private handleEmailChange = (text: string) => {
+        this.setState({ email: text });
+    };
+
+    private handlePasswordChange = (text: string) => {
+        this.setState({ password: text });
+    };
+
+    private handlePasswordConfirmChange = (text: string) => {
+        this.setState({ passwordConfirm: text });
+    };
+
+    private _handleSubmit = (email: string, password: string, passwordConfirm?: string) => {
+        this.props.onPress({ email, password, passwordConfirm });
     };
 }
 

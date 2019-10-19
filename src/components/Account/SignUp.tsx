@@ -46,6 +46,7 @@ class SignUpUnconnected extends React.Component<SignUpProps, {}> {
                     submitButtonText="Sign up"
                     errorMessage={this.props.errorMessage}
                     onPress={this.props.signUp}
+                    isSignUp
                 />
 
                 <AuthNavLink

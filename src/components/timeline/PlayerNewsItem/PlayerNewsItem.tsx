@@ -17,7 +17,7 @@ interface IPlayerNewsItemProps {
 export class PlayerNewsItem extends React.Component<IPlayerNewsItemProps> {
     render() {
         const { playerNewsItem } = this.props;
-        const { contentId, time, username, platform } = playerNewsItem;
+        const { time, username } = playerNewsItem;
         const { avatarUrl, name, position, teamId } = this.props.player;
 
         return (
@@ -60,17 +60,18 @@ export class PlayerNewsItem extends React.Component<IPlayerNewsItemProps> {
             return <Text key={`${key}-${content}`}>{content}</Text>;
         }
 
-        return childNodes.map((childNode: IChildNode) => {
+        return childNodes.map((childNode: IChildNode, index: number) => {
+            const subKey = `${key}-${index}`;
             const data = childNode.data.trim();
             if (childNode.contentType === 'text') {
-                return <Text key={`${key}-${data}`}>{data} </Text>;
+                return <Text key={`${subKey}-${data}`}>{data} </Text>;
             }
 
             if (childNode.username) {
                 const username = childNode.data.replace('/', '@').trim();
                 return (
                     <Text
-                        key={`${key}-${username}`}
+                        key={`${subKey}-${username}`}
                         style={styles.contentLink}
                         onPress={() => WebBrowser.openBrowserAsync(`https://twitter.com/${username}`)}
                     >
@@ -82,7 +83,7 @@ export class PlayerNewsItem extends React.Component<IPlayerNewsItemProps> {
             if (childNode.data.includes('hashtag')) {
                 const data = childNode.data.replace('/hashtag/', '#').replace('?src=hash', ' ');
                 return (
-                    <Text key={`${key}-${data}}`} style={styles.contentLink}>
+                    <Text key={`${subKey}-${data}}`} style={styles.contentLink}>
                         {data}
                     </Text>
                 );
@@ -90,7 +91,7 @@ export class PlayerNewsItem extends React.Component<IPlayerNewsItemProps> {
 
             return (
                 <Text
-                    key={`${key}-${childNode.data}`}
+                    key={`${subKey}-${childNode.data}`}
                     style={styles.contentLink}
                     onPress={() => WebBrowser.openBrowserAsync(childNode.data)}
                 >
