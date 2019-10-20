@@ -5,7 +5,14 @@ import * as Actions from './actions';
 
 type Action = ActionType<typeof Actions>;
 
-import { IUserState, SignUpActionTypes, SignInActionTypes, RESET_USER, UserPreferencesActionTypes } from './types';
+import {
+    IUserState,
+    SignUpActionTypes,
+    SignInActionTypes,
+    RESET_USER,
+    UserPreferencesActionTypes,
+    ResetPasswordActionTypes
+} from './types';
 import { TimelineSortType } from '../timeline/types';
 
 const initialState: IUserState = {
@@ -56,6 +63,22 @@ const reducer: Reducer<IUserState, Action> = (state = initialState, action) => {
                 loading: false,
                 errorMessage: action.payload,
                 token: null
+            };
+
+        // RESET PASSWORD
+        case ResetPasswordActionTypes.RESET_PASSWORD_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                errorMessage: '',
+                email: action.payload
+            };
+
+        case ResetPasswordActionTypes.RESET_PASSWORD_FAIL:
+            return {
+                ...state,
+                loading: false,
+                errorMessage: action.payload
             };
 
         // FETCH USER PREFERENCES

@@ -8,7 +8,8 @@ import {
     RESET_USER,
     UserPreferencesActionTypes,
     IUserPreferences,
-    InitializeActionTypes
+    InitializeActionTypes,
+    ResetPasswordActionTypes
 } from './types';
 
 export const reset = () => {
@@ -52,6 +53,19 @@ export const signOutSuccess = () => {
 
 export const signOutFail = (message: string) => {
     return action(SignOutActionTypes.SIGN_OUT_FAIL, message);
+};
+
+// RESET PASSWORD
+export const resetPassword = (email: string) => {
+    return action(ResetPasswordActionTypes.RESET_PASSWORD, email);
+};
+
+export const resetPasswordSuccess = (message: string) => {
+    return action(ResetPasswordActionTypes.RESET_PASSWORD_SUCCESS, message);
+};
+
+export const resetPasswordFail = (message: string) => {
+    return action(ResetPasswordActionTypes.RESET_PASSWORD_FAIL, message);
 };
 
 // FETCH USER PREFERENCES

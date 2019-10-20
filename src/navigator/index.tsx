@@ -16,6 +16,7 @@ import { TrackedPlayers } from '../components/TrackedPlayers/TrackedPlayers/Trac
 import { Account } from '../components/Account/Account';
 import { SignIn } from '../components/Account/SignIn';
 import { SignUp } from '../components/Account/SignUp';
+import { ForgotPassword } from '../components/Account/ForgotPassword';
 import { ResolveAuth } from '../ResolveAuth';
 import { NAVROUTES } from './navRoutes';
 import { PlayerSearch } from '../components/TrackedPlayers/PlayerSearch/PlayerSearch';
@@ -62,6 +63,9 @@ const LogInStack = createStackNavigator({
     },
     [NAVROUTES.SignIn]: {
         screen: SignIn
+    },
+    [NAVROUTES.ForgotPassword]: {
+        screen: ForgotPassword
     }
 });
 

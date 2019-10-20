@@ -49,6 +49,14 @@ class SignInUnconnected extends React.Component<SignInProps, {}> {
                 />
 
                 <AuthNavLink
+                    text="Forgot password"
+                    onPress={() => {
+                        this.props.navigation.navigate(NAVROUTES.ForgotPassword);
+                        this.props.reset();
+                    }}
+                />
+
+                <AuthNavLink
                     text="Don't have an account? Sign up"
                     onPress={() => {
                         this.props.navigation.navigate(NAVROUTES.SignUp);

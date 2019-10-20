@@ -12,7 +12,8 @@ import {
     SignInActionTypes,
     SignOutActionTypes,
     UserPreferencesActionTypes,
-    InitializeActionTypes
+    InitializeActionTypes,
+    ResetPasswordActionTypes
 } from './types';
 import {
     signUp,
@@ -28,7 +29,10 @@ import {
     fetchUserPreferences,
     initializeFail,
     initializeSuccess,
-    resetUser
+    resetUser,
+    resetPassword,
+    resetPasswordFail,
+    resetPasswordSuccess
 } from './actions';
 
 // SIGN UP
@@ -126,6 +130,34 @@ function* handleSignOut() {
     }
 }
 
+// RESET PASSWORD
+function* watchResetPassword() {
+    yield takeLatest(ResetPasswordActionTypes.RESET_PASSWORD, handleResetPassword);
+}
+
+function* handleResetPassword({ payload }: ReturnType<typeof resetPassword>) {
+    const email = payload;
+    const validEmail = validate(email);
+
+    if (!validEmail) {
+        return yield put(resetPasswordFail('Invalid email'));
+    }
+
+    try {
+        const res = yield call(callApi, 'POST', 'resetpassword', null, { email });
+
+        if (res.error) {
+            yield put(resetPasswordFail('Invalid email or email does not exist'));
+        } else {
+            yield put(resetPasswordSuccess(email));
+
+            navigate(NAVROUTES.SignIn);
+        }
+    } catch (err) {
+        yield put(resetPasswordFail('Invalid email or email does not exist'));
+    }
+}
+
 // FETCH USER PREFERENCES
 function* watchFetchUserPreferences() {
     yield takeEvery(UserPreferencesActionTypes.FETCH_USER_PREFERENCES, handleFetchUserPreferences);
@@ -171,6 +203,7 @@ export function* userSaga() {
         fork(watchSignIn),
         fork(watchSignOut),
         fork(watchFetchUserPreferences),
-        fork(watchInitialize)
+        fork(watchInitialize),
+        fork(watchResetPassword)
     ]);
 }
