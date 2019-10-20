@@ -96,7 +96,7 @@ function* handleSignIn({ payload }: ReturnType<typeof signIn>) {
         const { token, email } = res;
 
         if (res.error) {
-            yield put(signInFail(res.error));
+            yield put(signInFail('Invalid email or password'));
         } else {
             yield call(AsyncStorage.setItem, 'persource-auth-token', token);
             yield put(signInSuccess(token, email));
@@ -104,11 +104,7 @@ function* handleSignIn({ payload }: ReturnType<typeof signIn>) {
             navigate(NAVROUTES.ResolveAuth);
         }
     } catch (err) {
-        if (err instanceof Error) {
-            yield put(signInFail(err.stack));
-        } else {
-            yield put(signInFail('Invalid username or password'));
-        }
+        yield put(signInFail('Invalid email or password'));
     }
 }
 
