@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
+import { View, StyleSheet, FlatList, Keyboard } from 'react-native';
 import { Input, ListItem, Avatar } from 'react-native-elements';
 import Toast from 'react-native-root-toast';
 import { connect } from 'react-redux';
@@ -84,6 +84,7 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
                     data={this.state.filteredPlayers}
                     extraData={this.props.trackedPlayers}
                     keyExtractor={item => item.id}
+                    keyboardShouldPersistTaps="handled"
                     renderItem={({ item }) => this._renderPlayerListItem(item)}
                 />
 
@@ -134,6 +135,8 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
     };
 
     private _handleTrackPlayer = (selectedPlayer: string) => {
+        Keyboard.dismiss();
+
         if (!this.props.trackedPlayers.some(playerId => playerId === selectedPlayer)) {
             this.props.trackPlayer(selectedPlayer);
             this.setState({ selectedPlayer });
