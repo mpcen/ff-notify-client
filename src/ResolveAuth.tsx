@@ -1,7 +1,9 @@
 import * as React from 'react';
-import { View, AsyncStorage } from 'react-native';
+import { View, AsyncStorage, ActivityIndicator } from 'react-native';
+import { Image } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
+import { AppLoading, SplashScreen } from 'expo';
 
 import * as userPreferencesActions from './store/user/actions';
 import { AppState } from './store';
@@ -20,7 +22,8 @@ interface IResolveAuthPropsFromDispatch {
 }
 
 interface IResolveAuthUnconnectedState {
-    initialLoadComplete: boolean;
+    isAppReady: boolean;
+    isSplashReady: boolean;
 }
 
 type ResolveAuthProps = IResolveAuthPropsFromDispatch & IResolveAuthPropsFromState;
@@ -28,32 +31,58 @@ type ResolveAuthState = IResolveAuthUnconnectedState;
 
 class ResolveAuthUnconnected extends React.Component<ResolveAuthProps, ResolveAuthState> {
     state: ResolveAuthState = {
-        initialLoadComplete: false
+        isAppReady: false,
+        isSplashReady: false
     };
 
-    async componentDidMount() {
-        const token = await AsyncStorage.getItem('persource-auth-token');
-
-        if (token) {
-            await this.props.initialize();
-        } else {
-            navigate(NAVROUTES.LogInStack);
-        }
-    }
-
-    componentDidUpdate(prevProps: ResolveAuthProps, prevState: ResolveAuthState) {
-        if (!this.props.loading && !prevState.initialLoadComplete) {
-            this.setState({ initialLoadComplete: true });
-
-            // APP ENTRY AFTER SIGN IN
-            navigate(NAVROUTES.MainFlow);
-            // navigate(NAVROUTES.Account);
+    componentDidUpdate() {
+        if (!this.props.loading && this.state.isAppReady) {
+            return navigate(NAVROUTES.MainFlow);
         }
     }
 
     render() {
+        if (!this.state.isSplashReady) {
+            return (
+                <AppLoading
+                    startAsync={this._cacheSplashResourcesAsync}
+                    onFinish={() => this.setState({ isSplashReady: true })}
+                    onError={console.warn}
+                    autoHideSplash={false}
+                />
+            );
+        }
+
+        if (!this.state.isAppReady) {
+            return (
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <Image source={require('./assets/img/image.png')} onLoad={this._cacheResourcesAsync} />
+                    <ActivityIndicator size="large" />
+                </View>
+            );
+        }
         return <View />;
     }
+
+    private _cacheSplashResourcesAsync = async () => {
+        await Promise.all([this.props.initialize(), new Promise(resolve => setTimeout(resolve, 25))]);
+    };
+
+    private _cacheResourcesAsync = async () => {
+        SplashScreen.hide();
+
+        const token = await AsyncStorage.getItem('persource-auth-token');
+
+        if (token) {
+            await this.props.initialize();
+            await Promise.all([this.props.initialize(), new Promise(resolve => setTimeout(resolve, 1500))]);
+
+            this.setState({ isAppReady: true });
+        } else {
+            await Promise.all([new Promise(resolve => setTimeout(resolve, 1500))]);
+            navigate(NAVROUTES.LogInStack);
+        }
+    };
 }
 
 const mapStateToProps = ({ user, playerSettings }: AppState): IResolveAuthPropsFromState => {
