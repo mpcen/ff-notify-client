@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { View, AsyncStorage, ActivityIndicator } from 'react-native';
-import { Image } from 'react-native-elements';
+import { Image, Text } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { AppLoading, SplashScreen } from 'expo';
@@ -55,9 +55,13 @@ class ResolveAuthUnconnected extends React.Component<ResolveAuthProps, ResolveAu
 
         if (!this.state.isAppReady) {
             return (
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <Image source={require('./assets/img/image.png')} onLoad={this._cacheResourcesAsync} />
-                    <ActivityIndicator size="large" />
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#1DA1F2' }}>
+                    <Image
+                        resizeMode="center"
+                        source={require('./assets/img/image.png')}
+                        onLoad={this._cacheResourcesAsync}
+                    />
+                    <ActivityIndicator size="large" color="white" />
                 </View>
             );
         }
@@ -65,7 +69,7 @@ class ResolveAuthUnconnected extends React.Component<ResolveAuthProps, ResolveAu
     }
 
     private _cacheSplashResourcesAsync = async () => {
-        await Promise.all([this.props.initialize(), new Promise(resolve => setTimeout(resolve, 25))]);
+        await Promise.all([new Promise(resolve => setTimeout(resolve, 1500))]);
     };
 
     private _cacheResourcesAsync = async () => {
