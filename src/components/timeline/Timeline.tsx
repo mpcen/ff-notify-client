@@ -158,16 +158,16 @@ class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> 
     };
 
     private _handleOnEndReached = () => {
-        const hasNextPage = this.props.playerNews.page < this.props.playerNews.pages;
-        const nextPage = hasNextPage ? this.props.playerNews.page + 1 : -1;
-
         if (this.props.timelineSortType === TimelineSortType.All) {
-            if (hasNextPage) {
-                this.props.fetchAllPlayerNews(nextPage);
+            if (this.props.playerNews.nextPage) {
+                this.props.fetchAllPlayerNews(this.props.playerNews.nextPage);
             }
         } else {
-            if (hasNextPage) {
-                this.props.fetchPlayerNews(nextPage, this.props.trackedPlayers[this.props.selectedPlayerIndex]);
+            if (this.props.playerNews.nextPage) {
+                this.props.fetchPlayerNews(
+                    this.props.playerNews.nextPage,
+                    this.props.trackedPlayers[this.props.selectedPlayerIndex]
+                );
             }
         }
     };

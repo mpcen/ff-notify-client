@@ -5,6 +5,7 @@ import { timelineSaga } from './timeline/sagas';
 import { playerSettingsSaga } from './playerSettings/sagas';
 import { userSaga } from './user/sagas';
 
+import { SignOutActionTypes } from './user/types';
 import { timelineReducer, ITimelineState } from './timeline/reducer';
 import { playerSettingsReducer } from './playerSettings/reducer';
 import { userReducer } from './user/reducer';

@@ -11,8 +11,10 @@ type Action = ActionType<typeof TimelineActions & typeof UserActions>;
 const initialState: ITimelineState = {
     playerNews: {
         docs: [],
+        nextPage: 2,
         page: 1,
-        pages: 2
+        prevPage: null,
+        totalPages: 2
     },
     loading: true,
     error: false
@@ -31,8 +33,10 @@ const reducer: Reducer<ITimelineState, Action> = (state = initialState, action) 
             return {
                 playerNews: {
                     docs: [...state.playerNews.docs, ...action.payload.docs] as IPlayerNewsItem[],
+                    nextPage: action.payload.nextPage,
                     page: action.payload.page,
-                    pages: action.payload.pages
+                    prevPage: action.payload.prevPage,
+                    totalPages: action.payload.totalPages
                 },
                 error: false,
                 loading: false
@@ -79,8 +83,10 @@ const reducer: Reducer<ITimelineState, Action> = (state = initialState, action) 
             return {
                 playerNews: {
                     docs: [...state.playerNews.docs, ...action.payload.docs] as IPlayerNewsItem[],
+                    nextPage: action.payload.nextPage,
                     page: action.payload.page,
-                    pages: action.payload.pages
+                    prevPage: action.payload.prevPage,
+                    totalPages: action.payload.totalPages
                 },
                 error: false,
                 loading: false

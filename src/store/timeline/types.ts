@@ -46,7 +46,9 @@ export interface IChildNode {
 export interface IPlayerNews {
     docs: IPlayerNewsItem[];
     page: number | null;
-    pages: number;
+    totalPages: number;
+    prevPage: number | null;
+    nextPage: number;
 }
 
 export enum TimelineSortType {
