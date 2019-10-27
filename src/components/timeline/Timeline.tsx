@@ -117,15 +117,14 @@ class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> 
                 {this.props.timelineSortType === TimelineSortType.All ? (
                     <FlatList
                         data={this.props.playerNews.docs}
-                        keyExtractor={item => `${item.platform}-${item.username}-${item.contentId}`}
+                        keyExtractor={item => item._id}
                         onRefresh={this._handleRefresh}
                         refreshing={this.props.loading}
                         onEndReached={this._handleOnEndReached}
-                        renderItem={({ item }) => {
-                            return (
-                                <PlayerNewsItem player={this.props.playerMap[item.player.id]} playerNewsItem={item} />
-                            );
-                        }}
+                        onEndReachedThreshold={50}
+                        renderItem={({ item }) => (
+                            <PlayerNewsItem player={this.props.playerMap[item.player.id]} playerNewsItem={item} />
+                        )}
                     />
                 ) : null}
 
@@ -138,15 +137,14 @@ class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> 
                         contentContainerStyle={{ paddingBottom: 10 }}
                         ref={this.flatListRef}
                         data={this.props.playerNews.docs}
-                        keyExtractor={item => `${item.platform}-${item.contentId}`}
+                        keyExtractor={item => item._id}
                         onRefresh={this._handleRefresh}
                         refreshing={this.props.loading}
                         onEndReached={this._handleOnEndReached}
-                        renderItem={({ item }) => {
-                            return (
-                                <PlayerNewsItem player={this.props.playerMap[item.player.id]} playerNewsItem={item} />
-                            );
-                        }}
+                        onEndReachedThreshold={50}
+                        renderItem={({ item }) => (
+                            <PlayerNewsItem player={this.props.playerMap[item.player.id]} playerNewsItem={item} />
+                        )}
                     />
                 ) : null}
             </View>
@@ -158,16 +156,18 @@ class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> 
     };
 
     private _handleOnEndReached = () => {
-        if (this.props.timelineSortType === TimelineSortType.All) {
-            if (this.props.playerNews.nextPage) {
-                this.props.fetchAllPlayerNews(this.props.playerNews.nextPage);
-            }
-        } else {
-            if (this.props.playerNews.nextPage) {
-                this.props.fetchPlayerNews(
-                    this.props.playerNews.nextPage,
-                    this.props.trackedPlayers[this.props.selectedPlayerIndex]
-                );
+        if (!this.props.loading) {
+            if (this.props.timelineSortType === TimelineSortType.All) {
+                if (this.props.playerNews.nextPage) {
+                    this.props.fetchAllPlayerNews(this.props.playerNews.nextPage);
+                }
+            } else {
+                if (this.props.playerNews.nextPage) {
+                    this.props.fetchPlayerNews(
+                        this.props.playerNews.nextPage,
+                        this.props.trackedPlayers[this.props.selectedPlayerIndex]
+                    );
+                }
             }
         }
     };

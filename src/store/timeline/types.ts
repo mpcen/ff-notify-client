@@ -26,6 +26,7 @@ export interface ITimelineState {
 }
 
 export interface IPlayerNewsItem {
+    _id: string;
     platform: string;
     username: string;
     contentId: string;
