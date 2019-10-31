@@ -10,6 +10,7 @@ import { IPlayerMap, IPlayer } from '../../../store/playerSettings/types';
 import { AppState } from '../../../store';
 
 import { InputClearer } from '../../common/InputClearer';
+import { TEAMS } from '../../../util/teams';
 
 interface IPlayerSearchPropsFromState {
     playerMap: IPlayerMap;
@@ -59,7 +60,7 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
         return (
             <View>
                 <Input
-                    placeholder="Search for a player to track"
+                    placeholder={`Try "Tom Brady"`}
                     autoCapitalize="none"
                     autoCorrect={false}
                     value={this.state.searchText}
@@ -116,12 +117,12 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
     };
 
     private _renderPlayerListItem = (player: IPlayer) => {
-        const { id, name, avatarUrl, position } = player;
+        const { id, name, avatarUrl, position, teamId } = player;
         return (
             <ListItem
                 key={id}
                 title={name}
-                subtitle={position}
+                subtitle={`${position} | ${TEAMS[teamId - 1].abbrev}`}
                 bottomDivider
                 onPress={() => this._handleTrackPlayer(id)}
                 leftAvatar={
