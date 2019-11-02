@@ -53,7 +53,7 @@ function* handleFetchPlayers() {
 
 // TRACK PLAYER
 function* watchTrackPlayer() {
-    yield takeLatest(TrackPlayerActionTypes.TRACK_PLAYER, handleTrackPlayer);
+    yield takeEvery(TrackPlayerActionTypes.TRACK_PLAYER, handleTrackPlayer);
 }
 
 function* handleTrackPlayer({ payload }: ReturnType<typeof trackPlayer>) {

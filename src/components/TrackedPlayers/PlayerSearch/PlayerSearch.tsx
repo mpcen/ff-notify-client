@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { View, StyleSheet, FlatList, Keyboard } from 'react-native';
-import { Input, ListItem, Avatar } from 'react-native-elements';
+import { View, FlatList, Keyboard } from 'react-native';
+import { Input } from 'react-native-elements';
 import Toast from 'react-native-root-toast';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
@@ -10,7 +10,7 @@ import { IPlayerMap, IPlayer } from '../../../store/playerSettings/types';
 import { AppState } from '../../../store';
 
 import { InputClearer } from '../../common/InputClearer';
-import { TEAMS } from '../../../util/teams';
+import { TrackedPlayerCard } from '../common/TrackedPlayerCard';
 
 interface IPlayerSearchPropsFromState {
     playerMap: IPlayerMap;
@@ -45,7 +45,7 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
         isToastVisible: false
     };
 
-    componentDidUpdate(prevProps: PlayerSearchProps, prevState: PlayerSearchState) {
+    componentDidUpdate(prevProps: PlayerSearchProps) {
         if (this.props.trackedPlayers.length > prevProps.trackedPlayers.length) {
             this.setState({
                 isToastVisible: true
@@ -86,7 +86,7 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
                     extraData={this.props.trackedPlayers}
                     keyExtractor={item => item.id}
                     keyboardShouldPersistTaps="handled"
-                    renderItem={({ item }) => this._renderPlayerListItem(item)}
+                    renderItem={({ item }) => this._renderPlayerListItem(item.id)}
                 />
 
                 {this.state.isToastVisible && this.state.selectedPlayer && (
@@ -116,21 +116,14 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
         return filteredPlayers;
     };
 
-    private _renderPlayerListItem = (player: IPlayer) => {
-        const { id, name, avatarUrl, position, teamId } = player;
+    private _renderPlayerListItem = (playerId: string) => {
         return (
-            <ListItem
-                key={id}
-                title={name}
-                subtitle={`${position} | ${TEAMS[teamId - 1].abbrev}`}
-                bottomDivider
-                onPress={() => this._handleTrackPlayer(id)}
-                leftAvatar={
-                    <Avatar rounded size="medium" avatarStyle={styles.avatarStyle} source={{ uri: avatarUrl }} />
-                }
-                rightIcon={
-                    this.props.trackedPlayers.some(playerId => playerId === id) ? { name: 'remove' } : { name: 'add' }
-                }
+            <TrackedPlayerCard
+                key={playerId}
+                playerId={playerId}
+                tracked={false}
+                disabled={this.props.trackedPlayers.some(_playerId => _playerId === playerId) ? true : false}
+                onPress={() => this._handleTrackPlayer(playerId)}
             />
         );
     };
@@ -144,13 +137,6 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
         }
     };
 }
-
-const styles = StyleSheet.create({
-    avatarStyle: {
-        backgroundColor: '#eee',
-        borderColor: 'white'
-    }
-});
 
 const mapStateToProps = ({ playerSettings, user }: AppState) => {
     return {

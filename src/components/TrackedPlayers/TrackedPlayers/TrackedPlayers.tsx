@@ -1,5 +1,5 @@
 import React from 'react';
-import { Header, ListItem, Avatar, Text } from 'react-native-elements';
+import { Header, Text } from 'react-native-elements';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { NavigationScreenProps, NavigationScreenOptions } from 'react-navigation';
 import { connect } from 'react-redux';
@@ -9,8 +9,9 @@ import Toast from 'react-native-root-toast';
 import * as playerSettingsActions from '../../../store/playerSettings/actions';
 
 import { AppState } from '../../../store';
-import { IPlayerMap, IPlayer } from '../../../store/playerSettings/types';
+import { IPlayerMap } from '../../../store/playerSettings/types';
 import { PlayerSearch } from '../PlayerSearch/PlayerSearch';
+import { TrackedPlayerCard } from '../common/TrackedPlayerCard';
 
 interface ITrackedPlayersPropsFromState {
     trackedPlayers: string[];
@@ -64,7 +65,7 @@ class TrackedPlayersUnconnected extends React.Component<TrackedPlayersProps, Tra
                     <FlatList
                         data={this.props.trackedPlayers}
                         keyExtractor={playerId => playerId}
-                        renderItem={({ item }) => this._renderPlayerListItem(this.props.playerMap[item])}
+                        renderItem={({ item }) => this._renderPlayerListItem(item)}
                     />
                 ) : (
                     <View style={styles.centeredMessageContainer}>
@@ -87,20 +88,13 @@ class TrackedPlayersUnconnected extends React.Component<TrackedPlayersProps, Tra
         );
     }
 
-    private _renderPlayerListItem = (player: IPlayer) => {
-        const { id, name, avatarUrl, position } = player;
-
+    private _renderPlayerListItem = (playerId: string) => {
         return (
-            <ListItem
-                key={id}
-                onPress={() => this._handleUntrackPlayer(id)}
-                leftAvatar={
-                    <Avatar rounded size="medium" avatarStyle={styles.avatarStyle} source={{ uri: avatarUrl }} />
-                }
-                title={name}
-                subtitle={position}
-                rightIcon={{ name: 'remove' }}
-                bottomDivider
+            <TrackedPlayerCard
+                key={playerId}
+                playerId={playerId}
+                tracked={true}
+                onPress={() => this._handleUntrackPlayer(playerId)}
             />
         );
     };
@@ -112,10 +106,6 @@ class TrackedPlayersUnconnected extends React.Component<TrackedPlayersProps, Tra
 }
 
 const styles = StyleSheet.create({
-    avatarStyle: {
-        backgroundColor: '#eee',
-        borderColor: 'white'
-    },
     centeredMessageContainer: {
         flex: 1,
         justifyContent: 'center',

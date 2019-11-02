@@ -58,7 +58,9 @@ class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> 
         return {
             header: (
                 <Header
-                    containerStyle={{ height: Platform.OS === 'ios' ? 44 + Constants.statusBarHeight : 56 + StatusBar.currentHeight }}
+                    containerStyle={{
+                        height: Platform.OS === 'ios' ? 44 + Constants.statusBarHeight : 56 + StatusBar.currentHeight
+                    }}
                     leftComponent={null}
                     centerComponent={{ text: 'PerSource', style: { color: '#fff', fontSize: 20 } }}
                     rightComponent={<TimelineFilter />}
