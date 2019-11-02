@@ -46,7 +46,7 @@ const PlayerSettingsTabs = createMaterialTopTabNavigator(
             style: {
                 paddingTop: Constants.statusBarHeight,
                 backgroundColor: '#2089dc',
-                height: Platform.OS === 'ios' ? Header.HEIGHT : Header.HEIGHT + StatusBar.currentHeight,
+                height: Platform.OS === 'ios' ? 44 + Constants.statusBarHeight : 56 + StatusBar.currentHeight,
                 elevation: 0,
                 shadowRadius: 0
             },

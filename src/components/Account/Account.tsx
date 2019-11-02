@@ -1,9 +1,10 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Platform, StatusBar } from 'react-native';
 import { Header, Button } from 'react-native-elements';
 import { NavigationScreenProps, NavigationScreenOptions } from 'react-navigation';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
+import Constants from 'expo-constants'
 
 import * as userActions from '../../store/user/actions';
 import { IUserState } from '../../store/user/types';
@@ -22,7 +23,7 @@ type AccountProps = IAccountPropsFromState & ITrackedPlayersPropsFromDispatch;
 class AccountUnconnected extends React.Component<AccountProps, {}> {
     static navigationOptions = ({ navigation }: NavigationScreenProps) => {
         return {
-            header: <Header centerComponent={{ text: 'ACCOUNT', style: { color: '#fff' } }} />
+            header: <Header containerStyle={{ height: Platform.OS === 'ios' ? 44 + Constants.statusBarHeight : 56 + StatusBar.currentHeight }} centerComponent={{ text: 'ACCOUNT', style: { color: '#fff' } }} />
         } as NavigationScreenOptions;
     };
 

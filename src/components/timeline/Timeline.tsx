@@ -7,10 +7,11 @@ import {
     NavigationState,
     FlatList
 } from 'react-navigation';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, Platform, StatusBar } from 'react-native';
 import { Header } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
+import Constants from 'expo-constants';
 
 import * as timelineActions from '../../store/timeline/actions';
 import { TimelineSortType } from '../../store/timeline/types';
@@ -57,6 +58,7 @@ class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> 
         return {
             header: (
                 <Header
+                    containerStyle={{ height: Platform.OS === 'ios' ? 44 + Constants.statusBarHeight : 56 + StatusBar.currentHeight }}
                     leftComponent={null}
                     centerComponent={{ text: 'PerSource', style: { color: '#fff', fontSize: 20 } }}
                     rightComponent={<TimelineFilter />}
