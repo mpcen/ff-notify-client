@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
         borderRadius: 19,
         justifyContent: 'center',
         alignItems: 'center',
-        height: 44
+        height: 46
     },
     signUpButtonContainer: {
         backgroundColor: '#266DD3'
@@ -119,60 +119,3 @@ const styles = StyleSheet.create({
         fontSize: 16
     }
 });
-
-{
-    /* <View style={styles.welcomeContent}>
-        <View style={styles.greetingContainer}>
-            <Text style={styles.greetingText}>Welcome to persource.</Text>
-        </View>
-
-        <View style={styles.buttonsContainer}>
-            <Button buttonStyle={styles.buttonStyle} titleStyle={styles.buttonText} title="Sign up" />
-
-            <Spacer />
-
-            <Button
-                buttonStyle={{ ...styles.buttonStyle, ...styles.signUpButtonContainer }}
-                titleStyle={styles.buttonText}
-                title="Sign in"
-                type="outline"
-            />
-
-            <Spacer />
-
-            <Text style={{ ...styles.buttonText, ...styles.forgotPassword }}>Forgot password?</Text>
-        </View>
-    </View> */
-}
-
-{
-    /* <Input
-                                labelStyle={{ color: 'white', fontFamily: 'Montserrat-Light', fontWeight: 'normal' }}
-                                editable={this.state.editable}
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                label="EMAIL ADDRESS"
-                            />
-
-                            <Spacer />
-
-                            <Input
-                                labelStyle={{ color: 'white', fontFamily: 'Montserrat-Light', fontWeight: 'normal' }}
-                                editable={this.state.editable}
-                                secureTextEntry
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                label="PASSWORD"
-                            />
-
-                            <Spacer />
-
-                            <Input
-                                labelStyle={{ color: 'white', fontFamily: 'Montserrat-Light', fontWeight: 'normal' }}
-                                editable={this.state.editable}
-                                secureTextEntry
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                label="CONFIRM PASSWORD"
-                            /> */
-}
