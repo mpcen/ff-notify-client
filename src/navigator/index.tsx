@@ -9,7 +9,6 @@ import {
 } from 'react-navigation';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
-import { Header } from 'react-navigation';
 
 import { Timeline } from '../components/Timeline/Timeline';
 import { TrackedPlayers } from '../components/TrackedPlayers/TrackedPlayers/TrackedPlayers';
@@ -21,6 +20,7 @@ import { ResolveAuth } from '../ResolveAuth';
 import { NAVROUTES } from './navRoutes';
 import { PlayerSearch } from '../components/TrackedPlayers/PlayerSearch/PlayerSearch';
 import { StatusBar, Platform } from 'react-native';
+import { Welcome } from '../components/Account/Welcome';
 
 const TimelineStack = createStackNavigator({ Timeline });
 const AccountStack = createStackNavigator({ Account });
@@ -57,17 +57,25 @@ const PlayerSettingsTabs = createMaterialTopTabNavigator(
     }
 );
 
-const LogInStack = createStackNavigator({
-    [NAVROUTES.SignUp]: {
-        screen: SignUp
+const LogInStack = createStackNavigator(
+    {
+        [NAVROUTES.Welcome]: {
+            screen: Welcome
+        },
+        [NAVROUTES.SignUp]: {
+            screen: SignUp
+        },
+        [NAVROUTES.SignIn]: {
+            screen: SignIn
+        },
+        [NAVROUTES.ForgotPassword]: {
+            screen: ForgotPassword
+        }
     },
-    [NAVROUTES.SignIn]: {
-        screen: SignIn
-    },
-    [NAVROUTES.ForgotPassword]: {
-        screen: ForgotPassword
+    {
+        headerMode: 'none'
     }
-});
+);
 
 const MainFlow = createBottomTabNavigator(
     {

@@ -1,9 +1,11 @@
 import * as React from 'react';
-import { View, AsyncStorage, ActivityIndicator } from 'react-native';
-import { Image, Text } from 'react-native-elements';
+import { View, AsyncStorage, ActivityIndicator, StyleSheet } from 'react-native';
+import { Image } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { AppLoading, SplashScreen } from 'expo';
+import { Asset } from 'expo-asset';
+import * as Font from 'expo-font';
 
 import * as userPreferencesActions from './store/user/actions';
 import { AppState } from './store';
@@ -58,36 +60,54 @@ class ResolveAuthUnconnected extends React.Component<ResolveAuthProps, ResolveAu
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#1DA1F2' }}>
                     <Image
                         resizeMode="center"
-                        source={require('./assets/img/image.png')}
+                        source={require('../assets/img/appIcon.png')}
                         onLoad={this._cacheResourcesAsync}
                     />
                     <ActivityIndicator size="large" color="white" />
                 </View>
             );
         }
+
         return <View />;
     }
 
     private _cacheSplashResourcesAsync = async () => {
-        await Promise.all([new Promise(resolve => setTimeout(resolve, 1500))]);
+        await Promise.all([new Promise(resolve => setTimeout(resolve, 0))]);
     };
 
     private _cacheResourcesAsync = async () => {
         SplashScreen.hide();
 
         const token = await AsyncStorage.getItem('persource-auth-token');
+        const imageAssets = this._cacheImages([require('../assets/img/welcome-screen-bg.jpg')]);
 
         if (token) {
-            await this.props.initialize();
-            await Promise.all([this.props.initialize(), new Promise(resolve => setTimeout(resolve, 1500))]);
+            await Promise.all([this.props.initialize(), ...imageAssets, this._cacheFonts()]);
 
             this.setState({ isAppReady: true });
         } else {
-            await Promise.all([new Promise(resolve => setTimeout(resolve, 1500))]);
+            await Promise.all([...imageAssets, this._cacheFonts()]);
+
             navigate(NAVROUTES.LogInStack);
         }
     };
+
+    private async _cacheFonts() {
+        await Font.loadAsync({
+            'Montserrat-Bold': require('../assets/fonts/Montserrat-Bold.ttf'),
+            'Montserrat-Regular': require('../assets/fonts/Montserrat-Regular.ttf'),
+            'Montserrat-Light': require('../assets/fonts/Montserrat-Light.ttf')
+        });
+    }
+
+    private _cacheImages(images: any) {
+        return images.map((image: any) => {
+            return Asset.fromModule(image).downloadAsync();
+        });
+    }
 }
+
+const styles = StyleSheet.create({});
 
 const mapStateToProps = ({ user, playerSettings }: AppState): IResolveAuthPropsFromState => {
     return {

@@ -32,12 +32,6 @@ interface ISignInPropsFromDispatch {
 type SignInProps = ISignInProps & ISignInPropsFromDispatch & ISignInPropsFromState;
 
 class SignInUnconnected extends React.Component<SignInProps, {}> {
-    static navigationOptions = ({ navigation }: NavigationScreenProps) => {
-        return {
-            header: null
-        } as NavigationScreenOptions;
-    };
-
     render() {
         return (
             <View style={styles.container}>
