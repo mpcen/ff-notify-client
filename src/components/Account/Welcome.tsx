@@ -15,16 +15,16 @@ type WelcomeProps = ISignUpProps;
 export class Welcome extends React.Component<WelcomeProps> {
     render() {
         return (
-            <View style={{ flex: 1, justifyContent: 'flex-end' }}>
-                <View style={{ ...styles.welcomeContainer }}>
+            <View style={{ flex: 1 }}>
+                <View style={styles.absoluteContent}>
                     <Image
                         source={require('../../../assets/img/welcome-screen-bg.jpg')}
-                        style={styles.imageContainer}
+                        style={styles.backgroundImageContainer}
                     />
                     <View style={styles.imageWrapper} />
                 </View>
 
-                <View style={styles.welcomeContent}>
+                <View style={styles.absoluteContent}>
                     <View style={styles.greetingContainer}>
                         <Text style={styles.greetingText}>Welcome to persource.</Text>
                     </View>
@@ -60,14 +60,10 @@ export class Welcome extends React.Component<WelcomeProps> {
 const { width, height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
-    welcomeContainer: {
-        ...(StyleSheet.absoluteFill as object)
-    },
-    imageContainer: {
+    backgroundImageContainer: {
         flex: 1,
         height: height,
-        width: width + width / 2,
-        right: width / 2.5
+        width: width,
     },
     imageWrapper: {
         position: 'absolute',
@@ -76,7 +72,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#000',
         opacity: 0.86
     },
-    welcomeContent: {
+    absoluteContent: {
         ...(StyleSheet.absoluteFill as object)
     },
     greetingContainer: {
