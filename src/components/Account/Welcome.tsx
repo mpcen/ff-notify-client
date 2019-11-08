@@ -25,11 +25,9 @@ export class Welcome extends React.Component<WelcomeProps> {
                 </View>
 
                 <View style={styles.absoluteContent}>
-                    <View style={styles.greetingContainer}>
+                    <View style={styles.contentContainer}>
                         <Text style={styles.greetingText}>Welcome to persource.</Text>
-                    </View>
 
-                    <View style={styles.buttonsContainer}>
                         <Button
                             title="Sign up"
                             buttonStyle={{ ...styles.buttonStyle, ...styles.signUpButtonContainer }}
@@ -63,7 +61,7 @@ const styles = StyleSheet.create({
     backgroundImageContainer: {
         flex: 1,
         height: height,
-        width: width,
+        width: width
     },
     imageWrapper: {
         position: 'absolute',
@@ -75,17 +73,14 @@ const styles = StyleSheet.create({
     absoluteContent: {
         ...(StyleSheet.absoluteFill as object)
     },
-    greetingContainer: {
-        alignSelf: 'center',
-        top: height * 0.333
-    },
     greetingText: {
         color: 'white',
         fontSize: 27,
-        fontFamily: 'Montserrat-Bold'
+        fontFamily: 'Montserrat-Bold',
+        marginBottom: height / 4
     },
-    buttonsContainer: {
-        justifyContent: 'center',
+    contentContainer: {
+        top: height * 0.333,
         alignItems: 'center',
         flex: 1,
         width: width,

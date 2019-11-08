@@ -1,16 +1,19 @@
 import * as React from 'react';
-import { View, StyleSheet, Image, Dimensions, Text } from 'react-native';
-import { NavigationScreenProp, NavigationRoute, NavigationScreenProps, NavigationScreenOptions } from 'react-navigation';
+import { View, StyleSheet, Image, Dimensions, Text, KeyboardAvoidingView } from 'react-native';
+import {
+    NavigationScreenProp,
+    NavigationRoute,
+    NavigationScreenProps,
+    NavigationScreenOptions
+} from 'react-navigation';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
+import Constants from 'expo-constants';
 
 import * as userActions from '../../store/user/actions';
 import { AppState } from '../../store';
 import { IUser } from '../../store/user/types';
-import { AuthForm } from './AuthForm';
-import { NAVROUTES } from '../../navigator/navRoutes';
-import { AuthNavLink } from './AuthNavLink';
-import { Input, Button } from 'react-native-elements';
+import { Input, Button, Icon } from 'react-native-elements';
 import { Spacer } from '../common/Spacer';
 
 interface ISignUpProps {
@@ -40,7 +43,7 @@ class SignUpUnconnected extends React.Component<SignUpProps, ISignUpState> {
             header: null
         } as NavigationScreenOptions;
     };
-    
+
     state: ISignUpState = {
         email: '',
         password: '',
@@ -51,57 +54,81 @@ class SignUpUnconnected extends React.Component<SignUpProps, ISignUpState> {
         const { email, password, passwordConfirm } = this.state;
 
         return (
-            <View style={{ flex: 1, justifyContent: 'flex-end' }}>
-                <View style={{ ...styles.welcomeContainer }}>
+            <View style={{ flex: 1 }}>
+                <View style={styles.absoluteContent}>
                     <Image
                         source={require('../../../assets/img/signup-screen-bg.jpg')}
-                        style={styles.imageContainer}
-                        width={width}
+                        style={styles.backgroundImageContainer}
                     />
                     <View style={styles.imageWrapper} />
                 </View>
 
-                <View style={styles.container}>
-                    <View style={styles.greetingContainer}>
+                <View style={styles.absoluteContent}>
+                    <View style={styles.contentContainer}>
+                        <Icon size={40} iconStyle={styles.leftChevron} type="material-community" name="chevron-left" />
+
                         <Text style={styles.greetingText}>Let's start with the basics.</Text>
-                    </View>
 
-                    <Input
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        label="Email"
-                        value={email}
-                        onChangeText={this.handleEmailChange}
-                    />
-
-                    <Spacer />
-
-                    <Input
-                        secureTextEntry
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        label="Password"
-                        value={password}
-                        onChangeText={this.handlePasswordChange}
-                    />
-
-                    <Spacer />
-                    
-                    <Input
-                        secureTextEntry
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        label="Confirm Password"
-                        value={passwordConfirm}
-                        onChangeText={this.handlePasswordConfirmChange}
-                    />
-
-                    <Spacer>
-                        <Button
-                            title="Finish"
-                            onPress={() => this._handleSubmit(email, password, passwordConfirm)}
+                        <Input
+                            labelStyle={styles.inputLabel}
+                            inputStyle={styles.input}
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            label="EMAIL"
+                            value={email}
+                            onChangeText={this.handleEmailChange}
                         />
-                    </Spacer>
+
+                        <Spacer />
+
+                        <Input
+                            labelStyle={styles.inputLabel}
+                            inputStyle={styles.input}
+                            secureTextEntry
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            label="PASSWORD"
+                            value={password}
+                            onChangeText={this.handlePasswordChange}
+                        />
+
+                        <Spacer />
+
+                        <Input
+                            labelStyle={styles.inputLabel}
+                            inputStyle={styles.input}
+                            secureTextEntry
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            label="CONFIRM PASSWORD"
+                            value={passwordConfirm}
+                            onChangeText={this.handlePasswordConfirmChange}
+                        />
+
+                        <Text
+                            style={{
+                                ...styles.errorMessage,
+                                backfaceVisibility: 'visible'
+                            }}
+                        >
+                            {this.props.errorMessage}
+                        </Text>
+
+                        <Spacer />
+
+                        <View style={{ alignSelf: 'flex-end' }}>
+                            <Button
+                                icon={{
+                                    type: 'material-community',
+                                    name: 'chevron-right',
+                                    color: 'white',
+                                    size: 32
+                                }}
+                                onPress={() => this._handleSubmit(email, password, passwordConfirm)}
+                                buttonStyle={{ ...styles.buttonStyle, ...styles.signUpButtonContainer }}
+                            />
+                        </View>
+                    </View>
                 </View>
             </View>
         );
@@ -127,13 +154,10 @@ class SignUpUnconnected extends React.Component<SignUpProps, ISignUpState> {
 const { width, height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
-    welcomeContainer: {
-        ...(StyleSheet.absoluteFill as object)
-    },
-    imageContainer: {
+    backgroundImageContainer: {
         flex: 1,
         height: height,
-        width: width,
+        width: width
     },
     imageWrapper: {
         position: 'absolute',
@@ -142,32 +166,51 @@ const styles = StyleSheet.create({
         backgroundColor: '#000',
         opacity: 0.86
     },
-    greetingContainer: {
-        alignSelf: 'center',
-        top: height * 0.333
+    absoluteContent: {
+        ...(StyleSheet.absoluteFill as object)
+    },
+    leftChevron: {
+        color: 'white'
     },
     greetingText: {
         color: 'white',
-        fontSize: 27,
-        fontFamily: 'Montserrat-Bold'
+        fontSize: 26,
+        fontFamily: 'Montserrat-Regular',
+        left: 10,
+        marginTop: 20,
+        marginBottom: 30
     },
-    container: {
-        ...(StyleSheet.absoluteFill as object),
+    input: {
+        color: 'white',
+        fontFamily: 'Montserrat-Regular'
+    },
+    contentContainer: {
         flex: 1,
-        justifyContent: 'center',
-        marginBottom: 200
+        alignItems: 'flex-start',
+        backgroundColor: 'transparent',
+        top: Constants.statusBarHeight,
+        paddingLeft: 10,
+        paddingRight: 10
+    },
+    buttonStyle: {
+        borderRadius: 29,
+        width: 58,
+        height: 58
+    },
+    signUpButtonContainer: {
+        backgroundColor: '#266DD3'
+    },
+    inputLabel: {
+        color: 'white',
+        fontFamily: 'Montserrat-Bold',
+        fontWeight: 'normal',
+        fontSize: 12
     },
     errorMessage: {
-        marginLeft: 15,
         marginTop: 15,
+        height: 30,
         fontSize: 16,
         color: 'red'
-    },
-    message: {
-        marginLeft: 15,
-        marginTop: 15,
-        fontSize: 16,
-        color: 'green'
     }
 });
 
