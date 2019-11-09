@@ -3,18 +3,17 @@ import { View, StyleSheet, Image, Dimensions, Text, KeyboardAvoidingView } from 
 import {
     NavigationScreenProp,
     NavigationRoute,
-    NavigationScreenProps,
-    NavigationScreenOptions
 } from 'react-navigation';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import Constants from 'expo-constants';
+import { Input, Button } from 'react-native-elements';
 
 import * as userActions from '../../store/user/actions';
 import { AppState } from '../../store';
 import { IUser } from '../../store/user/types';
-import { Input, Button, Icon } from 'react-native-elements';
 import { Spacer } from '../common/Spacer';
+import { NAVROUTES } from '../../navigator/navRoutes';
 
 interface ISignUpProps {
     navigation: NavigationScreenProp<NavigationRoute>;
@@ -38,12 +37,6 @@ interface ISignUpPropsFromDispatch {
 type SignUpProps = ISignUpProps & ISignUpPropsFromDispatch & ISignUpPropsFromState;
 
 class SignUpUnconnected extends React.Component<SignUpProps, ISignUpState> {
-    static navigationOptions = ({ navigation }: NavigationScreenProps) => {
-        return {
-            header: null
-        } as NavigationScreenOptions;
-    };
-
     state: ISignUpState = {
         email: '',
         password: '',
@@ -65,69 +58,83 @@ class SignUpUnconnected extends React.Component<SignUpProps, ISignUpState> {
 
                 <View style={styles.absoluteContent}>
                     <View style={styles.contentContainer}>
-                        <Icon size={40} iconStyle={styles.leftChevron} type="material-community" name="chevron-left" />
-
-                        <Text style={styles.greetingText}>Let's start with the basics.</Text>
-
-                        <Input
-                            labelStyle={styles.inputLabel}
-                            inputStyle={styles.input}
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            label="EMAIL"
-                            value={email}
-                            onChangeText={this.handleEmailChange}
-                        />
-
-                        <Spacer />
-
-                        <Input
-                            labelStyle={styles.inputLabel}
-                            inputStyle={styles.input}
-                            secureTextEntry
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            label="PASSWORD"
-                            value={password}
-                            onChangeText={this.handlePasswordChange}
-                        />
-
-                        <Spacer />
-
-                        <Input
-                            labelStyle={styles.inputLabel}
-                            inputStyle={styles.input}
-                            secureTextEntry
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            label="CONFIRM PASSWORD"
-                            value={passwordConfirm}
-                            onChangeText={this.handlePasswordConfirmChange}
-                        />
-
-                        <Text
-                            style={{
-                                ...styles.errorMessage,
-                                backfaceVisibility: 'visible'
+                        <Button
+                            type="clear"
+                            icon={{
+                                type: 'material-community',
+                                name: 'chevron-left',
+                                color: 'white',
+                                size: 32,
                             }}
-                        >
-                            {this.props.errorMessage}
-                        </Text>
+                            buttonStyle={styles.chevronLeftStyle}
+                            onPress={() => this.props.navigation.navigate(NAVROUTES.Welcome)}
+                        />
 
-                        <Spacer />
+                        <KeyboardAvoidingView behavior="padding" style={{ flex: 1, justifyContent: 'center', alignSelf: 'stretch' }}>
+                            <Text style={styles.greetingText}>Let's start with the basics.</Text>
 
-                        <View style={{ alignSelf: 'flex-end' }}>
-                            <Button
-                                icon={{
-                                    type: 'material-community',
-                                    name: 'chevron-right',
-                                    color: 'white',
-                                    size: 32
-                                }}
-                                onPress={() => this._handleSubmit(email, password, passwordConfirm)}
-                                buttonStyle={{ ...styles.buttonStyle, ...styles.signUpButtonContainer }}
+                            <Spacer /><Spacer /><Spacer />
+
+                            <Input
+                                labelStyle={styles.inputLabel}
+                                inputStyle={styles.input}
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                label="EMAIL"
+                                value={email}
+                                onChangeText={this.handleEmailChange}
                             />
-                        </View>
+
+                            <Spacer />
+
+                            <Input
+                                labelStyle={styles.inputLabel}
+                                inputStyle={styles.input}
+                                secureTextEntry
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                label="PASSWORD"
+                                value={password}
+                                onChangeText={this.handlePasswordChange}
+                            />
+
+                            <Spacer />
+
+                            <Input
+                                labelStyle={styles.inputLabel}
+                                inputStyle={styles.input}
+                                secureTextEntry
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                label="CONFIRM PASSWORD"
+                                value={passwordConfirm}
+                                onChangeText={this.handlePasswordConfirmChange}
+                            />
+
+                            <Text
+                                style={{
+                                    ...styles.errorMessage,
+                                    backfaceVisibility: 'visible'
+                                }}
+                            >
+                                {this.props.errorMessage}
+                            </Text>
+
+                            <Spacer />
+
+                            <View style={{ alignSelf: 'flex-end', marginRight: 10 }}>
+                                <Button
+                                    icon={{
+                                        type: 'material-community',
+                                        name: 'chevron-right',
+                                        color: 'white',
+                                        size: 32
+                                    }}
+                                    onPress={() => this._handleSubmit(email, password, passwordConfirm)}
+                                    buttonStyle={{ ...styles.buttonStyle, ...styles.signUpButtonContainer }}
+                                />
+                            </View>
+                        </KeyboardAvoidingView>
                     </View>
                 </View>
             </View>
@@ -169,16 +176,11 @@ const styles = StyleSheet.create({
     absoluteContent: {
         ...(StyleSheet.absoluteFill as object)
     },
-    leftChevron: {
-        color: 'white'
-    },
     greetingText: {
         color: 'white',
         fontSize: 26,
         fontFamily: 'Montserrat-Regular',
         left: 10,
-        marginTop: 20,
-        marginBottom: 30
     },
     input: {
         color: 'white',
@@ -190,12 +192,16 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
         top: Constants.statusBarHeight,
         paddingLeft: 10,
-        paddingRight: 10
+        paddingRight: 10,
     },
     buttonStyle: {
         borderRadius: 29,
         width: 58,
         height: 58
+    },
+    chevronLeftStyle: {
+        alignSelf: 'flex-start',
+        padding: 0
     },
     signUpButtonContainer: {
         backgroundColor: '#266DD3'
@@ -210,7 +216,9 @@ const styles = StyleSheet.create({
         marginTop: 15,
         height: 30,
         fontSize: 16,
-        color: 'red'
+        color: 'red',
+        fontFamily: 'Montserrat-Regular',
+        marginLeft: 10
     }
 });
 

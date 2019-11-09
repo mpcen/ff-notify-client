@@ -91,7 +91,7 @@ class ResolveAuthUnconnected extends React.Component<ResolveAuthProps, ResolveAu
         } else {
             await Promise.all([...imageAssets, this._cacheFonts()]);
 
-            navigate(NAVROUTES.SignUp);
+            navigate(NAVROUTES.LogInStack);
         }
     };
 

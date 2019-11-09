@@ -1,18 +1,26 @@
 import * as React from 'react';
-import { View, StyleSheet, Image, Dimensions, Text } from 'react-native';
+import { View, StyleSheet, Image, Dimensions, Text, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-elements';
+import { connect } from 'react-redux';
 
+import * as userActions from '../../store/user/actions';
+import { AuthNavLink } from './AuthNavLink';
 import { Spacer } from '../common/Spacer';
 import { NavigationScreenProp, NavigationRoute } from 'react-navigation';
 import { NAVROUTES } from '../../navigator/navRoutes';
+import { Dispatch } from 'redux';
 
 interface ISignUpProps {
     navigation: NavigationScreenProp<NavigationRoute>;
 }
 
-type WelcomeProps = ISignUpProps;
+interface IWelcomePropsFromDispatch {
+    reset: typeof userActions.reset;
+}
 
-export class Welcome extends React.Component<WelcomeProps> {
+type WelcomeProps = ISignUpProps & IWelcomePropsFromDispatch;
+
+class WelcomeUnconnected extends React.Component<WelcomeProps> {
     render() {
         return (
             <View style={{ flex: 1 }}>
@@ -32,7 +40,7 @@ export class Welcome extends React.Component<WelcomeProps> {
                             title="Sign up"
                             buttonStyle={{ ...styles.buttonStyle, ...styles.signUpButtonContainer }}
                             titleStyle={styles.buttonText}
-                            onPress={() => this.props.navigation.navigate(NAVROUTES.SignUp)}
+                            onPress={this._handleNavigateToSignup}
                         />
 
                         <Spacer />
@@ -42,16 +50,33 @@ export class Welcome extends React.Component<WelcomeProps> {
                             type="outline"
                             buttonStyle={{ ...styles.buttonStyle, ...styles.signInButtonContainer }}
                             titleStyle={styles.buttonText}
-                            onPress={() => this.props.navigation.navigate(NAVROUTES.SignIn)}
+                            onPress={this._handleNavigateToSignin}
                         />
 
                         <Spacer />
 
-                        <Text style={{ ...styles.buttonText, ...styles.forgotPassword }}>Forgot password?</Text>
+                        <TouchableOpacity onPress={this._handleNavigateToForgotPassword}>
+                            <Text style={{ ...styles.buttonText, ...styles.forgotPassword }}>Forgot password?</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </View>
         );
+    }
+
+    private _handleNavigateToSignup = () => {
+        this.props.navigation.navigate(NAVROUTES.SignUp);
+        this.props.reset();
+    }
+
+    private _handleNavigateToSignin = () => {
+        this.props.navigation.navigate(NAVROUTES.SignIn);
+        this.props.reset();
+    }
+
+    private _handleNavigateToForgotPassword = () => {
+        this.props.navigation.navigate(NAVROUTES.ForgotPassword);
+        this.props.reset();
     }
 }
 
@@ -110,3 +135,14 @@ const styles = StyleSheet.create({
         fontSize: 16
     }
 });
+
+const mapDispatchToProps = (dispatch: Dispatch) => {
+    return {
+        reset: () => dispatch(userActions.reset())
+    };
+};
+
+export const Welcome = connect(
+    null,
+    mapDispatchToProps
+)(WelcomeUnconnected);
