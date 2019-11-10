@@ -28,6 +28,10 @@ export const trackPlayerFail = (message: string) => {
     return action(TrackPlayerActionTypes.TRACK_PLAYER_FAIL, message);
 };
 
+export const trackPlayerReset = () => {
+    return action(TrackPlayerActionTypes.TRACK_PLAYER_RESET);
+};
+
 // UNTRACK PLAYER
 export const untrackPlayer = (playerId: string) => {
     return action(TrackPlayerActionTypes.UNTRACK_PLAYER, playerId);

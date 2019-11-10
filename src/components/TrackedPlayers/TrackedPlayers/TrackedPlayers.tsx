@@ -94,6 +94,7 @@ class TrackedPlayersUnconnected extends React.Component<TrackedPlayersProps, Tra
                 key={playerId}
                 playerId={playerId}
                 tracked={true}
+                playerMap={this.props.playerMap}
                 onPress={() => this._handleUntrackPlayer(playerId)}
             />
         );

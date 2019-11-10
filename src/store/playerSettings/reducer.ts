@@ -63,6 +63,12 @@ const reducer: Reducer<IPlayerSettingsState, Action> = (state = initialState, ac
                 errorMessage: action.payload
             };
 
+        case TrackPlayerActionTypes.TRACK_PLAYER_RESET:
+            return {
+                ...state,
+                error: false
+            };
+
         // UNTRACK PLAYER
         case TrackPlayerActionTypes.UNTRACK_PLAYER:
             return {

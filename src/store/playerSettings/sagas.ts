@@ -6,8 +6,8 @@ import {
     fetchPlayersSuccess,
     fetchPlayersFail,
     trackPlayer,
-    trackPlayerFail,
     trackPlayerSuccess,
+    trackPlayerFail,
     untrackPlayer,
     untrackPlayerFail,
     untrackPlayerSuccess,
@@ -62,10 +62,11 @@ function* handleTrackPlayer({ payload }: ReturnType<typeof trackPlayer>) {
         const token = yield call(AsyncStorage.getItem, 'persource-auth-token');
         const res = yield call(callApi, 'POST', 'trackPlayer', token, { playerId });
 
+        yield put(trackPlayerSuccess());
+
         if (res.error) {
             yield put(trackPlayerFail(res.error));
         } else {
-            yield put(trackPlayerSuccess());
             yield put(fetchUserPreferencesSuccess(res));
 
             const store: AppState = yield select();

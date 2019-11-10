@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { View, FlatList, Keyboard } from 'react-native';
 import { Input } from 'react-native-elements';
-import Toast from 'react-native-root-toast';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
@@ -21,6 +20,7 @@ interface IPlayerSearchPropsFromState {
 
 interface IPlayerSearchPropsFromDispatch {
     trackPlayer: typeof playerSettingsActions.trackPlayer;
+    trackPlayerReset: typeof playerSettingsActions.trackPlayerReset;
 }
 
 interface IPlayerSearchUnconnectedState {
@@ -28,31 +28,25 @@ interface IPlayerSearchUnconnectedState {
     filteredPlayers: IPlayer[];
     selectedPlayer: string;
     isOverlayVisible: boolean;
-    isToastVisible: boolean;
+    trackedPlayers: Set<string>;
 }
 
 type PlayerSearchProps = IPlayerSearchPropsFromState & IPlayerSearchPropsFromDispatch;
 type PlayerSearchState = IPlayerSearchUnconnectedState;
 
 export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, PlayerSearchState> {
-    private TOAST_TIME = 2000;
-
     public state: PlayerSearchState = {
         searchText: '',
         selectedPlayer: '',
         filteredPlayers: [],
         isOverlayVisible: false,
-        isToastVisible: false
+        trackedPlayers: new Set()
     };
 
-    componentDidUpdate(prevProps: PlayerSearchProps) {
-        if (this.props.trackedPlayers.length > prevProps.trackedPlayers.length) {
-            this.setState({
-                isToastVisible: true
-            });
-            setTimeout(() => {
-                this.setState({ isToastVisible: false });
-            }, this.TOAST_TIME);
+    componentDidUpdate() {
+        if (this.props.error) {
+            this.setState({ trackedPlayers: new Set(this.props.trackedPlayers), selectedPlayer: '' });
+            this.props.trackPlayerReset();
         }
     }
 
@@ -83,23 +77,11 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
 
                 <FlatList
                     data={this.state.filteredPlayers}
-                    extraData={this.props.trackedPlayers}
+                    extraData={this.state.trackedPlayers}
                     keyExtractor={item => item.id}
                     keyboardShouldPersistTaps="handled"
                     renderItem={({ item }) => this._renderPlayerListItem(item.id)}
                 />
-
-                {this.state.isToastVisible && this.state.selectedPlayer && (
-                    <Toast
-                        visible={this.state.isToastVisible}
-                        position={-100}
-                        shadow={false}
-                        animation={false}
-                        hideOnPress={true}
-                    >
-                        {this.props.playerMap[this.state.selectedPlayer].name} is now being tracked
-                    </Toast>
-                )}
             </View>
         );
     }
@@ -122,8 +104,9 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
                 key={playerId}
                 playerId={playerId}
                 tracked={false}
-                disabled={this.props.trackedPlayers.some(_playerId => _playerId === playerId) ? true : false}
+                disabled={this.state.trackedPlayers.has(playerId) ? true : false}
                 onPress={() => this._handleTrackPlayer(playerId)}
+                playerMap={this.props.playerMap}
             />
         );
     };
@@ -131,9 +114,9 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
     private _handleTrackPlayer = (selectedPlayer: string) => {
         Keyboard.dismiss();
 
-        if (!this.props.trackedPlayers.some(playerId => playerId === selectedPlayer)) {
+        if (!this.state.trackedPlayers.has(selectedPlayer)) {
             this.props.trackPlayer(selectedPlayer);
-            this.setState({ selectedPlayer });
+            this.setState({ selectedPlayer, trackedPlayers: new Set(this.state.trackedPlayers).add(selectedPlayer) });
         }
     };
 }
@@ -149,7 +132,8 @@ const mapStateToProps = ({ playerSettings, user }: AppState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        trackPlayer: (playerId: string) => dispatch(playerSettingsActions.trackPlayer(playerId))
+        trackPlayer: (playerId: string) => dispatch(playerSettingsActions.trackPlayer(playerId)),
+        trackPlayerReset: () => dispatch(playerSettingsActions.trackPlayerReset())
     };
 };
 
