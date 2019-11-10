@@ -18,7 +18,7 @@ type TrackedPlayerCardProps = ITrackedPlayerCardProps;
 
 export class TrackedPlayerCard extends React.Component<TrackedPlayerCardProps> {
     shouldComponentUpdate(nextProps: TrackedPlayerCardProps) {
-        if (this.props.disabled !== nextProps.disabled) {
+        if (this.props.disabled !== nextProps.disabled || this.props.tracked !== nextProps.tracked) {
             return true;
         }
 

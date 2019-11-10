@@ -26,7 +26,6 @@ interface IPlayerSearchPropsFromDispatch {
 interface IPlayerSearchUnconnectedState {
     searchText: string;
     filteredPlayers: IPlayer[];
-    selectedPlayer: string;
     isOverlayVisible: boolean;
     trackedPlayers: Set<string>;
 }
@@ -37,15 +36,25 @@ type PlayerSearchState = IPlayerSearchUnconnectedState;
 export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, PlayerSearchState> {
     public state: PlayerSearchState = {
         searchText: '',
-        selectedPlayer: '',
         filteredPlayers: [],
         isOverlayVisible: false,
         trackedPlayers: new Set()
     };
 
-    componentDidUpdate() {
+    componentDidMount() {
+        this.setState({ trackedPlayers: new Set(this.props.trackedPlayers) });
+    }
+
+    componentDidUpdate(prevProps: PlayerSearchProps) {
+        if (
+            prevProps.trackedPlayers.length > this.props.trackedPlayers.length &&
+            this.props.trackedPlayers.length < this.state.trackedPlayers.size
+        ) {
+            this.setState({ trackedPlayers: new Set(this.props.trackedPlayers) });
+        }
+
         if (this.props.error) {
-            this.setState({ trackedPlayers: new Set(this.props.trackedPlayers), selectedPlayer: '' });
+            this.setState({ trackedPlayers: new Set(this.props.trackedPlayers) });
             this.props.trackPlayerReset();
         }
     }
@@ -116,7 +125,7 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
 
         if (!this.state.trackedPlayers.has(selectedPlayer)) {
             this.props.trackPlayer(selectedPlayer);
-            this.setState({ selectedPlayer, trackedPlayers: new Set(this.state.trackedPlayers).add(selectedPlayer) });
+            this.setState({ trackedPlayers: new Set(this.state.trackedPlayers).add(selectedPlayer) });
         }
     };
 }
