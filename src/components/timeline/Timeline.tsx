@@ -125,7 +125,7 @@ class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> 
                         onRefresh={this._handleRefresh}
                         refreshing={this.props.loading}
                         onEndReached={this._handleOnEndReached}
-                        onEndReachedThreshold={50}
+                        onEndReachedThreshold={20}
                         renderItem={({ item }) => (
                             <PlayerNewsItem player={this.props.playerMap[item.player.id]} playerNewsItem={item} />
                         )}
@@ -145,12 +145,14 @@ class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> 
                         onRefresh={this._handleRefresh}
                         refreshing={this.props.loading}
                         onEndReached={this._handleOnEndReached}
-                        onEndReachedThreshold={50}
+                        onEndReachedThreshold={20}
                         renderItem={({ item }) => (
                             <PlayerNewsItem player={this.props.playerMap[item.player.id]} playerNewsItem={item} />
                         )}
                     />
                 ) : null}
+
+                {!this.props.loading && !this.props.playerNews.docs.length ? this._renderNoNews() : null}
             </View>
         );
     }
@@ -187,6 +189,18 @@ class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> 
             this.props.refetchPlayerNews(this.props.trackedPlayers[this.props.selectedPlayerIndex]);
         }
     };
+
+    private _renderNoNews = () => (
+        <View
+            style={{
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center'
+            }}
+        >
+            <Text style={{ fontFamily: 'Montserrat-Regular' }}>There is no news for the selected player</Text>
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
