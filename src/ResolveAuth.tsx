@@ -81,7 +81,8 @@ class ResolveAuthUnconnected extends React.Component<ResolveAuthProps, ResolveAu
         const token = await AsyncStorage.getItem('persource-auth-token');
         const imageAssets = this._cacheImages([
             require('../assets/img/welcome-screen-bg.jpg'),
-            require('../assets/img/signup-screen-bg.jpg')
+            require('../assets/img/signup-screen-bg.jpg'),
+            require('../assets/img/signin-screen-bg.jpg')
         ]);
 
         if (token) {
