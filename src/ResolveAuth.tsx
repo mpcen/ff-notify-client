@@ -82,7 +82,8 @@ class ResolveAuthUnconnected extends React.Component<ResolveAuthProps, ResolveAu
         const imageAssets = this._cacheImages([
             require('../assets/img/welcome-screen-bg.jpg'),
             require('../assets/img/signup-screen-bg.jpg'),
-            require('../assets/img/signin-screen-bg.jpg')
+            require('../assets/img/signin-screen-bg.jpg'),
+            require('../assets/img/forgot-password-screen-bg.jpg')
         ]);
 
         if (token) {
@@ -110,8 +111,6 @@ class ResolveAuthUnconnected extends React.Component<ResolveAuthProps, ResolveAu
         });
     }
 }
-
-const styles = StyleSheet.create({});
 
 const mapStateToProps = ({ user, playerSettings }: AppState): IResolveAuthPropsFromState => {
     return {

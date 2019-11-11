@@ -80,7 +80,7 @@ class SignInUnconnected extends React.Component<SignInProps, ISignInState> {
                                 inputStyle={styles.input}
                                 autoCapitalize="none"
                                 autoCorrect={false}
-                                label="EMAIL"
+                                label="EMAIL ADDRESS"
                                 value={email}
                                 onChangeText={this.handleEmailChange}
                             />

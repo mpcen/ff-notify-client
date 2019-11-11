@@ -1,9 +1,6 @@
 import * as React from 'react';
 import { View, StyleSheet, Image, Dimensions, Text, KeyboardAvoidingView } from 'react-native';
-import {
-    NavigationScreenProp,
-    NavigationRoute,
-} from 'react-navigation';
+import { NavigationScreenProp, NavigationRoute } from 'react-navigation';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import Constants from 'expo-constants';
@@ -64,23 +61,28 @@ class SignUpUnconnected extends React.Component<SignUpProps, ISignUpState> {
                                 type: 'material-community',
                                 name: 'chevron-left',
                                 color: 'white',
-                                size: 32,
+                                size: 32
                             }}
                             buttonStyle={styles.chevronLeftStyle}
                             onPress={() => this.props.navigation.navigate(NAVROUTES.Welcome)}
                         />
 
-                        <KeyboardAvoidingView behavior="padding" style={{ flex: 1, justifyContent: 'center', alignSelf: 'stretch' }}>
+                        <KeyboardAvoidingView
+                            behavior="padding"
+                            style={{ flex: 1, justifyContent: 'center', alignSelf: 'stretch' }}
+                        >
                             <Text style={styles.greetingText}>Let's start with the basics.</Text>
 
-                            <Spacer /><Spacer /><Spacer />
+                            <Spacer />
+                            <Spacer />
+                            <Spacer />
 
                             <Input
                                 labelStyle={styles.inputLabel}
                                 inputStyle={styles.input}
                                 autoCapitalize="none"
                                 autoCorrect={false}
-                                label="EMAIL"
+                                label="EMAIL ADDRESS"
                                 value={email}
                                 onChangeText={this.handleEmailChange}
                             />
@@ -180,7 +182,7 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 26,
         fontFamily: 'Montserrat-Regular',
-        left: 10,
+        left: 10
     },
     input: {
         color: 'white',
@@ -192,7 +194,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
         top: Constants.statusBarHeight,
         paddingLeft: 10,
-        paddingRight: 10,
+        paddingRight: 10
     },
     buttonStyle: {
         borderRadius: 29,
