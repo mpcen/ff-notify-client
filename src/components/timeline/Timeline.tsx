@@ -152,7 +152,9 @@ class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> 
                     />
                 ) : null}
 
-                {!this.props.loading && !this.props.playerNews.docs.length ? this._renderNoNews() : null}
+                {!this.props.loading && this.props.playerNews.docs && !this.props.playerNews.docs.length
+                    ? this._renderNoNews()
+                    : null}
             </View>
         );
     }
