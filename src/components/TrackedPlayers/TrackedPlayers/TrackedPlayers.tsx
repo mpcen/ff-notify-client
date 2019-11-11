@@ -1,6 +1,6 @@
 import React from 'react';
 import { Header, Text } from 'react-native-elements';
-import { FlatList, StyleSheet, View, Alert } from 'react-native';
+import { FlatList, StyleSheet, View, Alert, AlertOptions } from 'react-native';
 import { NavigationScreenProps, NavigationScreenOptions } from 'react-navigation';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
@@ -102,8 +102,8 @@ class TrackedPlayersUnconnected extends React.Component<TrackedPlayersProps, Tra
 
     private _handleUntrackPlayer = (playerId: string) => {
         Alert.alert(
+            `Confirm`,
             `Untrack ${this.props.playerMap[playerId].name}?`,
-            '',
             [
                 {
                     text: 'Cancel',
