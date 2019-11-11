@@ -1,6 +1,6 @@
 import React from 'react';
 import { Header, Text } from 'react-native-elements';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { FlatList, StyleSheet, View, Alert } from 'react-native';
 import { NavigationScreenProps, NavigationScreenOptions } from 'react-navigation';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
@@ -100,9 +100,26 @@ class TrackedPlayersUnconnected extends React.Component<TrackedPlayersProps, Tra
         );
     };
 
-    private _handleUntrackPlayer = (id: string) => {
-        this.setState({ selectedPlayer: id });
-        this.props.untrackPlayer(id);
+    private _handleUntrackPlayer = (playerId: string) => {
+        Alert.alert(
+            `Untrack ${this.props.playerMap[playerId].name}?`,
+            '',
+            [
+                {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel'
+                },
+                {
+                    text: 'OK',
+                    onPress: () => {
+                        this.setState({ selectedPlayer: playerId });
+                        this.props.untrackPlayer(playerId);
+                    }
+                }
+            ],
+            { cancelable: false }
+        );
     };
 }
 
