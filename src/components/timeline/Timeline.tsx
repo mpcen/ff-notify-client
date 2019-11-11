@@ -156,7 +156,9 @@ class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> 
     }
 
     private _scrollToTop = () => {
-        this.flatListRef.current.scrollToIndex({ animated: true, index: 0 });
+        if (this.props.playerNews.docs.length > 0) {
+            this.flatListRef.current.scrollToIndex({ animated: true, index: 0 });
+        }
     };
 
     private _handleOnEndReached = () => {

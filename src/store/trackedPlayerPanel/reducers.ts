@@ -14,7 +14,7 @@ const initialState: ITrackedPlayerPanelState = {
 
 const reducer: Reducer<ITrackedPlayerPanelState, Action> = (state = initialState, action) => {
     switch (action.type) {
-        // FETCH PLAYERS
+        // SELECT_PLAYER
         case TrackedPlayerPanelActionTypes.SELECT_PLAYER:
             return {
                 selectedPlayerIndex: action.payload

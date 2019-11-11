@@ -1,10 +1,9 @@
 import React from 'react';
 import { Header, Text } from 'react-native-elements';
-import { FlatList, StyleSheet, View, Alert, AlertOptions } from 'react-native';
+import { FlatList, StyleSheet, View, Alert } from 'react-native';
 import { NavigationScreenProps, NavigationScreenOptions } from 'react-navigation';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import Toast from 'react-native-root-toast';
 
 import * as playerSettingsActions from '../../../store/playerSettings/actions';
 
@@ -22,17 +21,9 @@ interface ITrackedPlayersPropsFromDispatch {
     untrackPlayer: typeof playerSettingsActions.untrackPlayer;
 }
 
-interface ITrackedPlayersUnconnectedState {
-    isToastVisible: boolean;
-    selectedPlayer: string;
-}
-
 type TrackedPlayersProps = ITrackedPlayersPropsFromState & ITrackedPlayersPropsFromDispatch;
-type TrackedPlayersState = ITrackedPlayersUnconnectedState;
 
-class TrackedPlayersUnconnected extends React.Component<TrackedPlayersProps, TrackedPlayersState> {
-    private TOAST_TIME = 2000;
-
+class TrackedPlayersUnconnected extends React.Component<TrackedPlayersProps> {
     static navigationOptions = ({ navigation }: NavigationScreenProps) => {
         return {
             header: (
@@ -43,20 +34,6 @@ class TrackedPlayersUnconnected extends React.Component<TrackedPlayersProps, Tra
             )
         } as NavigationScreenOptions;
     };
-
-    state: TrackedPlayersState = {
-        selectedPlayer: '',
-        isToastVisible: false
-    };
-
-    componentDidUpdate(prevProps: TrackedPlayersProps) {
-        if (this.props.trackedPlayers.length < prevProps.trackedPlayers.length) {
-            this.setState({ isToastVisible: true });
-            setTimeout(() => {
-                this.setState({ isToastVisible: false });
-            }, this.TOAST_TIME);
-        }
-    }
 
     render() {
         return (
@@ -71,18 +48,6 @@ class TrackedPlayersUnconnected extends React.Component<TrackedPlayersProps, Tra
                     <View style={styles.centeredMessageContainer}>
                         <Text>There are no tracked players to untrack</Text>
                     </View>
-                )}
-
-                {this.state.isToastVisible && (
-                    <Toast
-                        visible={this.state.isToastVisible}
-                        position={-100}
-                        shadow={false}
-                        animation={false}
-                        hideOnPress={true}
-                    >
-                        {this.props.playerMap[this.state.selectedPlayer].name} is now untracked
-                    </Toast>
                 )}
             </>
         );
@@ -113,7 +78,6 @@ class TrackedPlayersUnconnected extends React.Component<TrackedPlayersProps, Tra
                 {
                     text: 'OK',
                     onPress: () => {
-                        this.setState({ selectedPlayer: playerId });
                         this.props.untrackPlayer(playerId);
                     }
                 }
