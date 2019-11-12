@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Card, Text, Icon, Avatar, Divider } from 'react-native-elements';
-import { format } from 'date-fns';
+import formatDistance from 'date-fns/formatDistance';
 import { WebBrowser } from 'expo';
 
 import { Reactions } from './Reactions';
@@ -44,7 +44,7 @@ export class PlayerNewsItem extends React.PureComponent<IPlayerNewsItemProps> {
                 <View style={styles.cardSourceContainer}>
                     <Icon iconStyle={styles.socialIcon} size={12} type="material-community" name="twitter" />
                     <Text style={styles.sourceText}>{username}</Text>
-                    <Text style={styles.timeText}>{format(new Date(time), 'MMMM do h:mm a')}</Text>
+                    <Text style={styles.timeText}>{`${formatDistance(Date.now(), new Date(time))} ago`}}</Text>
                 </View>
 
                 <Text style={styles.cardContentContainer}>{this._renderChildNodes()}</Text>
