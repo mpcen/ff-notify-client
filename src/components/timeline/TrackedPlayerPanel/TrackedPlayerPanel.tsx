@@ -3,7 +3,10 @@ import { View, StyleSheet } from 'react-native';
 import { FlatList } from 'react-navigation';
 import { connect } from 'react-redux';
 import { Overlay, ListItem, Avatar } from 'react-native-elements';
-import DraggableFlatList, { RenderItemInfo, OnMoveEndInfo } from 'react-native-draggable-flatlist';
+import DraggableFlatList, {
+    RenderItemInfo,
+    OnMoveEndInfo
+} from 'react-native-draggable-flatlist';
 import { Dispatch } from 'redux';
 
 import { AppState } from '../../../store';
@@ -39,15 +42,23 @@ type TrackedPlayerPanelProps = ITrackedPlayerPanelItemPropsFromState &
     ITrackedPlayerPanelUnconnectedProps;
 type TrackedPanelState = ITrackedPlayerPanelState;
 
-export class TrackedPlayerPanelUnconnected extends React.Component<TrackedPlayerPanelProps, TrackedPanelState> {
+export class TrackedPlayerPanelUnconnected extends React.Component<
+    TrackedPlayerPanelProps,
+    TrackedPanelState
+> {
     public state: TrackedPanelState = {
         isOverlayVisible: false,
         trackedPlayers: this.props.trackedPlayers,
         selectedIndex: 0
     };
 
-    componentDidUpdate(prevProps: TrackedPlayerPanelProps, prevState: TrackedPanelState) {
-        if (prevProps.trackedPlayers.length !== this.props.trackedPlayers.length) {
+    componentDidUpdate(
+        prevProps: TrackedPlayerPanelProps,
+        prevState: TrackedPanelState
+    ) {
+        if (
+            prevProps.trackedPlayers.length !== this.props.trackedPlayers.length
+        ) {
             this.setState({ trackedPlayers: this.props.trackedPlayers });
         }
 
@@ -70,7 +81,9 @@ export class TrackedPlayerPanelUnconnected extends React.Component<TrackedPlayer
 
                 <Overlay
                     isVisible={this.state.isOverlayVisible}
-                    onBackdropPress={() => this.setState({ isOverlayVisible: false })}
+                    onBackdropPress={() =>
+                        this.setState({ isOverlayVisible: false })
+                    }
                 >
                     <DraggableFlatList
                         data={this.state.trackedPlayers}
@@ -84,7 +97,13 @@ export class TrackedPlayerPanelUnconnected extends React.Component<TrackedPlayer
         );
     }
 
-    private _renderTrackedPlayerPanelItem = ({ item, index }: { item: string; index: number }) => {
+    private _renderTrackedPlayerPanelItem = ({
+        item,
+        index
+    }: {
+        item: string;
+        index: number;
+    }) => {
         return (
             <TrackedPlayerPanelItem
                 selected={this.state.selectedIndex === index}
@@ -93,19 +112,26 @@ export class TrackedPlayerPanelUnconnected extends React.Component<TrackedPlayer
                 onPress={() => {
                     this.setState({ selectedIndex: index });
                     this.props.selectPlayer(index);
-                    this.props.scrollToTop();
                 }}
             />
         );
     };
 
-    private _handleReorderTrackedPlayers = ({ data }: OnMoveEndInfo<string>) => {
+    private _handleReorderTrackedPlayers = ({
+        data
+    }: OnMoveEndInfo<string>) => {
         const reorderedTrackedPlayers = data as string[];
         this.props.reorderTrackedPlayers(reorderedTrackedPlayers);
         this.setState({ trackedPlayers: reorderedTrackedPlayers });
     };
 
-    private _renderDraggableItem = ({ item, index, move, moveEnd, isActive }: RenderItemInfo<string>) => {
+    private _renderDraggableItem = ({
+        item,
+        index,
+        move,
+        moveEnd,
+        isActive
+    }: RenderItemInfo<string>) => {
         const { id, name, position, avatarUrl } = this.props.playerMap[item];
 
         return (
@@ -117,7 +143,12 @@ export class TrackedPlayerPanelUnconnected extends React.Component<TrackedPlayer
                 bottomDivider
                 rightIcon={{ name: 'menu' }}
                 leftAvatar={
-                    <Avatar rounded size="medium" avatarStyle={styles.avatarStyle} source={{ uri: avatarUrl }} />
+                    <Avatar
+                        rounded
+                        size="medium"
+                        avatarStyle={styles.avatarStyle}
+                        source={{ uri: avatarUrl }}
+                    />
                 }
             />
         );
@@ -131,7 +162,11 @@ const styles = StyleSheet.create({
     }
 });
 
-const mapStateToProps = ({ playerSettings, user, trackedPlayerPanel }: AppState) => {
+const mapStateToProps = ({
+    playerSettings,
+    user,
+    trackedPlayerPanel
+}: AppState) => {
     return {
         playerMap: playerSettings.playerMap,
         trackedPlayers: user.userPreferences.trackedPlayers,
@@ -141,9 +176,14 @@ const mapStateToProps = ({ playerSettings, user, trackedPlayerPanel }: AppState)
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        selectPlayer: (playerIndex: number) => dispatch(trackedPlayerPanelActions.selectPlayer(playerIndex)),
+        selectPlayer: (playerIndex: number) =>
+            dispatch(trackedPlayerPanelActions.selectPlayer(playerIndex)),
         reorderTrackedPlayers: (reorderedTrackedPlayers: string[]) => {
-            return dispatch(playerSettingsActions.reorderTrackedPlayers(reorderedTrackedPlayers));
+            return dispatch(
+                playerSettingsActions.reorderTrackedPlayers(
+                    reorderedTrackedPlayers
+                )
+            );
         }
     };
 };

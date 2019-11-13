@@ -26,15 +26,23 @@ export class PlayerNewsItem extends React.PureComponent<IPlayerNewsItemProps> {
                     {/* <Reactions /> */}
 
                     <View>
-                        <Avatar avatarStyle={styles.avatarStyle} rounded source={{ uri: avatarUrl }} />
+                        <Avatar
+                            avatarStyle={styles.avatarStyle}
+                            rounded
+                            source={{ uri: avatarUrl }}
+                        />
                     </View>
 
                     <View>
                         <Text style={styles.playerText}>{name}</Text>
                         <View style={styles.playerInfoTextContainer}>
-                            <Text style={styles.playerInfoText}>{position}</Text>
+                            <Text style={styles.playerInfoText}>
+                                {position}
+                            </Text>
                             <Text style={styles.playerInfoText}> | </Text>
-                            <Text style={styles.playerInfoText}>{TEAMS[teamId - 1].abbrev}</Text>
+                            <Text style={styles.playerInfoText}>
+                                {TEAMS[teamId - 1].abbrev}
+                            </Text>
                         </View>
                     </View>
                 </View>
@@ -42,18 +50,33 @@ export class PlayerNewsItem extends React.PureComponent<IPlayerNewsItemProps> {
                 <Divider style={styles.dividerContainer} />
 
                 <View style={styles.cardSourceContainer}>
-                    <Icon iconStyle={styles.socialIcon} size={12} type="material-community" name="twitter" />
+                    <Icon
+                        iconStyle={styles.socialIcon}
+                        size={12}
+                        type="material-community"
+                        name="twitter"
+                    />
                     <Text style={styles.sourceText}>{username}</Text>
-                    <Text style={styles.timeText}>{`${formatDistance(Date.now(), new Date(time))} ago`}}</Text>
+                    <Text style={styles.timeText}>
+                        {`${formatDistance(Date.now(), new Date(time))} ago`}
+                    </Text>
                 </View>
 
-                <Text style={styles.cardContentContainer}>{this._renderChildNodes()}</Text>
+                <Text style={styles.cardContentContainer}>
+                    {this._renderChildNodes()}
+                </Text>
             </Card>
         );
     }
 
     private _renderChildNodes = () => {
-        const { contentId, content, username, childNodes, platform } = this.props.playerNewsItem;
+        const {
+            contentId,
+            content,
+            username,
+            childNodes,
+            platform
+        } = this.props.playerNewsItem;
         const key = `${platform}-${username}-${contentId}`;
 
         if (!childNodes.length) {
@@ -63,6 +86,7 @@ export class PlayerNewsItem extends React.PureComponent<IPlayerNewsItemProps> {
         return childNodes.map((childNode: IChildNode, index: number) => {
             const subKey = `${key}-${index}`;
             const data = childNode.data.trim();
+
             if (childNode.contentType === 'text') {
                 return <Text key={`${subKey}-${data}`}>{data} </Text>;
             }
@@ -73,7 +97,11 @@ export class PlayerNewsItem extends React.PureComponent<IPlayerNewsItemProps> {
                     <Text
                         key={`${subKey}-${username}`}
                         style={styles.contentLink}
-                        onPress={() => WebBrowser.openBrowserAsync(`https://twitter.com/${username}`)}
+                        onPress={() =>
+                            WebBrowser.openBrowserAsync(
+                                `https://twitter.com/${username}`
+                            )
+                        }
                     >
                         {username}{' '}
                     </Text>
@@ -81,7 +109,9 @@ export class PlayerNewsItem extends React.PureComponent<IPlayerNewsItemProps> {
             }
 
             if (childNode.data.includes('hashtag')) {
-                const data = childNode.data.replace('/hashtag/', '#').replace('?src=hash', ' ');
+                const data = childNode.data
+                    .replace('/hashtag/', '#')
+                    .replace('?src=hash', ' ');
                 return (
                     <Text key={`${subKey}-${data}}`} style={styles.contentLink}>
                         {data}
