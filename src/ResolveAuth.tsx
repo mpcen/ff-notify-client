@@ -57,7 +57,14 @@ class ResolveAuthUnconnected extends React.Component<ResolveAuthProps, ResolveAu
 
         if (!this.state.isAppReady) {
             return (
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#1DA1F2' }}>
+                <View
+                    style={{
+                        flex: 1,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        backgroundColor: '#1DA1F2'
+                    }}
+                >
                     <Image
                         resizeMode="center"
                         source={require('../assets/img/appIcon.png')}
@@ -125,7 +132,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     };
 };
 
-export const ResolveAuth = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(ResolveAuthUnconnected);
+export const ResolveAuth = connect(mapStateToProps, mapDispatchToProps)(ResolveAuthUnconnected);

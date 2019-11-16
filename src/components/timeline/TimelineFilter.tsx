@@ -32,30 +32,8 @@ class TimelineFilterUnconnected extends React.Component<TimelineFilterProps, ITi
     render() {
         return (
             <View>
-                <TouchableOpacity
-                    style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        position: 'relative',
-                        width: 30,
-                        height: 44
-                    }}
-                    onPress={this._handleOnPress}
-                >
-                    <Icon
-                        containerStyle={{ position: 'absolute', bottom: 22 }}
-                        type="material-community"
-                        size={18}
-                        name={this._renderFilterTypeIcon()}
-                        color="#fff"
-                    />
-                    <Icon
-                        type="material-community"
-                        containerStyle={{ position: 'absolute', top: 14 }}
-                        size={28}
-                        name="chevron-down"
-                        color="#fff"
-                    />
+                <TouchableOpacity onPress={this._handleOnPress}>
+                    <Icon type="material-community" name={this._renderFilterTypeIcon()} color="#fff" />
                 </TouchableOpacity>
 
                 <Overlay
@@ -64,17 +42,29 @@ class TimelineFilterUnconnected extends React.Component<TimelineFilterProps, ITi
                     height={275}
                 >
                     <View style={{ alignSelf: 'stretch', flex: 1 }}>
-                        <Text style={{ fontSize: 20, color: '#212121', alignSelf: 'center' }}>Sort News Feed By</Text>
+                        <Text
+                            style={{
+                                fontSize: 20,
+                                color: '#212121',
+                                alignSelf: 'center'
+                            }}
+                        >
+                            Sort News Feed By
+                        </Text>
 
                         <View style={{ flex: 1, justifyContent: 'center' }}>
                             <ListItem
                                 disabled={this.props.timelineSortType === TimelineSortType.Player}
                                 containerStyle={{
                                     backgroundColor:
-                                        this.props.timelineSortType === TimelineSortType.Player ? '#f4f4f4' : 'white',
+                                        this.props.timelineSortType === TimelineSortType.Player
+                                            ? '#f4f4f4'
+                                            : 'white',
                                     borderLeftWidth: 3,
                                     borderColor:
-                                        this.props.timelineSortType === TimelineSortType.Player ? '#2089dc' : 'white'
+                                        this.props.timelineSortType === TimelineSortType.Player
+                                            ? '#2089dc'
+                                            : 'white'
                                 }}
                                 title="Single Tracked Player"
                                 onPress={() => this._handleSelectSortType(TimelineSortType.Player)}
@@ -85,28 +75,44 @@ class TimelineFilterUnconnected extends React.Component<TimelineFilterProps, ITi
                                 disabled={this.props.timelineSortType === TimelineSortType.Date}
                                 containerStyle={{
                                     backgroundColor:
-                                        this.props.timelineSortType === TimelineSortType.Date ? '#f4f4f4' : 'white',
+                                        this.props.timelineSortType === TimelineSortType.Date
+                                            ? '#f4f4f4'
+                                            : 'white',
                                     borderLeftWidth: 3,
                                     borderColor:
-                                        this.props.timelineSortType === TimelineSortType.Date ? '#2089dc' : 'white'
+                                        this.props.timelineSortType === TimelineSortType.Date
+                                            ? '#2089dc'
+                                            : 'white'
                                 }}
                                 title="All Tracked Players"
                                 onPress={() => this._handleSelectSortType(TimelineSortType.Date)}
-                                leftIcon={<MaterialCommunityIcons name="account-multiple" size={25} color="#2089dc" />}
+                                leftIcon={
+                                    <MaterialCommunityIcons
+                                        name="account-multiple"
+                                        size={25}
+                                        color="#2089dc"
+                                    />
+                                }
                             />
 
                             <ListItem
                                 disabled={this.props.timelineSortType === TimelineSortType.All}
                                 containerStyle={{
                                     backgroundColor:
-                                        this.props.timelineSortType === TimelineSortType.All ? '#f4f4f4' : 'white',
+                                        this.props.timelineSortType === TimelineSortType.All
+                                            ? '#f4f4f4'
+                                            : 'white',
                                     borderLeftWidth: 3,
                                     borderColor:
-                                        this.props.timelineSortType === TimelineSortType.All ? '#2089dc' : 'white'
+                                        this.props.timelineSortType === TimelineSortType.All
+                                            ? '#2089dc'
+                                            : 'white'
                                 }}
                                 title="All Players"
                                 onPress={() => this._handleSelectSortType(TimelineSortType.All)}
-                                leftIcon={<MaterialCommunityIcons name="account-group" size={25} color="#2089dc" />}
+                                leftIcon={
+                                    <MaterialCommunityIcons name="account-group" size={25} color="#2089dc" />
+                                }
                             />
                         </View>
                     </View>
@@ -155,7 +161,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     };
 };
 
-export const TimelineFilter = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(TimelineFilterUnconnected);
+export const TimelineFilter = connect(mapStateToProps, mapDispatchToProps)(TimelineFilterUnconnected);

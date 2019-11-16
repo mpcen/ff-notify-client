@@ -34,7 +34,7 @@ type PlayerSearchProps = IPlayerSearchPropsFromState & IPlayerSearchPropsFromDis
 type PlayerSearchState = IPlayerSearchUnconnectedState;
 
 export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, PlayerSearchState> {
-    public state: PlayerSearchState = {
+    state: PlayerSearchState = {
         searchText: '',
         filteredPlayers: [],
         isOverlayVisible: false,
@@ -146,7 +146,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     };
 };
 
-export const PlayerSearch = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(PlayerSearchUnconnected);
+export const PlayerSearch = connect(mapStateToProps, mapDispatchToProps)(PlayerSearchUnconnected);

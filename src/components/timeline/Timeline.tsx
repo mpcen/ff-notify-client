@@ -48,15 +48,10 @@ interface ITimelineUnconnectedState {
     page: number;
 }
 
-type TimelineProps = ITimelinePropsFromState &
-    ITimelinePropsFromDispatch &
-    ITimelineUnconnectedProps;
+type TimelineProps = ITimelinePropsFromState & ITimelinePropsFromDispatch & ITimelineUnconnectedProps;
 type TimelineState = ITimelineUnconnectedState;
 
-class TimeLineUnconnected extends React.Component<
-    TimelineProps,
-    TimelineState
-> {
+class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> {
     private flatListRef = React.createRef<FlatList<any>>();
 
     static navigationOptions = ({ navigation }: NavigationScreenProps) => {
@@ -105,27 +100,20 @@ class TimeLineUnconnected extends React.Component<
             prevProps.timelineSortType !== TimelineSortType.All
         ) {
             this.props.refetchAllPlayerNews();
-        } else if (
-            prevProps.selectedPlayerIndex !== this.props.selectedPlayerIndex
-        ) {
-            this.props.refetchPlayerNews(
-                this.props.trackedPlayers[this.props.selectedPlayerIndex]
-            );
+        } else if (prevProps.selectedPlayerIndex !== this.props.selectedPlayerIndex) {
+            this.props.refetchPlayerNews(this.props.trackedPlayers[this.props.selectedPlayerIndex]);
         } else if (
             prevProps.trackedPlayers[this.props.selectedPlayerIndex] !==
             this.props.trackedPlayers[this.props.selectedPlayerIndex]
         ) {
-            this.props.refetchPlayerNews(
-                this.props.trackedPlayers[this.props.selectedPlayerIndex]
-            );
+            this.props.refetchPlayerNews(this.props.trackedPlayers[this.props.selectedPlayerIndex]);
         }
     }
 
     public render() {
         return (
             <View style={{ flex: 1 }}>
-                {this.props.timelineSortType !== TimelineSortType.All &&
-                !this.props.trackedPlayers.length ? (
+                {this.props.timelineSortType !== TimelineSortType.All && !this.props.trackedPlayers.length ? (
                     <View style={styles.centeredMessageContainer}>
                         <Text>Get started by tracking some players</Text>
                     </View>
@@ -184,9 +172,7 @@ class TimeLineUnconnected extends React.Component<
                     />
                 ) : null}
 
-                {!this.props.loading &&
-                this.props.playerNews.docs &&
-                !this.props.playerNews.docs.length
+                {!this.props.loading && this.props.playerNews.docs && !this.props.playerNews.docs.length
                     ? this._renderNoNews()
                     : null}
             </View>
@@ -206,17 +192,13 @@ class TimeLineUnconnected extends React.Component<
         if (!this.props.loading) {
             if (this.props.timelineSortType === TimelineSortType.All) {
                 if (this.props.playerNews.nextPage) {
-                    this.props.fetchAllPlayerNews(
-                        this.props.playerNews.nextPage
-                    );
+                    this.props.fetchAllPlayerNews(this.props.playerNews.nextPage);
                 }
             } else {
                 if (this.props.playerNews.nextPage) {
                     this.props.fetchPlayerNews(
                         this.props.playerNews.nextPage,
-                        this.props.trackedPlayers[
-                            this.props.selectedPlayerIndex
-                        ]
+                        this.props.trackedPlayers[this.props.selectedPlayerIndex]
                     );
                 }
             }
@@ -226,15 +208,10 @@ class TimeLineUnconnected extends React.Component<
     private _handleRefresh = () => {
         this.setState({});
 
-        if (
-            this.props.timelineSortType === TimelineSortType.All &&
-            !this.props.loading
-        ) {
+        if (this.props.timelineSortType === TimelineSortType.All && !this.props.loading) {
             this.props.refetchAllPlayerNews();
         } else {
-            this.props.refetchPlayerNews(
-                this.props.trackedPlayers[this.props.selectedPlayerIndex]
-            );
+            this.props.refetchPlayerNews(this.props.trackedPlayers[this.props.selectedPlayerIndex]);
         }
     };
 
@@ -246,9 +223,7 @@ class TimeLineUnconnected extends React.Component<
                 alignItems: 'center'
             }}
         >
-            <Text style={{ fontFamily: 'Montserrat-Regular' }}>
-                There is no news for the selected player
-            </Text>
+            <Text style={{ fontFamily: 'Montserrat-Regular' }}>There is no news for the selected player</Text>
         </View>
     );
 }
@@ -280,18 +255,12 @@ const mapStateToProps = ({
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        fetchAllPlayerNews: (page: number) =>
-            dispatch(timelineActions.fetchAllPlayerNews(page)),
-        refetchAllPlayerNews: () =>
-            dispatch(timelineActions.refetchAllPlayerNews()),
+        fetchAllPlayerNews: (page: number) => dispatch(timelineActions.fetchAllPlayerNews(page)),
+        refetchAllPlayerNews: () => dispatch(timelineActions.refetchAllPlayerNews()),
         fetchPlayerNews: (page: number, playerId: string) =>
             dispatch(timelineActions.fetchPlayerNews(page, playerId)),
-        refetchPlayerNews: (playerId: string) =>
-            dispatch(timelineActions.refetchPlayerNews(playerId))
+        refetchPlayerNews: (playerId: string) => dispatch(timelineActions.refetchPlayerNews(playerId))
     };
 };
 
-export const Timeline = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(TimeLineUnconnected);
+export const Timeline = connect(mapStateToProps, mapDispatchToProps)(TimeLineUnconnected);
