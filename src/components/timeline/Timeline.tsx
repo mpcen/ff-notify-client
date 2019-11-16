@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = ({
     timeline,
-    playerSettings,
+    players,
     user,
     trackedPlayerPanel
 }: AppState): ITimelinePropsFromState => {
@@ -246,7 +246,7 @@ const mapStateToProps = ({
         error: timeline.error,
         loading: timeline.loading,
         playerNews: timeline.playerNews,
-        playerMap: playerSettings.playerMap,
+        playerMap: players.playerMap,
         trackedPlayers: user.userPreferences.trackedPlayers,
         timelineSortType: user.userPreferences.timelineSortType,
         selectedPlayerIndex: trackedPlayerPanel.selectedPlayerIndex

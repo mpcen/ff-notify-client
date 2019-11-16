@@ -7,7 +7,7 @@ import DraggableFlatList, { RenderItemInfo, OnMoveEndInfo } from 'react-native-d
 import { Dispatch } from 'redux';
 
 import { AppState } from '../../../store';
-import * as playerSettingsActions from '../../../store/players/actions';
+import * as playersActions from '../../../store/players/actions';
 import * as trackedPlayerPanelActions from '../../../store/trackedPlayerPanel/actions';
 
 import { TrackedPlayerPanelItem } from './TrackedPlayerPanelItem';
@@ -24,7 +24,7 @@ interface ITrackedPlayerPanelItemPropsFromState {
 }
 
 interface ITrackedPlayerPanelPropsFromDispatch {
-    reorderTrackedPlayers: typeof playerSettingsActions.reorderTrackedPlayers;
+    reorderTrackedPlayers: typeof playersActions.reorderTrackedPlayers;
     selectPlayer: typeof trackedPlayerPanelActions.selectPlayer;
 }
 
@@ -138,9 +138,9 @@ const styles = StyleSheet.create({
     }
 });
 
-const mapStateToProps = ({ playerSettings, user, trackedPlayerPanel }: AppState) => {
+const mapStateToProps = ({ players, user, trackedPlayerPanel }: AppState) => {
     return {
-        playerMap: playerSettings.playerMap,
+        playerMap: players.playerMap,
         trackedPlayers: user.userPreferences.trackedPlayers,
         selectetedPlayerIndex: trackedPlayerPanel.selectedPlayerIndex
     };
@@ -150,7 +150,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
         selectPlayer: (playerIndex: number) => dispatch(trackedPlayerPanelActions.selectPlayer(playerIndex)),
         reorderTrackedPlayers: (reorderedTrackedPlayers: string[]) => {
-            return dispatch(playerSettingsActions.reorderTrackedPlayers(reorderedTrackedPlayers));
+            return dispatch(playersActions.reorderTrackedPlayers(reorderedTrackedPlayers));
         }
     };
 };

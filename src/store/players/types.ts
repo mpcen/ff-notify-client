@@ -13,7 +13,7 @@ export interface IPlayerMap {
     [id: string]: IPlayer;
 }
 
-export interface IPlayerSettingsState {
+export interface IPlayersState {
     playerMap: IPlayerMap;
     loading: boolean;
     error: boolean;

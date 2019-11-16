@@ -119,10 +119,10 @@ class ResolveAuthUnconnected extends React.Component<ResolveAuthProps, ResolveAu
     }
 }
 
-const mapStateToProps = ({ user, playerSettings }: AppState): IResolveAuthPropsFromState => {
+const mapStateToProps = ({ user, players }: AppState): IResolveAuthPropsFromState => {
     return {
         userPreferences: user.userPreferences,
-        loading: user.loading || playerSettings.loading
+        loading: user.loading || players.loading
     };
 };
 

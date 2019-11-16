@@ -140,7 +140,7 @@ function* handleReorderTrackedPlayers({ payload }: ReturnType<typeof reorderTrac
     }
 }
 
-export function* playerSettingsSaga() {
+export function* playersSaga() {
     yield all([
         fork(watchFetchPlayers),
         fork(watchTrackPlayer),

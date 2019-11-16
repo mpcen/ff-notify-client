@@ -4,7 +4,7 @@ import { Input } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
-import * as playerSettingsActions from '../../../store/players/actions';
+import * as playersActions from '../../../store/players/actions';
 import { IPlayerMap, IPlayer } from '../../../store/players/types';
 import { AppState } from '../../../store';
 
@@ -19,8 +19,8 @@ interface IPlayerSearchPropsFromState {
 }
 
 interface IPlayerSearchPropsFromDispatch {
-    trackPlayer: typeof playerSettingsActions.trackPlayer;
-    trackPlayerReset: typeof playerSettingsActions.trackPlayerReset;
+    trackPlayer: typeof playersActions.trackPlayer;
+    trackPlayerReset: typeof playersActions.trackPlayerReset;
 }
 
 interface IPlayerSearchUnconnectedState {
@@ -130,19 +130,19 @@ export class PlayerSearchUnconnected extends React.Component<PlayerSearchProps, 
     };
 }
 
-const mapStateToProps = ({ playerSettings, user }: AppState) => {
+const mapStateToProps = ({ players, user }: AppState) => {
     return {
-        error: playerSettings.error,
-        loading: playerSettings.loading,
-        playerMap: playerSettings.playerMap,
+        error: players.error,
+        loading: players.loading,
+        playerMap: players.playerMap,
         trackedPlayers: user.userPreferences.trackedPlayers
     };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        trackPlayer: (playerId: string) => dispatch(playerSettingsActions.trackPlayer(playerId)),
-        trackPlayerReset: () => dispatch(playerSettingsActions.trackPlayerReset())
+        trackPlayer: (playerId: string) => dispatch(playersActions.trackPlayer(playerId)),
+        trackPlayerReset: () => dispatch(playersActions.trackPlayerReset())
     };
 };
 

@@ -1,21 +1,21 @@
 import { Reducer } from 'redux';
 import { ActionType } from 'typesafe-actions';
 
-import * as PlayerSettingsActions from './actions';
+import * as PlayersActions from './actions';
 import * as UserActions from '../user/actions';
 import { RESET_USER } from '../user/types';
 
-type Action = ActionType<typeof PlayerSettingsActions & typeof UserActions>;
+type Action = ActionType<typeof PlayersActions & typeof UserActions>;
 
-import { FetchPlayersActionTypes, TrackPlayerActionTypes, IPlayerSettingsState } from './types';
+import { FetchPlayersActionTypes, TrackPlayerActionTypes, IPlayersState } from './types';
 
-const initialState: IPlayerSettingsState = {
+const initialState: IPlayersState = {
     playerMap: {},
     loading: true,
     error: false
 };
 
-const reducer: Reducer<IPlayerSettingsState, Action> = (state = initialState, action) => {
+const reducer: Reducer<IPlayersState, Action> = (state = initialState, action) => {
     switch (action.type) {
         // FETCH PLAYERS
         case FetchPlayersActionTypes.FETCH_PLAYERS:
@@ -126,4 +126,4 @@ const reducer: Reducer<IPlayerSettingsState, Action> = (state = initialState, ac
     }
 };
 
-export { reducer as playerSettingsReducer };
+export { reducer as playersReducer };

@@ -5,7 +5,7 @@ import { NavigationScreenProps, NavigationScreenOptions } from 'react-navigation
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
-import * as playerSettingsActions from '../../../store/players/actions';
+import * as playersActions from '../../../store/players/actions';
 
 import { AppState } from '../../../store';
 import { IPlayerMap } from '../../../store/players/types';
@@ -18,7 +18,7 @@ interface ITrackedPlayersPropsFromState {
 }
 
 interface ITrackedPlayersPropsFromDispatch {
-    untrackPlayer: typeof playerSettingsActions.untrackPlayer;
+    untrackPlayer: typeof playersActions.untrackPlayer;
 }
 
 type TrackedPlayersProps = ITrackedPlayersPropsFromState & ITrackedPlayersPropsFromDispatch;
@@ -97,14 +97,14 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state: AppState) => {
     return {
-        playerMap: state.playerSettings.playerMap,
+        playerMap: state.players.playerMap,
         trackedPlayers: state.user.userPreferences.trackedPlayers
     };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        untrackPlayer: (playerId: string) => dispatch(playerSettingsActions.untrackPlayer(playerId))
+        untrackPlayer: (playerId: string) => dispatch(playersActions.untrackPlayer(playerId))
     };
 };
 
