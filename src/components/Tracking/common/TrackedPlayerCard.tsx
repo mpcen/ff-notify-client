@@ -4,7 +4,7 @@ import { ListItem, Avatar } from 'react-native-elements';
 
 import { TrackPlayerButton } from './TrackPlayerButton';
 import { TEAMS } from '../../../util/teams';
-import { IPlayerMap } from '../../../store/playerSettings/types';
+import { IPlayerMap } from '../../../store/players/types';
 
 interface ITrackedPlayerCardProps {
     playerId?: string;
@@ -35,7 +35,12 @@ export class TrackedPlayerCard extends React.Component<TrackedPlayerCardProps> {
                 subtitle={`${position} | ${TEAMS[teamId - 1].abbrev}`}
                 bottomDivider
                 leftAvatar={
-                    <Avatar rounded size="medium" avatarStyle={styles.avatarStyle} source={{ uri: avatarUrl }} />
+                    <Avatar
+                        rounded
+                        size="medium"
+                        avatarStyle={styles.avatarStyle}
+                        source={{ uri: avatarUrl }}
+                    />
                 }
                 rightIcon={<TrackPlayerButton disabled={disabled} tracked={tracked} onPress={onPress} />}
             />

@@ -4,8 +4,8 @@ import { Input } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
-import * as playerSettingsActions from '../../../store/playerSettings/actions';
-import { IPlayerMap, IPlayer } from '../../../store/playerSettings/types';
+import * as playerSettingsActions from '../../../store/players/actions';
+import { IPlayerMap, IPlayer } from '../../../store/players/types';
 import { AppState } from '../../../store';
 
 import { InputClearer } from '../../common/InputClearer';

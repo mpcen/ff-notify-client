@@ -4,7 +4,7 @@ export enum NAVROUTES {
     SignUp = 'SignUp',
     SignIn = 'SignIn',
     Timeline = 'Timeline',
-    PlayerSettings = 'PlayerSettings',
+    Tracking = 'Tracking',
     AlertSettings = 'AlertSettings',
     Account = 'Account',
     LogInStack = 'LogInStack',

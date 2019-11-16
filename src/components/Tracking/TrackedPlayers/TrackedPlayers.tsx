@@ -5,10 +5,10 @@ import { NavigationScreenProps, NavigationScreenOptions } from 'react-navigation
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
-import * as playerSettingsActions from '../../../store/playerSettings/actions';
+import * as playerSettingsActions from '../../../store/players/actions';
 
 import { AppState } from '../../../store';
-import { IPlayerMap } from '../../../store/playerSettings/types';
+import { IPlayerMap } from '../../../store/players/types';
 import { PlayerSearch } from '../PlayerSearch/PlayerSearch';
 import { TrackedPlayerCard } from '../common/TrackedPlayerCard';
 
@@ -108,7 +108,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     };
 };
 
-export const TrackedPlayers = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(TrackedPlayersUnconnected);
+export const TrackedPlayers = connect(mapStateToProps, mapDispatchToProps)(TrackedPlayersUnconnected);

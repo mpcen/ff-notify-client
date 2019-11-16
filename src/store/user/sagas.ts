@@ -5,7 +5,7 @@ import { validate } from 'email-validator';
 import { validatePassword } from '../../util/validatePassword';
 import { callApi } from '../../api';
 import { NAVROUTES } from '../../navigator/navRoutes';
-import { fetchPlayers } from '../playerSettings/actions';
+import { fetchPlayers } from '../players/actions';
 import { navigate } from '../../navigator/navigationRef';
 import {
     SignUpActionTypes,

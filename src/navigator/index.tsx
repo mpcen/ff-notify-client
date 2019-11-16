@@ -11,14 +11,14 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 
 import { Timeline } from '../components/Timeline/Timeline';
-import { TrackedPlayers } from '../components/TrackedPlayers/TrackedPlayers/TrackedPlayers';
+import { TrackedPlayers } from '../components/Tracking/TrackedPlayers/TrackedPlayers';
 import { Account } from '../components/Account/Account';
 import { SignIn } from '../components/Account/SignIn';
 import { SignUp } from '../components/Account/SignUp';
 import { ForgotPassword } from '../components/Account/ForgotPassword';
 import { ResolveAuth } from '../ResolveAuth';
 import { NAVROUTES } from './navRoutes';
-import { PlayerSearch } from '../components/TrackedPlayers/PlayerSearch/PlayerSearch';
+import { PlayerSearch } from '../components/Tracking/PlayerSearch/PlayerSearch';
 import { StatusBar, Platform } from 'react-native';
 import { Welcome } from '../components/Account/Welcome';
 import { Search } from '../components/Search/Search';
@@ -27,7 +27,7 @@ const TimelineStack = createStackNavigator({ Timeline });
 const AccountStack = createStackNavigator({ Account });
 const SearchStack = createStackNavigator({ Search });
 
-const PlayerSettingsTabs = createMaterialTopTabNavigator(
+const Tracking = createMaterialTopTabNavigator(
     {
         [NAVROUTES.PlayerSearch]: {
             screen: PlayerSearch,
@@ -99,10 +99,10 @@ const MainFlow = createBottomTabNavigator(
                 )
             } as NavigationScreenOptions
         },
-        [NAVROUTES.PlayerSettings]: {
-            screen: PlayerSettingsTabs,
+        [NAVROUTES.Tracking]: {
+            screen: Tracking,
             navigationOptions: {
-                tabBarLabel: 'PLAYERS',
+                tabBarLabel: 'TRACK',
                 tabBarIcon: ({ tintColor }: any) => (
                     <MaterialCommunityIcons name="account-group" size={25} color={tintColor} />
                 )

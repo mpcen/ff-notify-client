@@ -16,7 +16,7 @@ import Constants from 'expo-constants';
 import * as timelineActions from '../../store/timeline/actions';
 import { TimelineSortType } from '../../store/timeline/types';
 import { AppState } from '../../store';
-import { IPlayerMap } from '../../store/playerSettings/types';
+import { IPlayerMap } from '../../store/players/types';
 
 import { TrackedPlayerPanel } from './TrackedPlayerPanel/TrackedPlayerPanel';
 import { TimelineFilter } from './TimelineFilter';
