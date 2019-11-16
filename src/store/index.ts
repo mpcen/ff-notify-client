@@ -10,8 +10,8 @@ import { timelineReducer, ITimelineState } from './timeline/reducer';
 import { playersReducer } from './players/reducer';
 import { userReducer } from './user/reducer';
 import { IUserState } from './user/types';
-import { ITrackedPlayerPanelState } from './trackedPlayerPanel/types';
-import { trackedPlayerPanelReducer } from './trackedPlayerPanel/reducers';
+import { ITrackedPlayerPanelState } from './tracking/types';
+import { trackedPlayerPanelReducer } from './tracking/reducers';
 import { IPlayersState } from './players/types';
 
 export interface AppState {

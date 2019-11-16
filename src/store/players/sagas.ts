@@ -20,7 +20,7 @@ import { refetchPlayerNews } from '../timeline/actions';
 import { fetchUserPreferencesSuccess } from '../user/actions';
 import { AppState } from '..';
 import { TimelineSortType } from '../timeline/types';
-import { selectPlayer } from '../trackedPlayerPanel/actions';
+import { selectPlayer } from '../tracking/actions';
 
 // FETCH PLAYERS
 function* watchFetchPlayers() {

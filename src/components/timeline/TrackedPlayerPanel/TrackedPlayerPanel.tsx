@@ -8,7 +8,7 @@ import { Dispatch } from 'redux';
 
 import { AppState } from '../../../store';
 import * as playersActions from '../../../store/players/actions';
-import * as trackedPlayerPanelActions from '../../../store/trackedPlayerPanel/actions';
+import * as trackedPlayerPanelActions from '../../../store/tracking/actions';
 
 import { TrackedPlayerPanelItem } from './TrackedPlayerPanelItem';
 import { IPlayerMap } from '../../../store/players/types';
