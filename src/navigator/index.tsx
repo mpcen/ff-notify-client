@@ -21,9 +21,11 @@ import { NAVROUTES } from './navRoutes';
 import { PlayerSearch } from '../components/TrackedPlayers/PlayerSearch/PlayerSearch';
 import { StatusBar, Platform } from 'react-native';
 import { Welcome } from '../components/Account/Welcome';
+import { Search } from '../components/Search/Search';
 
 const TimelineStack = createStackNavigator({ Timeline });
 const AccountStack = createStackNavigator({ Account });
+const SearchStack = createStackNavigator({ Search });
 
 const PlayerSettingsTabs = createMaterialTopTabNavigator(
     {
@@ -85,6 +87,15 @@ const MainFlow = createBottomTabNavigator(
                 tabBarLabel: 'NEWS',
                 tabBarIcon: ({ tintColor }: any) => (
                     <MaterialCommunityIcons name="chart-timeline" size={25} color={tintColor} />
+                )
+            } as NavigationScreenOptions
+        },
+        [NAVROUTES.Search]: {
+            screen: SearchStack,
+            navigationOptions: {
+                tabBarLabel: 'SEARCH',
+                tabBarIcon: ({ tintColor }: any) => (
+                    <MaterialCommunityIcons name="magnify" size={25} color={tintColor} />
                 )
             } as NavigationScreenOptions
         },

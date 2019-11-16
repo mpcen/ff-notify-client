@@ -11,5 +11,6 @@ export enum NAVROUTES {
     MainFlow = 'MainFlow',
     ResolveAuth = 'ResolveAuth',
     ForgotPassword = 'ForgotPassword',
-    Welcome = 'Welcome'
+    Welcome = 'Welcome',
+    Search = 'Search'
 }
