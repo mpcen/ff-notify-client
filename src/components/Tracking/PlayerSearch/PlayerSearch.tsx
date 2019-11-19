@@ -11,6 +11,13 @@ import { AppState } from '../../../store';
 import { InputClearer } from '../../common/InputClearer';
 import { TrackedPlayerCard } from '../common/TrackedPlayerCard';
 
+interface IPlayerSearchUnconnectedState {
+    searchText: string;
+    filteredPlayers: IPlayer[];
+    isOverlayVisible: boolean;
+    trackedPlayers: Set<string>;
+}
+
 interface IPlayerSearchPropsFromState {
     playerMap: IPlayerMap;
     loading: boolean;
@@ -21,13 +28,6 @@ interface IPlayerSearchPropsFromState {
 interface IPlayerSearchPropsFromDispatch {
     trackPlayer: typeof playersActions.trackPlayer;
     trackPlayerReset: typeof playersActions.trackPlayerReset;
-}
-
-interface IPlayerSearchUnconnectedState {
-    searchText: string;
-    filteredPlayers: IPlayer[];
-    isOverlayVisible: boolean;
-    trackedPlayers: Set<string>;
 }
 
 type PlayerSearchProps = IPlayerSearchPropsFromState & IPlayerSearchPropsFromDispatch;

@@ -44,14 +44,9 @@ interface ITimelinePropsFromDispatch {
     refetchPlayerNews: typeof timelineActions.refetchPlayerNews;
 }
 
-interface ITimelineUnconnectedState {
-    page: number;
-}
-
 type TimelineProps = ITimelinePropsFromState & ITimelinePropsFromDispatch & ITimelineUnconnectedProps;
-type TimelineState = ITimelineUnconnectedState;
 
-class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> {
+class TimeLineUnconnected extends React.Component<TimelineProps> {
     private flatListRef = React.createRef<FlatList<any>>();
 
     static navigationOptions = ({ navigation }: NavigationScreenProps) => {
@@ -73,10 +68,6 @@ class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> 
                 />
             )
         } as NavigationScreenOptions;
-    };
-
-    state: TimelineState = {
-        page: 1
     };
 
     componentDidMount() {
@@ -206,8 +197,6 @@ class TimeLineUnconnected extends React.Component<TimelineProps, TimelineState> 
     };
 
     private _handleRefresh = () => {
-        this.setState({});
-
         if (this.props.timelineSortType === TimelineSortType.All && !this.props.loading) {
             this.props.refetchAllPlayerNews();
         } else {

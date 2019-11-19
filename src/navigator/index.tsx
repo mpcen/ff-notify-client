@@ -25,7 +25,7 @@ import { Search } from '../components/Search/Search';
 
 const TimelineStack = createStackNavigator({ Timeline });
 const AccountStack = createStackNavigator({ Account });
-const SearchStack = createStackNavigator({ Search });
+const SearchStack = createStackNavigator({ Search }, { headerMode: 'none' });
 
 const Tracking = createMaterialTopTabNavigator(
     {

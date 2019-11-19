@@ -1,6 +1,11 @@
 import { action } from 'typesafe-actions';
 
-import { FetchPlayerNewsActionTypes, SortTimelineByActionTypes, IPlayerNews, TimelineSortType } from './types';
+import {
+    FetchPlayerNewsActionTypes,
+    SortTimelineByActionTypes,
+    IPlayerNews,
+    TimelineSortType
+} from './types';
 
 // FETCH ALL PLAYER NEWS
 export const fetchAllPlayerNews = (page: number = 1) => {
@@ -28,7 +33,7 @@ export const refetchAllPlayerNewsFail = (message: string) => {
     return action(FetchPlayerNewsActionTypes.REFETCH_ALL_PLAYER_NEWS_FAIL, message);
 };
 
-// FETCH TRACKED PLAYER NEWS
+// FETCH PLAYER NEWS
 export const fetchPlayerNews = (page: number = 1, playerId?: string) => {
     return action(FetchPlayerNewsActionTypes.FETCH_PLAYER_NEWS, { page, playerId });
 };
