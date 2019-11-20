@@ -4,7 +4,12 @@ import { ActionType } from 'typesafe-actions';
 import * as TimelineActions from './actions';
 import * as UserActions from '../user/actions';
 import { RESET_USER } from '../user/types';
-import { FetchPlayerNewsActionTypes, SortTimelineByActionTypes, ITimelineState, IPlayerNewsItem } from './types';
+import {
+    FetchPlayerNewsActionTypes,
+    SortTimelineByActionTypes,
+    ITimelineState,
+    IPlayerNewsItem
+} from './types';
 
 type Action = ActionType<typeof TimelineActions & typeof UserActions>;
 

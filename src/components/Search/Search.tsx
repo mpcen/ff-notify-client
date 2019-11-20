@@ -1,17 +1,10 @@
 import * as React from 'react';
-import { View, Text, Platform, StatusBar, StyleSheet } from 'react-native';
-import {
-    NavigationScreenProp,
-    NavigationState,
-    NavigationParams,
-    NavigationScreenOptions,
-    NavigationScreenProps,
-    FlatList
-} from 'react-navigation';
-import { Header, ListItem, Avatar, Input, Icon } from 'react-native-elements';
+import { View, Platform, StatusBar, StyleSheet } from 'react-native';
+import { NavigationScreenProp, NavigationState, NavigationParams, FlatList } from 'react-navigation';
+import { ListItem, Avatar, Input, Icon } from 'react-native-elements';
 import Constants from 'expo-constants';
 
-import * as timelineActions from '../../store/timeline/actions';
+import * as searchActions from '../../store/search/actions';
 import { IPlayer, IPlayerMap } from '../../store/players/types';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
@@ -32,12 +25,12 @@ interface ISearchUnconnectedState {
 }
 
 interface ISearchPropsFromDispatch {
-    fetchPlayerNews: typeof timelineActions.fetchPlayerNews;
-    refetchPlayerNews: typeof timelineActions.refetchPlayerNews;
+    fetchSearchedPlayerNews: typeof searchActions.fetchSearchedPlayerNews;
+    refetchSearchedPlayerNews: typeof searchActions.refetchSearchedPlayerNews;
 }
 
 interface ISearchPropsFromState {
-    playerNews: IPlayerNews;
+    searchedPlayerNews: IPlayerNews;
     playerMap: IPlayerMap;
     loading: boolean;
     error: boolean;
@@ -102,7 +95,7 @@ class SearchUnconnected extends React.Component<SearchProps, SearchState> {
                         extraData={this.state.selectedPlayerId}
                         contentContainerStyle={{ paddingBottom: 10 }}
                         // ref={this.flatListRef}
-                        data={this.props.playerNews.docs}
+                        data={this.props.searchedPlayerNews.docs}
                         keyExtractor={item => item._id}
                         onRefresh={this._handleRefresh}
                         refreshing={this.props.loading}
@@ -121,13 +114,16 @@ class SearchUnconnected extends React.Component<SearchProps, SearchState> {
     }
 
     private _handleRefresh = () => {
-        this.props.refetchPlayerNews(this.state.selectedPlayerId);
+        this.props.refetchSearchedPlayerNews(this.state.selectedPlayerId);
     };
 
     private _handleOnEndReached = () => {
         if (!this.props.loading) {
-            if (this.props.playerNews.nextPage) {
-                this.props.fetchPlayerNews(this.props.playerNews.nextPage, this.state.selectedPlayerId);
+            if (this.props.searchedPlayerNews.nextPage) {
+                this.props.fetchSearchedPlayerNews(
+                    this.props.searchedPlayerNews.nextPage,
+                    this.state.selectedPlayerId
+                );
             }
         }
     };
@@ -196,7 +192,7 @@ class SearchUnconnected extends React.Component<SearchProps, SearchState> {
 
     private _handlePlayerSelect = (playerId: string) => {
         this.setState({ selectedPlayerId: playerId });
-        this.props.refetchPlayerNews(playerId);
+        this.props.refetchSearchedPlayerNews(playerId);
     };
 }
 
@@ -207,20 +203,21 @@ const styles = StyleSheet.create({
     }
 });
 
-const mapStateToProps = ({ players, timeline }: AppState) => {
+const mapStateToProps = ({ players, search }: AppState) => {
     return {
         error: players.error,
         loading: players.loading,
-        playerNews: timeline.playerNews,
+        searchedPlayerNews: search.searchedPlayerNews,
         playerMap: players.playerMap
     };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        fetchPlayerNews: (page: number, playerId: string) =>
-            dispatch(timelineActions.fetchPlayerNews(page, playerId)),
-        refetchPlayerNews: (playerId: string) => dispatch(timelineActions.refetchPlayerNews(playerId))
+        fetchSearchedPlayerNews: (page: number, playerId: string) =>
+            dispatch(searchActions.fetchSearchedPlayerNews(page, playerId)),
+        refetchSearchedPlayerNews: (playerId: string) =>
+            dispatch(searchActions.refetchSearchedPlayerNews(playerId))
     };
 };
 
