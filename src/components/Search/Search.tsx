@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = ({ players, search }: AppState) => {
     return {
         error: players.error,
-        loading: players.loading,
+        loading: search.loading,
         searchedPlayerNews: search.searchedPlayerNews,
         playerMap: players.playerMap
     };
