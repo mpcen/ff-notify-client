@@ -7,11 +7,11 @@ import { Dispatch } from 'redux';
 import { sortTimelineBy } from '../../store/timeline/actions';
 
 import { AppState } from '../../store';
-import { TimelineSortType } from '../../store/timeline/types';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { NewsType } from '../../store/timeline/types';
 
 interface ITimelineFilterPropsFromState {
-    timelineSortType: TimelineSortType;
+    newsType: NewsType;
 }
 
 interface ITimelineFilterPropsFromDispatch {
@@ -54,38 +54,30 @@ class TimelineFilterUnconnected extends React.Component<TimelineFilterProps, ITi
 
                         <View style={{ flex: 1, justifyContent: 'center' }}>
                             <ListItem
-                                disabled={this.props.timelineSortType === TimelineSortType.Player}
+                                disabled={this.props.newsType === NewsType.Individual}
                                 containerStyle={{
                                     backgroundColor:
-                                        this.props.timelineSortType === TimelineSortType.Player
-                                            ? '#f4f4f4'
-                                            : 'white',
+                                        this.props.newsType === NewsType.Individual ? '#f4f4f4' : 'white',
                                     borderLeftWidth: 3,
                                     borderColor:
-                                        this.props.timelineSortType === TimelineSortType.Player
-                                            ? '#2089dc'
-                                            : 'white'
+                                        this.props.newsType === NewsType.Individual ? '#2089dc' : 'white'
                                 }}
                                 title="Single Tracked Player"
-                                onPress={() => this._handleSelectSortType(TimelineSortType.Player)}
+                                onPress={() => this._handleSelectSortType(NewsType.Individual)}
                                 leftIcon={<MaterialCommunityIcons name="account" size={25} color="#2089dc" />}
                             />
 
                             <ListItem
-                                disabled={this.props.timelineSortType === TimelineSortType.Date}
+                                disabled={this.props.newsType === NewsType.AllTracked}
                                 containerStyle={{
                                     backgroundColor:
-                                        this.props.timelineSortType === TimelineSortType.Date
-                                            ? '#f4f4f4'
-                                            : 'white',
+                                        this.props.newsType === NewsType.AllTracked ? '#f4f4f4' : 'white',
                                     borderLeftWidth: 3,
                                     borderColor:
-                                        this.props.timelineSortType === TimelineSortType.Date
-                                            ? '#2089dc'
-                                            : 'white'
+                                        this.props.newsType === NewsType.AllTracked ? '#2089dc' : 'white'
                                 }}
                                 title="All Tracked Players"
-                                onPress={() => this._handleSelectSortType(TimelineSortType.Date)}
+                                onPress={() => this._handleSelectSortType(NewsType.AllTracked)}
                                 leftIcon={
                                     <MaterialCommunityIcons
                                         name="account-multiple"
@@ -96,20 +88,15 @@ class TimelineFilterUnconnected extends React.Component<TimelineFilterProps, ITi
                             />
 
                             <ListItem
-                                disabled={this.props.timelineSortType === TimelineSortType.All}
+                                disabled={this.props.newsType === NewsType.All}
                                 containerStyle={{
                                     backgroundColor:
-                                        this.props.timelineSortType === TimelineSortType.All
-                                            ? '#f4f4f4'
-                                            : 'white',
+                                        this.props.newsType === NewsType.All ? '#f4f4f4' : 'white',
                                     borderLeftWidth: 3,
-                                    borderColor:
-                                        this.props.timelineSortType === TimelineSortType.All
-                                            ? '#2089dc'
-                                            : 'white'
+                                    borderColor: this.props.newsType === NewsType.All ? '#2089dc' : 'white'
                                 }}
                                 title="All Players"
-                                onPress={() => this._handleSelectSortType(TimelineSortType.All)}
+                                onPress={() => this._handleSelectSortType(NewsType.All)}
                                 leftIcon={
                                     <MaterialCommunityIcons name="account-group" size={25} color="#2089dc" />
                                 }
@@ -121,21 +108,21 @@ class TimelineFilterUnconnected extends React.Component<TimelineFilterProps, ITi
         );
     }
 
-    private _handleSelectSortType = (sortType: TimelineSortType) => {
+    private _handleSelectSortType = (newsType: NewsType) => {
         this.setState({ isOverlayVisible: false });
-        this.props.sortTimelineBy(sortType);
+        this.props.sortTimelineBy(newsType);
     };
 
     private _renderFilterTypeIcon = () => {
-        if (this.props.timelineSortType === TimelineSortType.All) {
+        if (this.props.newsType === NewsType.All) {
             return 'account-group';
         }
 
-        if (this.props.timelineSortType === TimelineSortType.Date) {
+        if (this.props.newsType === NewsType.AllTracked) {
             return 'account-multiple';
         }
 
-        if (this.props.timelineSortType === TimelineSortType.Player) {
+        if (this.props.newsType === NewsType.Individual) {
             return 'account';
         }
     };
@@ -151,13 +138,13 @@ class TimelineFilterUnconnected extends React.Component<TimelineFilterProps, ITi
 
 const mapStateToProps = ({ user }: AppState): ITimelineFilterPropsFromState => {
     return {
-        timelineSortType: user.userPreferences.timelineSortType
+        newsType: user.userPreferences.timelineSortType
     };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        sortTimelineBy: (sortType: TimelineSortType) => dispatch(sortTimelineBy(sortType))
+        sortTimelineBy: (sortType: NewsType) => dispatch(sortTimelineBy(sortType))
     };
 };
 

@@ -16,11 +16,11 @@ import {
     reorderTrackedPlayersSuccess
 } from './actions';
 import { callApi } from '../../api';
-import { refetchPlayerNews } from '../timeline/actions';
 import { fetchUserPreferencesSuccess } from '../user/actions';
 import { AppState } from '..';
-import { TimelineSortType } from '../timeline/types';
 import { selectPlayer } from '../tracking/actions';
+import { NewsType } from '../timeline/types';
+import { fetchPlayerNews } from '../timeline/actions';
 
 // FETCH PLAYERS
 function* watchFetchPlayers() {
@@ -71,8 +71,8 @@ function* handleTrackPlayer({ payload }: ReturnType<typeof trackPlayer>) {
 
             const store: AppState = yield select();
 
-            if (store.user.userPreferences.timelineSortType === TimelineSortType.Date) {
-                yield put(refetchPlayerNews(''));
+            if (store.user.userPreferences.timelineSortType === NewsType.Individual) {
+                yield put(fetchPlayerNews(1, playerId, NewsType.Individual));
             }
         }
     } catch (err) {
@@ -98,16 +98,21 @@ function* handleUntrackPlayer({ payload }: ReturnType<typeof untrackPlayer>) {
             const currentSelectedPlayer =
                 store.user.userPreferences.trackedPlayers[store.trackedPlayerPanel.selectedPlayerIndex];
 
-            if (
-                store.user.userPreferences.timelineSortType === TimelineSortType.Player &&
+            if (store.user.userPreferences.timelineSortType === NewsType.AllTracked) {
+                yield put(fetchPlayerNews(1, '', NewsType.AllTracked, true));
+            } else if (
+                store.user.userPreferences.timelineSortType === NewsType.Individual &&
                 currentSelectedPlayer === playerId
             ) {
                 yield put(selectPlayer(0));
-                yield put(refetchPlayerNews(store.user.userPreferences.trackedPlayers[0]));
-            } else if (store.user.userPreferences.timelineSortType === TimelineSortType.Player) {
-                yield put(refetchPlayerNews(currentSelectedPlayer));
-            } else if (store.user.userPreferences.timelineSortType === TimelineSortType.Date) {
-                yield put(refetchPlayerNews());
+                yield put(
+                    fetchPlayerNews(
+                        1,
+                        store.user.userPreferences.trackedPlayers[0],
+                        NewsType.Individual,
+                        true
+                    )
+                );
             }
 
             yield put(untrackPlayerSuccess());

@@ -14,7 +14,15 @@ interface IPlayerNewsItemProps {
     player: IPlayer;
 }
 
-export class PlayerNewsItem extends React.PureComponent<IPlayerNewsItemProps> {
+export class PlayerNewsItem extends React.Component<IPlayerNewsItemProps> {
+    shouldComponentUpdate(nextProps: IPlayerNewsItemProps) {
+        if (this.props.playerNewsItem._id !== nextProps.playerNewsItem._id) {
+            return true;
+        }
+
+        return false;
+    }
+
     render() {
         const { playerNewsItem } = this.props;
         const { time, username } = playerNewsItem;

@@ -13,7 +13,7 @@ import {
     UserPreferencesActionTypes,
     ResetPasswordActionTypes
 } from './types';
-import { TimelineSortType } from '../timeline/types';
+import { NewsType } from '../timeline/types';
 
 const initialState: IUserState = {
     token: null,
@@ -21,7 +21,7 @@ const initialState: IUserState = {
     loading: true,
     errorMessage: '',
     userPreferences: {
-        timelineSortType: TimelineSortType.All,
+        timelineSortType: NewsType.All,
         trackedPlayers: [],
         userId: ''
     }

@@ -46,6 +46,12 @@ class SearchUnconnected extends React.Component<SearchProps, SearchState> {
         selectedPlayerId: ''
     };
 
+    componentDidUpdate(prevProps: SearchProps, prevState: SearchState) {
+        if (prevState.selectedPlayerId !== this.state.selectedPlayerId) {
+            this.props.refetchSearchedPlayerNews(this.state.selectedPlayerId);
+        }
+    }
+
     render() {
         return (
             <View
@@ -192,7 +198,7 @@ class SearchUnconnected extends React.Component<SearchProps, SearchState> {
 
     private _handlePlayerSelect = (playerId: string) => {
         this.setState({ selectedPlayerId: playerId });
-        this.props.refetchSearchedPlayerNews(playerId);
+        // this.props.refetchSearchedPlayerNews(playerId);
     };
 }
 

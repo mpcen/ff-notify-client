@@ -1,4 +1,4 @@
-import { TimelineSortType } from '../timeline/types';
+import { NewsType } from '../timeline/types';
 
 export interface IUser {
     email: string;
@@ -9,7 +9,7 @@ export interface IUser {
 export interface IUserPreferences {
     userId: string;
     trackedPlayers: string[];
-    timelineSortType: TimelineSortType;
+    timelineSortType: NewsType;
 }
 
 export interface IUserState {

@@ -63,11 +63,11 @@ export class TrackedPlayerPanelUnconnected extends React.Component<
         return (
             <View>
                 <FlatList
+                    extraData={this.state.selectedIndex}
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
                     data={this.props.trackedPlayers}
                     keyExtractor={item => item}
-                    extraData={this.state.selectedIndex}
                     renderItem={this._renderTrackedPlayerPanelItem}
                 />
 

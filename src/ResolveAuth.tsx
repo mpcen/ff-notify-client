@@ -40,7 +40,7 @@ class ResolveAuthUnconnected extends React.Component<ResolveAuthProps, ResolveAu
     componentDidUpdate() {
         if (!this.props.loading && this.state.isAppReady) {
             return navigate(NAVROUTES.MainFlow);
-            // return navigate(NAVROUTES.Search);
+            //return navigate(NAVROUTES.Search);
         }
     }
 

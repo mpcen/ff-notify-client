@@ -27,57 +27,7 @@ const initialState: ITimelineState = {
 
 const reducer: Reducer<ITimelineState, Action> = (state = initialState, action) => {
     switch (action.type) {
-        // FETCH ALL PLAYER NEWS
-        case FetchPlayerNewsActionTypes.FETCH_ALL_PLAYER_NEWS:
-            return {
-                ...state,
-                loading: true
-            };
-
-        case FetchPlayerNewsActionTypes.FETCH_ALL_PLAYER_NEWS_SUCCESS:
-            return {
-                playerNews: {
-                    docs: [...state.playerNews.docs, ...action.payload.docs] as IPlayerNewsItem[],
-                    nextPage: action.payload.nextPage,
-                    page: action.payload.page,
-                    prevPage: action.payload.prevPage,
-                    totalPages: action.payload.totalPages
-                },
-                error: false,
-                loading: false
-            };
-
-        // REFETCH ALL PLAYER NEWS
-        case FetchPlayerNewsActionTypes.REFETCH_ALL_PLAYER_NEWS:
-            return {
-                ...state,
-                loading: true
-            };
-
-        case FetchPlayerNewsActionTypes.REFETCH_ALL_PLAYER_NEWS_SUCCESS:
-            return {
-                playerNews: { ...action.payload },
-                error: false,
-                loading: false
-            };
-
-        case FetchPlayerNewsActionTypes.REFETCH_ALL_PLAYER_NEWS_FAIL:
-            return {
-                ...state,
-                error: true,
-                loading: false,
-                errorMessage: action.payload
-            };
-
-        case FetchPlayerNewsActionTypes.FETCH_PLAYER_NEWS_FAIL:
-            return {
-                ...state,
-                error: true,
-                loading: false,
-                errorMessage: action.payload
-            };
-
-        // FETCH TRACKED PLAYER NEWS
+        // FETCH PLAYER NEWS
         case FetchPlayerNewsActionTypes.FETCH_PLAYER_NEWS:
             return {
                 ...state,
@@ -85,41 +35,23 @@ const reducer: Reducer<ITimelineState, Action> = (state = initialState, action) 
             };
 
         case FetchPlayerNewsActionTypes.FETCH_PLAYER_NEWS_SUCCESS:
+            const { fresh, playerNews } = action.payload;
+
             return {
                 playerNews: {
-                    docs: [...state.playerNews.docs, ...action.payload.docs] as IPlayerNewsItem[],
-                    nextPage: action.payload.nextPage,
-                    page: action.payload.page,
-                    prevPage: action.payload.prevPage,
-                    totalPages: action.payload.totalPages
+                    docs: fresh
+                        ? [...playerNews.docs]
+                        : ([...state.playerNews.docs, ...playerNews.docs] as IPlayerNewsItem[]),
+                    nextPage: playerNews.nextPage,
+                    page: playerNews.page,
+                    prevPage: playerNews.prevPage,
+                    totalPages: playerNews.totalPages
                 },
                 error: false,
                 loading: false
             };
 
         case FetchPlayerNewsActionTypes.FETCH_PLAYER_NEWS_FAIL:
-            return {
-                ...state,
-                error: true,
-                loading: false,
-                errorMessage: action.payload
-            };
-
-        // REFETCH TRACKED PLAYER NEWS
-        case FetchPlayerNewsActionTypes.REFETCH_PLAYER_NEWS:
-            return {
-                ...state,
-                loading: true
-            };
-
-        case FetchPlayerNewsActionTypes.REFETCH_PLAYER_NEWS_SUCCESS:
-            return {
-                playerNews: { ...action.payload },
-                error: false,
-                loading: false
-            };
-
-        case FetchPlayerNewsActionTypes.REFETCH_PLAYER_NEWS_FAIL:
             return {
                 ...state,
                 error: true,
@@ -140,7 +72,7 @@ const reducer: Reducer<ITimelineState, Action> = (state = initialState, action) 
                 ...state,
                 error: false,
                 loading: false,
-                timelineSortType: action.payload
+                newsType: action.payload
             };
 
         case SortTimelineByActionTypes.SORT_TIMELINE_BY_FAIL:
