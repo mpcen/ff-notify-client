@@ -26,7 +26,6 @@ interface ISearchUnconnectedState {
 
 interface ISearchPropsFromDispatch {
     fetchSearchedPlayerNews: typeof searchActions.fetchSearchedPlayerNews;
-    refetchSearchedPlayerNews: typeof searchActions.refetchSearchedPlayerNews;
 }
 
 interface ISearchPropsFromState {
@@ -47,8 +46,8 @@ class SearchUnconnected extends React.Component<SearchProps, SearchState> {
     };
 
     componentDidUpdate(prevProps: SearchProps, prevState: SearchState) {
-        if (prevState.selectedPlayerId !== this.state.selectedPlayerId) {
-            this.props.refetchSearchedPlayerNews(this.state.selectedPlayerId);
+        if (this.state.selectedPlayerId && prevState.selectedPlayerId !== this.state.selectedPlayerId) {
+            this.props.fetchSearchedPlayerNews(1, this.state.selectedPlayerId, true);
         }
     }
 
@@ -56,6 +55,7 @@ class SearchUnconnected extends React.Component<SearchProps, SearchState> {
         return (
             <View
                 style={{
+                    flex: 1,
                     marginTop: Platform.OS === 'ios' ? Constants.statusBarHeight : StatusBar.currentHeight
                 }}
             >
@@ -100,7 +100,6 @@ class SearchUnconnected extends React.Component<SearchProps, SearchState> {
                     <FlatList
                         extraData={this.state.selectedPlayerId}
                         contentContainerStyle={{ paddingBottom: 10 }}
-                        // ref={this.flatListRef}
                         data={this.props.searchedPlayerNews.docs}
                         keyExtractor={item => item._id}
                         onRefresh={this._handleRefresh}
@@ -120,7 +119,7 @@ class SearchUnconnected extends React.Component<SearchProps, SearchState> {
     }
 
     private _handleRefresh = () => {
-        this.props.refetchSearchedPlayerNews(this.state.selectedPlayerId);
+        this.props.fetchSearchedPlayerNews(1, this.state.selectedPlayerId, true);
     };
 
     private _handleOnEndReached = () => {
@@ -198,7 +197,6 @@ class SearchUnconnected extends React.Component<SearchProps, SearchState> {
 
     private _handlePlayerSelect = (playerId: string) => {
         this.setState({ selectedPlayerId: playerId });
-        // this.props.refetchSearchedPlayerNews(playerId);
     };
 }
 
@@ -220,10 +218,8 @@ const mapStateToProps = ({ players, search }: AppState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        fetchSearchedPlayerNews: (page: number, playerId: string) =>
-            dispatch(searchActions.fetchSearchedPlayerNews(page, playerId)),
-        refetchSearchedPlayerNews: (playerId: string) =>
-            dispatch(searchActions.refetchSearchedPlayerNews(playerId))
+        fetchSearchedPlayerNews: (page: number, playerId: string, fresh: boolean) =>
+            dispatch(searchActions.fetchSearchedPlayerNews(page, playerId, fresh))
     };
 };
 

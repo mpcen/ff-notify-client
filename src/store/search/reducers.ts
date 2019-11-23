@@ -30,13 +30,20 @@ const reducer: Reducer<ISearchState, Action> = (state = initialState, action) =>
             };
 
         case FetchSearchedPlayerNewsActionTypes.FETCH_SEARCHED_PLAYER_NEWS_SUCCESS:
+            const { fresh, searchedPlayerNews } = action.payload;
+
             return {
                 searchedPlayerNews: {
-                    docs: [...state.searchedPlayerNews.docs, ...action.payload.docs] as IPlayerNewsItem[],
-                    nextPage: action.payload.nextPage,
-                    page: action.payload.page,
-                    prevPage: action.payload.prevPage,
-                    totalPages: action.payload.totalPages
+                    docs: fresh
+                        ? [...searchedPlayerNews.docs]
+                        : ([
+                              ...state.searchedPlayerNews.docs,
+                              ...searchedPlayerNews.docs
+                          ] as IPlayerNewsItem[]),
+                    nextPage: searchedPlayerNews.nextPage,
+                    page: searchedPlayerNews.page,
+                    prevPage: searchedPlayerNews.prevPage,
+                    totalPages: searchedPlayerNews.totalPages
                 },
                 error: false,
                 loading: false
@@ -49,29 +56,6 @@ const reducer: Reducer<ISearchState, Action> = (state = initialState, action) =>
                 loading: false,
                 errorMessage: action.payload
             };
-
-        // REFETCH SEARCHED PLAYER NEWS
-        case FetchSearchedPlayerNewsActionTypes.REFETCH_SEARCHED_PLAYER_NEWS:
-            return {
-                ...state,
-                loading: true
-            };
-
-        case FetchSearchedPlayerNewsActionTypes.REFETCH_SEARCHED_PLAYER_NEWS_SUCCESS:
-            return {
-                searchedPlayerNews: { ...action.payload },
-                error: false,
-                loading: false
-            };
-
-        case FetchSearchedPlayerNewsActionTypes.REFETCH_SEARCHED_PLAYER_NEWS_FAIL:
-            return {
-                ...state,
-                error: true,
-                loading: false,
-                errorMessage: action.payload
-            };
-
         default:
             return state;
     }

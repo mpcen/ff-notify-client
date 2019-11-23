@@ -269,7 +269,7 @@ const mapStateToProps = ({
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        fetchPlayerNews: (page: number, playerId: string, newsType: NewsType, fresh: boolean = false) =>
+        fetchPlayerNews: (page: number, playerId: string, newsType: NewsType, fresh: boolean) =>
             dispatch(timelineActions.fetchPlayerNews(page, playerId, newsType, fresh))
     };
 };
