@@ -32,13 +32,13 @@ const Tracking = createMaterialTopTabNavigator(
         [NAVROUTES.PlayerSearch]: {
             screen: PlayerSearch,
             navigationOptions: {
-                tabBarLabel: 'SEARCH PLAYER'
+                tabBarLabel: 'SEARCH FOR PLAYERS TO TRACK'
             }
         },
         [NAVROUTES.TrackedPlayers]: {
             screen: TrackedPlayers,
             navigationOptions: {
-                tabBarLabel: 'TRACKED PLAYERS'
+                tabBarLabel: 'CURRENT TRACKED PLAYERS'
             }
         }
     },
@@ -127,7 +127,7 @@ const MainFlow = createBottomTabNavigator(
     }
 );
 
-const AppNavigator = createSwitchNavigator(
+export const AppNavigator = createSwitchNavigator(
     {
         [NAVROUTES.ResolveAuth]: {
             screen: ResolveAuth
