@@ -24,7 +24,7 @@ import { IPlayerNews } from '../../store/timeline/types';
 import { PlayerNewsItem } from './PlayerNewsItem/PlayerNewsItem';
 
 interface ITimelineUnconnectedProps {
-    navigation: NavigationScreenProp<NavigationState, NavigationParams>;
+    navigation?: NavigationScreenProp<NavigationState, NavigationParams>;
 }
 
 interface ITimelinePropsFromState {
@@ -67,18 +67,17 @@ class TimeLineUnconnected extends React.Component<TimelineProps> {
         } as NavigationScreenOptions;
     };
 
-    componentDidMount() {
-        if (this.props.newsType === NewsType.All) {
-            this.props.fetchPlayerNews(1, '', NewsType.All);
-        } else if (this.props.newsType === NewsType.AllTracked) {
-            this.props.fetchPlayerNews(1, '', NewsType.AllTracked);
-        } else {
-            this.props.fetchPlayerNews(1, this.props.trackedPlayers[0], NewsType.Individual);
-        }
-    }
+    // componentDidMount() {
+    //     if (this.props.newsType === NewsType.All) {
+    //         this.props.fetchPlayerNews(1, '', NewsType.All);
+    //     } else if (this.props.newsType === NewsType.AllTracked) {
+    //         this.props.fetchPlayerNews(1, '', NewsType.AllTracked);
+    //     } else {
+    //         this.props.fetchPlayerNews(1, this.props.trackedPlayers[0], NewsType.Individual);
+    //     }
+    // }
 
     componentDidUpdate(prevProps: TimelineProps) {
-        debugger;
         if (
             prevProps.selectedPlayerIndex !== this.props.selectedPlayerIndex ||
             prevProps.newsType !== this.props.newsType
@@ -109,17 +108,18 @@ class TimeLineUnconnected extends React.Component<TimelineProps> {
     }
 
     public render() {
-        return (
-            <View style={{ flex: 1 }}>
-                {this.props.newsType !== NewsType.All && !this.props.trackedPlayers.length ? (
-                    <View style={styles.centeredMessageContainer}>
-                        <Text>Get started by tracking some players</Text>
-                    </View>
-                ) : (
-                    this._renderTimeline()
-                )}
-            </View>
-        );
+        return <Text>Hello World</Text>
+        // return (
+        //     <View style={{ flex: 1 }}>
+        //         {this.props.newsType !== NewsType.All && !this.props.trackedPlayers.length ? (
+        //             <View style={styles.centeredMessageContainer}>
+        //                 <Text>Get started by tracking some players</Text>
+        //             </View>
+        //         ) : (
+        //             this._renderTimeline()
+        //         )}
+        //     </View>
+        // );
     }
 
     private _renderTimeline() {

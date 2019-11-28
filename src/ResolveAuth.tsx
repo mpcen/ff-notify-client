@@ -34,7 +34,7 @@ type ResolveAuthState = IResolveAuthUnconnectedState;
 class ResolveAuthUnconnected extends React.Component<ResolveAuthProps, ResolveAuthState> {
     state: ResolveAuthState = {
         isAppReady: false,
-        isSplashReady: false
+        isSplashReady: true
     };
 
     componentDidUpdate() {
@@ -45,16 +45,16 @@ class ResolveAuthUnconnected extends React.Component<ResolveAuthProps, ResolveAu
     }
 
     render() {
-        if (!this.state.isSplashReady) {
-            return (
-                <AppLoading
-                    startAsync={this._cacheSplashResourcesAsync}
-                    onFinish={() => this.setState({ isSplashReady: true })}
-                    onError={console.warn}
-                    autoHideSplash={false}
-                />
-            );
-        }
+        // if (!this.state.isSplashReady) {
+        //     return (
+        //         <AppLoading
+        //             startAsync={this._cacheSplashResourcesAsync}
+        //             onFinish={() => this.setState({ isSplashReady: true })}
+        //             onError={console.warn}
+        //             autoHideSplash={false}
+        //         />
+        //     );
+        // }
 
         if (!this.state.isAppReady) {
             return (
@@ -67,16 +67,17 @@ class ResolveAuthUnconnected extends React.Component<ResolveAuthProps, ResolveAu
                     }}
                 >
                     <Image
+                        testID="app-icon"
                         resizeMode="center"
                         source={require('../assets/img/appIcon.png')}
                         onLoad={this._cacheResourcesAsync}
                     />
-                    <ActivityIndicator size="large" color="white" />
+                    <ActivityIndicator testID="loading-indicator" size="large" color="white" />
                 </View>
             );
         }
 
-        return <View />;
+        return <View testID="empty-view" />;
     }
 
     private _cacheSplashResourcesAsync = async () => {
